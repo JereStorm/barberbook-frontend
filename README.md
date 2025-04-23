@@ -12,7 +12,7 @@ TAREAS POR HACER:
 LINKS:
 
 - Google Drive: https://drive.google.com/drive/folders/1iNgk87ktPxIVHVjKhX8JX5RhkVyxDoiI?usp=sharing
-- //Arbol de trabajo
+- Trello: https://trello.com/invite/b/68097355997729c192ab36fc/ATTI07672a73828d115ad43b28d38ce491f1B0E69D44/trabajo-final-fip
 
 REQUISITOS DE APROBACION
 
