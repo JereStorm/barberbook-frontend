@@ -3,7 +3,7 @@ Este repositorio se usara para albergar todo lo trabajado en el proyecto grupal 
 
 TAREAS POR HACER:
 
-- Agregar a Braian como colaborador.
+- Agregar a Braian como colaborador. (Hecho)
 - Definir que utilizar en el punto "Crear un board en github/trello/jira donde se van a generar las user stories"
 - Junto al profesor revisar el trabajo y definir el alcance del proyecto.
 - Crear distintas épicas para trabajar en los flujos de la aplicación con sus respectivas stories (con detalles). Las stories no necesitan tener todos los detalles todavía.
