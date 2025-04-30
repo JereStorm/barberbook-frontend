@@ -42,7 +42,6 @@ Si querés levantarlo con un servidor local simple:
    ```bash
    npx serve .
 
-
 ## 🚀 Uso
 
 1. Abrí index.html
