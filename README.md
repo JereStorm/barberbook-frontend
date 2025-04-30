@@ -23,7 +23,7 @@ La aplicación permite a los peluqueros o administradores iniciar sesión, carga
 
 ---
 
-## ⚙️ Instalación
+## Instalación
 
 No requiere instalación de dependencias externas. Solo necesitas un navegador moderno.  
 Cloná o descargá el proyecto y abrí el archivo `index.html` en tu navegador.
