@@ -1,14 +1,14 @@
 # proyecto-anual-fip
 -Este repositorio se usara para albergar todo lo trabajado en el proyecto grupal anual de FIP para el FULLSTACK CEPIT.
 
-## LINKS:
+### LINKS:
 
 - Presentacion: https://www.canva.com/design/DAGiN-Z6BJY/7ekvPEv_fIHH8W8yAe-MTA/edit?utm_content=DAGiN-Z6BJY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 - Google Drive: https://drive.google.com/drive/folders/1iNgk87ktPxIVHVjKhX8JX5RhkVyxDoiI?usp=sharing
 - Trello: https://trello.com/invite/b/68097355997729c192ab36fc/ATTI07672a73828d115ad43b28d38ce491f1B0E69D44/trabajo-final-fip
 - Jira: https://proyecto-fip-grupo-28.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?atlOrigin=eyJpIjoiZWM0YmI1MTY5MzkwNDQxNzk1YzFkOWQwZmM0OTMwYWMiLCJwIjoiaiJ9
 
-REQUISITOS DE APROBACION
+###REQUISITOS DE APROBACION
 
 - Aplicacion navegable con al menos 3 pantallas.
 - Una seria un LogIn, las otras dos serian de libre eleccion siempre y cuando contengan el formato para crear un CRUD (para poder practicar toda la parte de backend).
