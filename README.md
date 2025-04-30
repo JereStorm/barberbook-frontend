@@ -1,14 +1,14 @@
-# 💇‍♂️ Sistema de Administración de Turnos para Peluquería
+# Sistema de Administración de Turnos para Peluquería
 
-## 📌 Nombre del Proyecto
+## Nombre del Proyecto
 Turnos Peluquería – Frontend
 
-## 📝 Descripción
+## Descripción
 
 Este proyecto es una aplicación web enfocada en la **gestión de turnos y empleados** para una peluquería, desarrollada como trabajo práctico para la materia de Programación.  
 La aplicación permite a los peluqueros o administradores iniciar sesión, cargar turnos de clientes, asociar empleados, y mantener una agenda organizada.
 
-### ✨ Características principales
+### Características principales
 
 - Login con validación básica
 - CRUD completo de turnos:
@@ -42,11 +42,11 @@ Si querés levantarlo con un servidor local simple:
    ```bash
    npx serve .
 
-## 🚀 Uso
+## Uso
 
 1. Abrí index.html
 
-2. Iniciá sesión con las credenciales predefinidas (por ejemplo: admin@peluqueria.com / 1234)
+2. Iniciá sesión con las credenciales predefinidas (Usuario: admin@peluqueria.com, contraseña: 1234)
 
 3. Usá el menú de navegación para:
 
@@ -72,7 +72,7 @@ Si querés levantarlo con un servidor local simple:
 - Tema a libre elección (Salen cosas muy buenas cuando los dejamos volar).
 - Nos quedaria poner la parte de limites para que no se vuelen y lo puedan terminar bien. Todo lo que les sobre de tiempo lo pueden usar para extras
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto es de uso educativo y no tiene fines comerciales.
 Podés modificarlo y distribuirlo bajo la licencia MIT.
