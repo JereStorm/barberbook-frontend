@@ -67,6 +67,7 @@ Si querés levantarlo con un servidor local simple:
 ### Requisitos de aprobacion
 
 - Aplicacion navegable con al menos 3 pantallas.
+- Desarrollo aplicando buenas practicas de git (branches especificas de desarrollo para cada contribuidor)
 - Una seria un LogIn, las otras dos serian de libre eleccion siempre y cuando contengan el formato para crear un CRUD (para poder practicar toda la parte de backend).
 - Solo seria la parte de Front End de momento.
 - Tema a libre elección (Salen cosas muy buenas cuando los dejamos volar).
