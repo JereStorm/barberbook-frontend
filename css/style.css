@@ -1,0 +1,61 @@
+:root {
+    /* Colores de fondo */
+    --bg-claro: #F2F5F8;
+    --bg-oscuro: #0E1F3D;
+    --bg-gris-claro: #B0B0B0;
+
+    /* Colores de texto */
+    --fs-principal: #0E1F3D;
+    --fs-clara: #D5DBE5;
+    --fs-gris-oscura: #2E2E3A;
+    --fs-rojo: #C00F0C;
+
+    /* Tipografía (opcional) */
+    --font-principal: 'Segoe UI', sans-serif;
+}
+
+/* Fondos */
+.bg-claro {
+    background-color: var(--bg-claro);
+}
+
+.bg-oscuro {
+    background-color: var(--bg-oscuro);
+}
+
+.bg-gris-claro {
+    background-color: var(--bg-gris-claro);
+}
+
+/* Colores de fuente */
+.fs-principal {
+    color: var(--fs-principal);
+}
+
+.fs-clara {
+    color: var(--fs-clara);
+}
+
+.fs-gris-oscura {
+    color: var(--fs-gris-oscura);
+}
+
+.fs-rojo {
+    color: var(--fs-rojo);
+}
+
+/* Botones */
+.btn-primario {
+    background-color: var(--bg-oscuro);
+    color: var(--fs-clara);
+}
+
+.btn-secundario {
+    background-color: var(--bg-gris-claro);
+    color: var(--fs-gris-oscura);
+}
+
+/* (Opcional) Tipografía base */
+body {
+    font-family: var(--font-principal);
+}
