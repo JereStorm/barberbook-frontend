@@ -14,6 +14,16 @@
     --font-principal: 'Segoe UI', sans-serif;
 }
 
+/* (Opcional) Tipografía base */
+body {
+    font-family: var(--font-principal);
+    min-height: 100vh;
+}
+
+.contenedor {
+    padding-top: 70px;
+}
+
 /* Fondos */
 .bg-claro {
     background-color: var(--bg-claro);
@@ -55,7 +65,47 @@
     color: var(--fs-gris-oscura);
 }
 
-/* (Opcional) Tipografía base */
-body {
-    font-family: var(--font-principal);
+.active {
+    text-decoration: underline;
+}
+
+
+
+.sidebar-slide-in {
+    animation: slideIn 0.3s ease forwards;
+}
+
+.sidebar-slide-out {
+    animation: slideOut 0.3s ease forwards;
+}
+
+/* Animación de entrada */
+@keyframes slideIn {
+    from {
+        transform: translateX(-220px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-220px);
+        opacity: 0;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .contenedor {
+        padding-top: 0px;
+    }
 }
