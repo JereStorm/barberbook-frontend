@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnos Peluqueria</title>
+    <!-- LINK BOOTSTRAP CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <!-- LINK BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- LINK CSS PROPIO -->
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/empleados.css" />
+</head>
+
+<body class="bg-claro">
+    <div class="container-fluid">
+        <!-- BTN HAMBURGUESA SOLO MOBILE-->
+        <button id="toggleSidebarBtn" class="btn btn-primario d-md-none position-fixed top-0 end-0 m-3 z-3">
+            <i class="bi bi-list"></i>
+        </button>
+        <!-- NARVBAR DESKTOP -->
+        <header class="d-none d-md-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a href="/"
+                class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <span class="fs-4 fs-principal">Barber Book</span>
+            </a>
+            <ul class="nav">
+                <li class="nav-item"><a href="#" class="nav-link fs-principal " aria-current="page">Ver Turnos</a>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link fs-principal me-5 active">Ver Empleados</a></li>
+                <li class="nav-item"><a href="#" class="btn btn-outline-danger">Cerrar Sesion</a></li>
+            </ul>
+        </header>
+        <!-- SIDEBAR MOBILE -->
+        <div id="mobileSidebar"
+            class="d-none d-md-none position-fixed top-0 start-0 bottom-0 flex-column flex-shrink-0 p-3 bg-oscuro"
+            style="width: 200px; z-index: 1000;">
+            <a href="/"
+                class="d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto fs-clara text-decoration-none">
+                <span class="fs-4">#Username</span>
+            </a>
+            <hr class="fs-clara">
+            <ul class="nav flex-column mb-auto text-center">
+                <li class="nav-item">
+                    <a href="#" class="nav-link fs-clara active" aria-current="page">
+                        Ver Turnos
+                    </a>
+                </li>
+                <hr class="fs-clara">
+                <li>
+                    <a href="#" class="nav-link fs-clara">
+                        Ver Empleados
+                    </a>
+                </li>
+            </ul>
+            <hr class="fs-clara">
+            <div class="text-center">
+                <a href="#" class="btn btn-outline-danger ">
+                    Cerrar Sesion
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="contenedor">
+        <!-- Renderizado dinamico -->
+        <h1 class="titulo-principal">Seccion empleados</h1>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+        crossorigin="anonymous"></script>
+    <script src="/js/main.js">
+    </script>
+    <script src="/js/empleados.js">
+    </script>
+
+</body>
+
+</html>
