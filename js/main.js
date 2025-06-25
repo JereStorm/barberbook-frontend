@@ -25,3 +25,19 @@ toggleBtn.addEventListener('click', () => {
 
     sidebarVisible = !sidebarVisible;
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const links = document.querySelectorAll('.nav-link');
+
+    const currentPath = window.location.pathname;
+
+    links.forEach(link => {
+        const linkPath = link.getAttribute('href');
+        console.log(linkPath)
+        if (linkPath === currentPath) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+});
