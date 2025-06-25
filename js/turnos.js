@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Datos simulados (localStorage)
+    // Datos simulados ->(localStorage)
     let turnos = JSON.parse(localStorage.getItem('turnos')) || [];
     
     // Elementos del DOM
