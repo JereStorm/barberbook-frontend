@@ -60,6 +60,11 @@ body {
     color: var(--fs-clara);
 }
 
+.btn-primario:hover,
+.btn-secundario:hover {
+    border: 1px solid var(--bg-oscuro);
+}
+
 .btn-secundario {
     background-color: var(--bg-gris-claro);
     color: var(--fs-gris-oscura);
