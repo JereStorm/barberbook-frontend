@@ -26,7 +26,7 @@ if (toggleBtn) {
 
 /*------------------- PARTIAL RENDER CON HASH */
 
-const contenidoDinamico = document.getElementById("cotenido-dinamico");
+const contenidoDinamico = document.getElementById("contenido-dinamico");
 const navbarsContainer = document.getElementById("navbars");
 const enlaces = document.querySelectorAll(".nav-link");
 
