@@ -11,7 +11,8 @@
     <!-- LINK BOOTSTRAP ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <!-- LINK CSS PROPIO -->
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/empleados.css" />
 </head>
 
 <body class="bg-claro">
@@ -27,13 +28,9 @@
                 <span class="fs-4 fs-principal">Barber Book</span>
             </a>
             <ul class="nav">
-                <li class="nav-item"><a href="#" class="nav-link fs-principal active" aria-current="page">Ver Turnos</a>
+                <li class="nav-item"><a href="#" class="nav-link fs-principal " aria-current="page">Ver Turnos</a>
                 </li>
-                <li class="nav-item">
-                    <a href="/pages/empleados.html" class="nav-link fs-principal me-5">
-                        Ver Empleados
-                    </a>
-                </li>
+                <li class="nav-item"><a href="#" class="nav-link fs-principal me-5 active">Ver Empleados</a></li>
                 <li class="nav-item"><a href="#" class="btn btn-outline-danger">Cerrar Sesion</a></li>
             </ul>
         </header>
@@ -48,13 +45,13 @@
             <hr class="fs-clara">
             <ul class="nav flex-column mb-auto text-center">
                 <li class="nav-item">
-                    <a href="#" class="nav-link fs-clara active" aria-current="page">
+                    <a href="#" class="nav-link fs-clara " aria-current="page">
                         Ver Turnos
                     </a>
                 </li>
                 <hr class="fs-clara">
                 <li>
-                    <a href="#" class="nav-link fs-clara">
+                    <a href="#" class="nav-link fs-clara active">
                         Ver Empleados
                     </a>
                 </li>
@@ -69,7 +66,7 @@
     </div>
     <div class="contenedor">
         <!-- Renderizado dinamico -->
-
+        <h1 class="titulo-principal">Seccion empleados</h1>
     </div>
 
 
@@ -78,6 +75,9 @@
         crossorigin="anonymous"></script>
     <script src="/js/main.js">
     </script>
+    <script src="/js/empleados.js">
+    </script>
+
 </body>
 
 </html>
