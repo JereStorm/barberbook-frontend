@@ -70,6 +70,34 @@ async function cargarVista(ruta) {
 }
 
 /**
+ * Carga un script JS asociado a la vista si existe
+ * @param {string} vista - Nombre base del archivo JS (ej: 'turnos')
+ */
+function cargarScriptDeVista(vista) {
+    const idScript = 'script-dinamico';
+
+    // Elimina script anterior si hay
+    const scriptAnterior = document.getElementById(idScript);
+    if (scriptAnterior) {
+        scriptAnterior.remove();
+    }
+
+    // Crea y agrega nuevo script
+    const script = document.createElement('script');
+    script.src = `/js/${vista}.js`;
+    script.id = idScript;
+    script.type = 'text/javascript';
+
+    // Manejo de error si no existe el script
+    script.onerror = () => {
+        console.warn(`No se encontró script para vista: ${vista}`);
+    };
+
+    document.body.appendChild(script);
+}
+
+
+/**
  * Marca el enlace activo en el navbar/menú
  * @param {string} rutaActual
  */
@@ -92,13 +120,12 @@ function obtenerRutaDesdeHash() {
  */
 function manejarCambioDeHash() {
     const ruta = obtenerRutaDesdeHash();
-    //Cargamos el css primero segun la ruta
-    cargarCssPorRuta(ruta);
-    //Luego cargamos la vista para prevenir incoherencias
     cargarVista(ruta);
-    //Activamos el link del navbar
+    cargarCssPorRuta(ruta);
+    cargarScriptDeVista(ruta); // << nuevo
     marcarActivoPorRuta(ruta);
 }
+
 
 // Detectar cambios en la URL hash
 window.addEventListener("hashchange", manejarCambioDeHash);

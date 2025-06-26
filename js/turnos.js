@@ -1,7 +1,8 @@
-document.addEventListener('DOMContentLoaded', function() {
+function inciar() {
+
     // Datos simulados ->(localStorage)
     let turnos = JSON.parse(localStorage.getItem('turnos')) || [];
-    
+
     // Elementos del DOM
     const tablaTurnos = document.getElementById('tabla-turnos');
     const btnNuevoTurno = document.getElementById('btnNuevoTurno');
@@ -9,16 +10,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const tituloForm = document.getElementById('titulo-form');
     const selectOrdenar = document.getElementById('ordenar');
     const modalTurno = new bootstrap.Modal(document.getElementById('modalTurno'));
-    
+
     // Mostrar turnos en la tabla
     function renderizarTurnos() {
         tablaTurnos.innerHTML = '';
-        
+
         // Ordenar turnos
         const orden = selectOrdenar.value;
         let turnosOrdenados = [...turnos];
-        
-        switch(orden) {
+
+        switch (orden) {
             case 'hora':
                 turnosOrdenados.sort((a, b) => {
                     const fechaA = new Date(`${a.fecha}T${a.hora}`);
@@ -36,12 +37,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 turnosOrdenados.sort((a, b) => a.servicio.localeCompare(b.servicio));
                 break;
         }
-            
 
-        
         //Constante para los turnos sorteados
         const turnosMostrar = turnosOrdenados;
-        
+
         if (turnosMostrar.length === 0) {
             tablaTurnos.innerHTML = `
                 <tr>
@@ -50,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             return;
         }
-        
+
         turnosMostrar.forEach((turno, index) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -71,23 +70,23 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             tablaTurnos.appendChild(tr);
         });
-        
+
         // Eventos de los botones
         document.querySelectorAll('.btn-editar').forEach(btn => {
             btn.addEventListener('click', editarTurno);
         });
-        
+
         document.querySelectorAll('.btn-eliminar').forEach(btn => {
             btn.addEventListener('click', eliminarTurno);
         });
     }
-    
+
     // Fecha formateada, tuve que agregar esto para que se vea mejor
     function formatearFecha(fecha) {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(fecha).toLocaleDateString('es-ES', options);
     }
-    
+
     // Mostrar formulario para nuevo turno
     function mostrarFormularioNuevo() {
         tituloForm.textContent = 'Crear Turno';
@@ -96,12 +95,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('fecha').min = new Date().toISOString().split('T')[0];
         modalTurno.show();
     }
-    
+
     // Editar turno existente
     function editarTurno(e) {
         const index = e.currentTarget.getAttribute('data-id');
         const turno = turnos[index];
-        
+
         tituloForm.textContent = 'Editar Turno';
         document.getElementById('indice-edicion').value = index;
         document.getElementById('nombre').value = turno.nombre;
@@ -112,10 +111,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('servicio').value = turno.servicio;
         document.getElementById('duracion').value = turno.duracion;
         document.getElementById('empleado').value = turno.empleado || '';
-        
+
         modalTurno.show();
     }
-    
+
     // Eliminar turno
     function eliminarTurno(e) {
         if (confirm('¿Estás seguro de que quieres eliminar este turno?')) {
@@ -125,11 +124,11 @@ document.addEventListener('DOMContentLoaded', function() {
             renderizarTurnos();
         }
     }
-    
+
     // Guardar turno (se usa la misma funcion para un turno nuevo o editado)
     function guardarTurno(e) {
         e.preventDefault();
-        
+
         const indexEdicion = document.getElementById('indice-edicion').value;
         const turno = {
             nombre: document.getElementById('nombre').value,
@@ -141,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
             duracion: document.getElementById('duracion').value,
             empleado: document.getElementById('empleado').value || null
         };
-        
+
         if (indexEdicion === '') {
             // Nuevo turno
             turnos.push(turno);
@@ -149,22 +148,27 @@ document.addEventListener('DOMContentLoaded', function() {
             // Editar turno existente
             turnos[indexEdicion] = turno;
         }
-        
+
         guardarTurnos();
         renderizarTurnos();
         modalTurno.hide();
     }
-    
+
     // Guardar en localStorage
     function guardarTurnos() {
         localStorage.setItem('turnos', JSON.stringify(turnos));
     }
-    
+
     // Event listeners
     btnNuevoTurno.addEventListener('click', mostrarFormularioNuevo);
     formTurno.addEventListener('submit', guardarTurno);
     selectOrdenar.addEventListener('change', renderizarTurnos);
-    
+
     // Inicializar
     renderizarTurnos();
-});
+};
+
+/*Esperamos 3000 milisegundos para que carge el contenido en el DOM antes de ejecutar el script */
+setTimeout(() => {
+    inciar();
+}, 300);
