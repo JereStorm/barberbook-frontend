@@ -1,4 +1,62 @@
-<div class="contenedor">
-    <!-- Renderizado dinamico -->
-    <h1 class="titulo-principal">Seccion empleados</h1>
-</div>
+<section class="container pt-5 pt-md-0 py-4">
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+    <h2 class="fs-principal">Empleados</h2>
+    <!-- Botón primario para nuevo empleado -->
+    <button id="btnNuevoEmpleado" class="btn btn-primario rounded-circle btn-nuevo-empleado">
+      <i class="bi bi-plus"></i>
+    </button>
+  </div>
+
+  <!-- Tabla de empleados -->
+  <div class="table-responsive">
+    <table class="table table-bordered text-center table-empleados">
+      <thead>
+        <tr class="bg-oscuro">
+          <th class="fs-clara">Nombre</th>
+          <th class="fs-clara">Email</th>
+          <th class="fs-clara">Telefono</th>
+          <th class="fs-clara">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-empleados">
+        <!-- Se carga desde JS -->
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+  <!-- Modal para formulario -->
+  <div class="modal fade" id="modalEmpleado" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-oscuro">
+          <h5 class="modal-title fs-clara" id="titulo-form">Crear Empleado</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-empleado">
+            <input type="hidden" id="indice-edicion">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre Completo</label>
+              <input placeholder="Leo Messi" type="text" class="form-control" id="nombre" required />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input placeholder="leomessi@gmail.com" type="email" class="form-control" id="email" required />
+            </div>
+            <div class="mb-3">
+              <label for="telefono" class="form-label">Número de teléfono</label>
+              <input placeholder="2284010101" type="text" class="form-control" id="telefono" required />
+            </div>
+    
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secundario" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primario">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
