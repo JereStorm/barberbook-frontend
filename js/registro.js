@@ -28,7 +28,7 @@ function validarRegistro(){
     const validarPassword= "123456";
 
     if (email===validarEmail && password ===validarPassword) {
-        window.location.href="turnos.html";
+        window.location.href="../pages/turnos.html";
     } else {
         alert ("Usuario o Contraseña incorrectos.")
     }
