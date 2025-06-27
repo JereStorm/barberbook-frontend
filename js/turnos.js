@@ -1,5 +1,5 @@
-function inciar() {
-
+"use strict";
+(() => {
     // Datos simulados ->(localStorage)
     let turnos = JSON.parse(localStorage.getItem('turnos')) || [];
 
@@ -166,9 +166,4 @@ function inciar() {
 
     // Inicializar
     renderizarTurnos();
-};
-
-/*Esperamos 3000 milisegundos para que carge el contenido en el DOM antes de ejecutar el script */
-setTimeout(() => {
-    inciar();
-}, 300);
+})();

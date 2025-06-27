@@ -39,41 +39,51 @@ let banderaSinMenu = true;
  * @param {string} ruta - nombre sin extensión (ej: 'turnos')
  */
 async function cargarVista(ruta) {
-    banderaSinMenu = false;
-    //Restringimos el navbar cuando no hay
-    rutasSinMenu.forEach(sinMenu => {
-        if (ruta === sinMenu) {
-            banderaSinMenu = true;
-        }
-    });
+    const container = document.getElementById("contenido-dinamico");
 
+    banderaSinMenu = rutasSinMenu.includes(ruta);
     if (banderaSinMenu) {
         navbarsContainer.classList.add("d-none");
     } else {
-        if (navbarsContainer.classList.contains("d-none")) {
-            navbarsContainer.classList.remove("d-none");
-        }
+        navbarsContainer.classList.remove("d-none");
     }
+
+    // FADE OUT antes de cambiar el contenido
+    container.classList.remove("visible");
+
+    // Esperamos la duración del fade-out antes de continuar (300ms como en el CSS)
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     try {
         const res = await fetch(`/pages/${ruta}.html`);
         if (res.ok) {
             const html = await res.text();
-            contenidoDinamico.innerHTML = html;
+            container.innerHTML = html;
+
+            requestAnimationFrame(() => {
+                container.classList.add("visible");
+                // Acá es donde sí o sí ya está en el DOM
+                cargarScriptDeVista(ruta);
+            });
         } else {
-            contenidoDinamico.innerHTML = "<p>Error cargando la vista.</p>";
+            container.innerHTML = "<p>Error cargando la vista.</p>";
         }
     } catch (error) {
         console.error("Error en la carga de vista:", error);
-        contenidoDinamico.innerHTML = "<p>Error al cargar el contenido.</p>";
+        container.innerHTML = "<p>Error al cargar el contenido.</p>";
     }
 }
+
 
 /**
  * Carga un script JS asociado a la vista si existe
  * @param {string} vista - Nombre base del archivo JS (ej: 'turnos')
  */
 function cargarScriptDeVista(vista) {
+    if (vista === "home") {
+        return
+    }
+
     const idScript = 'script-dinamico';
 
     // Elimina script anterior si hay
@@ -118,14 +128,12 @@ function obtenerRutaDesdeHash() {
 /**
  * Carga vista y actualiza navegación al cambiar hash
  */
-function manejarCambioDeHash() {
+async function manejarCambioDeHash() {
     const ruta = obtenerRutaDesdeHash();
+    await cargarCssPorRuta(ruta);
     cargarVista(ruta);
-    cargarCssPorRuta(ruta);
-    cargarScriptDeVista(ruta); // << nuevo
     marcarActivoPorRuta(ruta);
 }
-
 
 // Detectar cambios en la URL hash
 window.addEventListener("hashchange", manejarCambioDeHash);
@@ -138,22 +146,33 @@ window.addEventListener("DOMContentLoaded", () => {
 /*---------------------- RENDERIZADO DINAMICO CSS */
 
 /**
- * Carga dinámicamente un archivo CSS según la ruta
+ * Carga dinámicamente un archivo CSS sin romper la vista anterior
  * @param {string} ruta - Nombre del archivo sin extensión
+ * @returns {Promise<void>}
  */
 function cargarCssPorRuta(ruta) {
-    // Elimina el CSS anterior si existe
-    const estiloAnterior = document.getElementById('estilo-dinamico');
-    if (estiloAnterior) {
-        estiloAnterior.remove();
-    }
+    return new Promise((resolve) => {
+        const nuevoLink = document.createElement('link');
+        nuevoLink.rel = 'stylesheet';
+        nuevoLink.href = `/css/${ruta}.css`;
+        nuevoLink.id = 'estilo-dinamico-nuevo';
 
-    // Crea nuevo link
-    const nuevoLink = document.createElement('link');
-    nuevoLink.rel = 'stylesheet';
-    nuevoLink.href = `/css/${ruta}.css`; // ejemplo: empleados.css
-    nuevoLink.id = 'estilo-dinamico';
+        nuevoLink.onload = () => {
+            // Cuando se haya aplicado el nuevo CSS, eliminamos el anterior
+            const anterior = document.getElementById('estilo-dinamico');
+            if (anterior) anterior.remove();
 
-    // Lo agrega al <head>
-    document.head.appendChild(nuevoLink);
+            // Renombramos el nuevo link como el anterior para mantener el sistema
+            nuevoLink.id = 'estilo-dinamico';
+
+            resolve();
+        };
+
+        nuevoLink.onerror = () => {
+            console.warn(`Error al cargar CSS para ${ruta}`);
+            resolve();
+        };
+
+        document.head.appendChild(nuevoLink);
+    });
 }

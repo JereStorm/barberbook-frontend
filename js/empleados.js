@@ -1,5 +1,5 @@
-"use strict"
-function inciar() {
+"use strict";
+(() => {
 
     // Datos simulados ->(localStorage)
     let empleados = JSON.parse(localStorage.getItem('empleados')) || [];
@@ -121,9 +121,4 @@ function inciar() {
 
     // Inicializar
     renderizarEmpleados();
-};
-
-/*Esperamos 300 milisegundos para que carge el contenido en el DOM antes de ejecutar el script */
-setTimeout(() => {
-    inciar();
-}, 300);
+})();
