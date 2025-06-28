@@ -83,6 +83,10 @@ body {
     animation: slideOut 0.3s ease forwards;
 }
 
+.links-container a {
+    width: 130px;
+}
+
 /* Animación de entrada */
 @keyframes slideIn {
     from {
