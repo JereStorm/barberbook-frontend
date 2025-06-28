@@ -41,7 +41,6 @@ const footer = document.getElementById("footer");
 const rutasSinMenu = ["home", "login", "registro"];
 let banderaSinMenu = true;
 
-
 /**
  * Carga el contenido parcial desde /pages/{ruta}.html
  * @param {string} ruta - nombre sin extensión (ej: 'turnos')

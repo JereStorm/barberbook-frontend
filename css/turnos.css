@@ -25,7 +25,23 @@
 /* Botón eliminar */
 .btn-eliminar {
     background-color: var(--fs-rojo);
+    border: 1px solid var(--fs-rojo);
     color: white;
+    transition: all 0.5s ease;
+
+}
+
+.btn-eliminar:hover {
+    border: 1px solid black;
+}
+
+.btn-editar {
+    border: 1px solid transparent;
+    transition: all 0.5s ease;
+}
+
+.btn-editar:hover {
+    border: 1px solid black;
 }
 
 /* Botón nuevo turno (solo dimensiones) */
@@ -38,12 +54,12 @@
 }
 
 /* Estilos para inputs en el modal */
-.modal-content .form-control, 
+.modal-content .form-control,
 .modal-content .form-select {
     border: 1px solid var(--bg-gris-claro);
 }
 
-.modal-content .form-control:focus, 
+.modal-content .form-control:focus,
 .modal-content .form-select:focus {
     border-color: var(--bg-oscuro);
     box-shadow: 0 0 0 0.25rem rgba(14, 31, 61, 0.25);
