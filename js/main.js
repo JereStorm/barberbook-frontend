@@ -1,6 +1,7 @@
 "use strict";
 
-/*---------------- LOGICA SIDEBAR */
+/*------------------- SIDEBAR MOBILE (boton hamburguesa) -------------------*/
+
 const toggleBtn = document.getElementById("toggleSidebarBtn");
 const sidebar = document.getElementById("mobileSidebar");
 
@@ -9,45 +10,51 @@ let sidebarVisible = false;
 if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
         if (!sidebarVisible) {
+            // Mostrar el sidebar con animacion
             sidebar.classList.remove("d-none");
             sidebar.classList.add("d-flex", "sidebar-slide-in");
             sidebar.classList.remove("sidebar-slide-out");
         } else {
+            // Ocultarlo con animacion
             sidebar.classList.remove("sidebar-slide-in");
             sidebar.classList.add("sidebar-slide-out");
             setTimeout(() => {
                 sidebar.classList.remove("d-flex", "sidebar-slide-out");
                 sidebar.classList.add("d-none");
-            }, 300);
+            }, 300); // mismo tiempo que la animacion CSS
         }
         sidebarVisible = !sidebarVisible;
     });
 }
 
-/*------------------- LOGICA FOOTER*/
+/*------------------- AÑO DINAMICO EN EL FOOTER -------------------*/
 
 const yearSpan = document.getElementById("year");
 if (yearSpan) {
     yearSpan.textContent = new Date().getFullYear();
 }
 
-/*------------------- PARTIAL RENDER CON HASH */
+/*------------------- RENDER DINAMICO DE VISTAS CON HASH -------------------*/
 
 const contenidoDinamico = document.getElementById("contenido-dinamico");
 const navbarsContainer = document.getElementById("navbars");
 const enlaces = document.querySelectorAll(".nav-link");
 const footer = document.getElementById("footer");
 
+// Estas vistas no muestran navbar ni footer
 const rutasSinMenu = ["home", "login", "registro"];
+
+// Estas vistas si tienen JS y CSS propio
+const vistasConRecursos = ["empleados", "login", "registro", "turnos"];
+
+// Flag para saber si ocultar nav y footer
 let banderaSinMenu = true;
 
-/**
- * Carga el contenido parcial desde /pages/{ruta}.html
- * @param {string} ruta - nombre sin extensión (ej: 'turnos')
- */
+// Carga el HTML parcial de una vista desde /pages/{vista}.html
 async function cargarVista(ruta) {
     const container = document.getElementById("contenido-dinamico");
 
+    // Si es una vista sin menu, ocultamos navbars y footer
     banderaSinMenu = rutasSinMenu.includes(ruta);
     if (banderaSinMenu) {
         navbarsContainer.classList.add("d-none");
@@ -57,11 +64,9 @@ async function cargarVista(ruta) {
         footer.classList.remove("d-none");
     }
 
-    // FADE OUT antes de cambiar el contenido
+    // Fade-out antes de reemplazar contenido
     container.classList.remove("visible");
-
-    // Esperamos la duración del fade-out antes de continuar (300ms como en el CSS)
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise(resolve => setTimeout(resolve, 300)); // esperar que termine animacion
 
     try {
         const res = await fetch(`/pages/${ruta}.html`);
@@ -70,9 +75,8 @@ async function cargarVista(ruta) {
             container.innerHTML = html;
 
             requestAnimationFrame(() => {
-                container.classList.add("visible");
-                // Acá es donde sí o sí ya está en el DOM
-                cargarScriptDeVista(ruta);
+                container.classList.add("visible"); // fade-in
+                cargarScriptDeVista(ruta); // cargar JS especifico si corresponde
             });
         } else {
             container.innerHTML = "<p>Error cargando la vista.</p>";
@@ -83,31 +87,19 @@ async function cargarVista(ruta) {
     }
 }
 
-
-/**
- * Carga un script JS asociado a la vista si existe
- * @param {string} vista - Nombre base del archivo JS (ej: 'turnos')
- */
+// Carga el JS de la vista si corresponde (empleados, turnos, etc.)
 function cargarScriptDeVista(vista) {
-    if (vista === "home") {
-        return
-    }
+    if (!vistasConRecursos.includes(vista)) return;
 
     const idScript = 'script-dinamico';
-
-    // Elimina script anterior si hay
     const scriptAnterior = document.getElementById(idScript);
-    if (scriptAnterior) {
-        scriptAnterior.remove();
-    }
+    if (scriptAnterior) scriptAnterior.remove();
 
-    // Crea y agrega nuevo script
     const script = document.createElement('script');
     script.src = `/js/${vista}.js`;
     script.id = idScript;
     script.type = 'text/javascript';
 
-    // Manejo de error si no existe el script
     script.onerror = () => {
         console.warn(`No se encontró script para vista: ${vista}`);
     };
@@ -115,11 +107,7 @@ function cargarScriptDeVista(vista) {
     document.body.appendChild(script);
 }
 
-
-/**
- * Marca el enlace activo en el navbar/menú
- * @param {string} rutaActual
- */
+// Marca el link activo segun la vista actual
 function marcarActivoPorRuta(rutaActual) {
     enlaces.forEach(link => {
         const linkRuta = link.getAttribute("href").replace("#", "");
@@ -127,16 +115,12 @@ function marcarActivoPorRuta(rutaActual) {
     });
 }
 
-/**
- * Obtiene la ruta desde el hash actual (sin #)
- */
+// Devuelve la ruta actual (sin el #)
 function obtenerRutaDesdeHash() {
     return window.location.hash.replace("#", "") || "home";
 }
 
-/**
- * Carga vista y actualiza navegación al cambiar hash
- */
+//Carga la vista completa cada vez que cambia el hash->se usa una funcion asincrona por la necesidad de usar el await, en este paso, para la carga de los css
 async function manejarCambioDeHash() {
     const ruta = obtenerRutaDesdeHash();
     await cargarCssPorRuta(ruta);
@@ -144,36 +128,38 @@ async function manejarCambioDeHash() {
     marcarActivoPorRuta(ruta);
 }
 
-// Detectar cambios en la URL hash
+// Dispara cuando cambia el hash (navegacion con #)
 window.addEventListener("hashchange", manejarCambioDeHash);
 
-// Carga inicial al entrar directo con hash
+// Carga inicial al abrir la pagina con hash directo
 window.addEventListener("DOMContentLoaded", () => {
     manejarCambioDeHash();
 });
 
-/*---------------------- RENDERIZADO DINAMICO CSS */
+/*------------------- RENDER DINAMICO DE CSS -------------------*/
 
-/**
- * Carga dinámicamente un archivo CSS sin romper la vista anterior
- * @param {string} ruta - Nombre del archivo sin extensión
- * @returns {Promise<void>}
- */
+// Carga dinamicamente el CSS de la vista si corresponde
+
 function cargarCssPorRuta(ruta) {
     return new Promise((resolve) => {
+        // Si no tiene CSS propio, no cargamos nada
+        if (!vistasConRecursos.includes(ruta)) {
+            resolve();
+            return;
+        }
+
         const nuevoLink = document.createElement('link');
         nuevoLink.rel = 'stylesheet';
         nuevoLink.href = `/css/${ruta}.css`;
         nuevoLink.id = 'estilo-dinamico-nuevo';
 
         nuevoLink.onload = () => {
-            // Cuando se haya aplicado el nuevo CSS, eliminamos el anterior
+            // Si ya habia un CSS dinamico antes, lo borramos
             const anterior = document.getElementById('estilo-dinamico');
             if (anterior) anterior.remove();
 
-            // Renombramos el nuevo link como el anterior para mantener el sistema
+            // Renombramos el nuevo para mantener consistencia
             nuevoLink.id = 'estilo-dinamico';
-
             resolve();
         };
 
