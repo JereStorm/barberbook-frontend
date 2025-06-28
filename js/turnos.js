@@ -7,6 +7,10 @@
     // Datos simulados ->(localStorage)
     let turnos = JSON.parse(localStorage.getItem('turnos')) || [];
 
+    // Agregue esta linea para obtener los empleados del formulario turnos, desde los empleados creados en el CRUD de los mismos
+    let empleados = JSON.parse(localStorage.getItem('empleados')) || [];
+
+
     // Elementos del DOM
     const tablaTurnos = document.getElementById('tabla-turnos');
     const btnNuevoTurno = document.getElementById('btnNuevoTurno');
@@ -97,29 +101,32 @@
         formTurno.reset();
         document.getElementById('indice-edicion').value = '';
         document.getElementById('fecha').min = new Date().toISOString().split('T')[0];
+
+        cargarOpcionesEmpleado(); 
         modalTurno.show();
     }
+
 
     // Editar turno existente
     function editarTurno(e) {
         const index = e.currentTarget.getAttribute('data-id');
         const turno = turnos[index];
 
-        console.log(turnos)
-
         tituloForm.textContent = 'Editar Turno';
         document.getElementById('indice-edicion').value = index;
-        document.getElementById('nombre').value = "Hola mundo";
+        document.getElementById('nombre').value = turno.nombre;
         document.getElementById('email').value = turno.email;
         document.getElementById('telefono').value = turno.telefono;
         document.getElementById('fecha').value = turno.fecha;
         document.getElementById('hora').value = turno.hora;
         document.getElementById('servicio').value = turno.servicio;
         document.getElementById('duracion').value = turno.duracion;
-        document.getElementById('empleado').value = turno.empleado || '';
+
+        cargarOpcionesEmpleado(turno.empleado); // Ahora los empleados se obtienen de los creados en su CRUD
 
         modalTurno.show();
     }
+
 
     // Eliminar turno
     function eliminarTurno(e) {
@@ -169,6 +176,32 @@
     btnNuevoTurno.addEventListener('click', mostrarFormularioNuevo);
     formTurno.addEventListener('submit', guardarTurno);
     selectOrdenar.addEventListener('change', renderizarTurnos);
+
+
+    // Rellena el select de empleados cada vez que se abre el modal
+    function cargarOpcionesEmpleado(seleccionado = "") {
+        const select = document.getElementById("empleado");
+
+        // Limpiamos las opciones actuales
+        select.innerHTML = `<option value="">Sin asignar</option>`;
+
+        // Releer empleados por si cambiaron
+        empleados = JSON.parse(localStorage.getItem("empleados")) || [];
+
+        empleados.forEach(emp => {
+            const opcion = document.createElement("option");
+            opcion.value = emp.nombre;
+            opcion.textContent = emp.nombre;
+
+            // Si hay uno seleccionado, lo marcamos
+            if (emp.nombre === seleccionado) {
+                opcion.selected = true;
+            }
+
+            select.appendChild(opcion);
+        });
+    }
+
 
     // Inicializar
     renderizarTurnos();
