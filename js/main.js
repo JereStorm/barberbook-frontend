@@ -24,11 +24,19 @@ if (toggleBtn) {
     });
 }
 
+/*------------------- LOGICA FOOTER*/
+
+const yearSpan = document.getElementById("year");
+if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+}
+
 /*------------------- PARTIAL RENDER CON HASH */
 
 const contenidoDinamico = document.getElementById("contenido-dinamico");
 const navbarsContainer = document.getElementById("navbars");
 const enlaces = document.querySelectorAll(".nav-link");
+const footer = document.getElementById("footer");
 
 const rutasSinMenu = ["home", "login", "registro"];
 let banderaSinMenu = true;
@@ -44,8 +52,10 @@ async function cargarVista(ruta) {
     banderaSinMenu = rutasSinMenu.includes(ruta);
     if (banderaSinMenu) {
         navbarsContainer.classList.add("d-none");
+        footer.classList.add("d-none");
     } else {
         navbarsContainer.classList.remove("d-none");
+        footer.classList.remove("d-none");
     }
 
     // FADE OUT antes de cambiar el contenido

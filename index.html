@@ -45,8 +45,8 @@
             class="d-none d-md-none position-fixed top-0 start-0 bottom-0 flex-column flex-shrink-0 p-3 bg-oscuro"
             style="width: 200px; z-index: 1000;">
             <a href="/"
-                class="d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto fs-clara text-decoration-none">
-                <span class="fs-4">#Username</span>
+                class="d-flex justify-content-center align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <span class="fs-4 fs-clara">Barber Book</span>
             </a>
             <hr class="fs-clara">
             <ul class="nav flex-column mb-auto text-center">
@@ -73,6 +73,25 @@
     <main id="contenido-dinamico">
         <!-- Renderizado dinamico -->
     </main>
+
+    <footer id="footer" class="w-100 d-flex justify-content-between align-items-center py-3 px-2 px-md-5 border-top">
+        <small class="col-4 mb-0 fs-gris-oscura">© <span id="year"></span> Barber Book Company, Dev. Team.</small>
+        <div>
+            <a href="/"
+                class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <span class="fs-4 fs-gris-oscura">Barber Book</span>
+            </a>
+        </div>
+
+        <ul class="col-4 nav justify-content-end">
+            <li class="nav-item">
+                <small><a href="#turnos" class="nav-link px-2 fs-gris-oscura">Turnos</a></small>
+            </li>
+            <li class="nav-item">
+                <small><a href="#empleados" class="nav-link px-2 fs-gris-oscura">Empleados</a></small>
+            </li>
+        </ul>
+    </footer>
 
     <!-- Modal para formulario empleados -->
     <div class="modal fade" id="modalEmpleado" tabindex="-1" aria-hidden="true">

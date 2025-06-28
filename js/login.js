@@ -25,6 +25,7 @@
         if (!emailOk || email.value != usuarioValido.email) {
             mostrarEstadoInput(email, false, "emailHelp", "emailError", "Email invalido... Prueba de nuevo");
             esValido = false;
+            return
         } else {
             mostrarEstadoInput(email, true, "emailHelp", "emailError");
         }
