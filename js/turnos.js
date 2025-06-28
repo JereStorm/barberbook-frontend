@@ -1,4 +1,8 @@
 "use strict";
+
+/**Utilizamos una arrow function auto invocada o IIFE para asegurarnos
+ * que el código se ejecute solo cuando el script correspondiente es cargado y evaluado por el navegador,
+ * espués de que su HTML fue inyectado. */
 (() => {
     // Datos simulados ->(localStorage)
     let turnos = JSON.parse(localStorage.getItem('turnos')) || [];

@@ -1,4 +1,8 @@
 "use strict";
+
+/**Utilizamos una arrow function auto invocada o IIFE para asegurarnos
+ * que el código se ejecute solo cuando el script correspondiente es cargado y evaluado por el navegador,
+ * espués de que su HTML fue inyectado. */
 (() => {
     const form = document.getElementById("form-registro");
 
@@ -31,18 +35,21 @@
         if (!repassValido) esFormularioValido = false;
 
         if (esFormularioValido) {
-            const container = document.getElementById("contenido-dinamico");
-
-            // Paso 1: forzar el fade-out
-            container.classList.remove("visible");
-
-            // Paso 2: esperar que termine la animación
-            setTimeout(() => {
-                // Paso 3: cambiar de página
-                location.hash = "#turnos";
-            }, 300); // mismo valor que tu transición CSS
+            navegarConAnimacion("#turnos");
         }
     });
+
+    /**
+     * Realiza la animación de salida y luego redirige a la nueva vista.
+     * @param {string} hashDestino - Ruta hash hacia la que se debe navegar
+     */
+    function navegarConAnimacion(hashDestino) {
+        const container = document.getElementById("contenido-dinamico");
+        container.classList.remove("visible");
+        setTimeout(() => {
+            location.hash = hashDestino;
+        }, 300);
+    }
 
     /**
      * Limpia las clases de validación de un input.
