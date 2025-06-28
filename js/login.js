@@ -46,7 +46,8 @@
         };
 
         // Guardar en localStorage o lo que quieras
-        window.location.href = "#turnos";
+        location.hash = "#turnos";
+
 
         // Podés mostrar también un mensaje general
         console.log("Credenciales correctas");

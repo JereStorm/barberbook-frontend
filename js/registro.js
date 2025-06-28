@@ -31,8 +31,7 @@
         if (!repassValido) esFormularioValido = false;
 
         if (esFormularioValido) {
-            // Guardar en localStorage o lo que quieras
-            window.location.href = "#turnos";
+            location.hash = "#turnos";
         }
     });
 
