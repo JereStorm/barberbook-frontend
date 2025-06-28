@@ -1,35 +1,55 @@
 "use strict";
 (() => {
-    const formRegistro = document.getElementById("form-registro");
-    formRegistro.addEventListener("submit", validarRegistro);
+    const form = document.getElementById("form-registro");
 
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const repassword = document.getElementById("re-password");
 
-    function validarRegistro() {
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+        // Limpiar validaciones anteriores
+        [email, password, repassword].forEach(limpiarEstadoInput);
 
+        let esFormularioValido = true;
 
-        // Validar formato de email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert("El email no tiene un formato válido.");
-            return;
-        }
+        // Validar email
+        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        emailValido.test(email.value.trim());
+        aplicarEstadoInput(email, emailValido);
+        if (!emailValido) esFormularioValido = false;
 
-        // Validar longitud de la contraseña
-        if (password.length < 6) {
-            alert("La contraseña debe tener al menos 6 caracteres.");
-            return;
-        }
+        // Validar password
+        const passValido = password.value.length >= 6;
+        aplicarEstadoInput(password, passValido);
+        if (!passValido) esFormularioValido = false;
 
-        const validarEmail = "peluquero@ejemplo.com";
-        const validarPassword = "123456";
+        // Validar confirmación
+        const repassValido = password.value === repassword.value && repassword.value !== "";
+        aplicarEstadoInput(repassword, repassValido);
+        if (!repassValido) esFormularioValido = false;
 
-        if (email === validarEmail && password === validarPassword) {
+        if (esFormularioValido) {
+            // Guardar en localStorage o lo que quieras
             window.location.href = "#turnos";
-        } else {
-            alert("Usuario o Contraseña incorrectos.")
         }
+    });
+
+    /**
+     * Limpia las clases de validación de un input.
+     * @param {HTMLInputElement} input
+     */
+    function limpiarEstadoInput(input) {
+        input.classList.remove("is-valid", "is-invalid");
+    }
+
+    /**
+     * Aplica clase visual a un input según si pasó o no la validación.
+     * @param {HTMLInputElement} input
+     * @param {boolean} esValido
+     */
+    function aplicarEstadoInput(input, esValido) {
+        input.classList.add(esValido ? "is-valid" : "is-invalid");
     }
 })();

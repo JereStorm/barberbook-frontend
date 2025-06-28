@@ -4,17 +4,15 @@
     <div class="mb-3">
       <label for="email" class="form-label">Email </label>
       <input type="email" class="form-control" id="email" aria-describedby="emailHelp" required />
-      <div id="emailHelp" class="form-text">
-        Ingresa un email valido con @
-      </div>
+      <div id="emailHelp" class="form-text">Ingresa un email valido con @</div>
+      <div id="emailError" class="invalid-feedback">El email no es válido o no existe.</div>
+
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Contraseña</label>
-      <input type="password" class="form-control" id="password" required />
-      <div id="passwordHelp" class="form-text">
-        Ingresa un minimo de 6 caracteres
-      </div>
-
+      <input type="password" class="form-control" id="password" aria-describedby="passwordHelp" required />
+      <div id="passwordHelp" class="form-text">Ingresa un minimo de 6 caracteres</div>
+      <div id="passwordError" class="invalid-feedback">Contraseña incorrecta.</div>
     </div>
     <p><small>Si todavia no tenes un usuario <a href="#registro">Registrate</a></small></p>
     <button type="submit" class="btn btn-primario">Ingresar</button>

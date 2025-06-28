@@ -69,9 +69,9 @@
 
         tituloForm.textContent = 'Editar Empleado';
         document.getElementById('indice-edicion').value = index;
-        document.getElementById('nombre').value = empleado.nombre;
-        document.getElementById('email').value = empleado.email;
-        document.getElementById('telefono').value = empleado.telefono;
+        document.getElementById('nombreEmpleado').value = empleado.nombre;
+        document.getElementById('emailEmpleado').value = empleado.email;
+        document.getElementById('telefonoEmpleado').value = empleado.telefono;
 
         modalEmpleado.show();
     }

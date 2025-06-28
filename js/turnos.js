@@ -101,9 +101,11 @@
         const index = e.currentTarget.getAttribute('data-id');
         const turno = turnos[index];
 
+        console.log(turnos)
+
         tituloForm.textContent = 'Editar Turno';
         document.getElementById('indice-edicion').value = index;
-        document.getElementById('nombre').value = turno.nombre;
+        document.getElementById('nombre').value = "Hola mundo";
         document.getElementById('email').value = turno.email;
         document.getElementById('telefono').value = turno.telefono;
         document.getElementById('fecha').value = turno.fecha;
