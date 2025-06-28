@@ -92,9 +92,9 @@
 
         const indexEdicion = document.getElementById('indice-edicion').value;
         const empleado = {
-            nombre: document.getElementById('nombre').value,
-            email: document.getElementById('email').value,
-            telefono: document.getElementById('telefono').value,
+            nombre: document.getElementById('nombreEmpleado').value,
+            email: document.getElementById('emailEmpleado').value,
+            telefono: document.getElementById('telefonoEmpleado').value,
         };
 
         if (indexEdicion === '') {
