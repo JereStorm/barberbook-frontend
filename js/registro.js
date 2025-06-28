@@ -31,7 +31,16 @@
         if (!repassValido) esFormularioValido = false;
 
         if (esFormularioValido) {
-            location.hash = "#turnos";
+            const container = document.getElementById("contenido-dinamico");
+
+            // Paso 1: forzar el fade-out
+            container.classList.remove("visible");
+
+            // Paso 2: esperar que termine la animación
+            setTimeout(() => {
+                // Paso 3: cambiar de página
+                location.hash = "#turnos";
+            }, 300); // mismo valor que tu transición CSS
         }
     });
 
