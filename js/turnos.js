@@ -99,10 +99,10 @@
     function mostrarFormularioNuevo() {
         tituloForm.textContent = 'Crear Turno';
         formTurno.reset();
-        document.getElementById('indice-edicion').value = '';
+        document.getElementById('indice-edicion-turno').value = '';
         document.getElementById('fecha').min = new Date().toISOString().split('T')[0];
 
-        cargarOpcionesEmpleado(); 
+        cargarOpcionesEmpleado();
         modalTurno.show();
     }
 
@@ -113,14 +113,14 @@
         const turno = turnos[index];
 
         tituloForm.textContent = 'Editar Turno';
-        document.getElementById('indice-edicion').value = index;
-        document.getElementById('nombre').value = turno.nombre;
-        document.getElementById('email').value = turno.email;
-        document.getElementById('telefono').value = turno.telefono;
-        document.getElementById('fecha').value = turno.fecha;
-        document.getElementById('hora').value = turno.hora;
-        document.getElementById('servicio').value = turno.servicio;
-        document.getElementById('duracion').value = turno.duracion;
+        document.getElementById('indice-edicion-turno').value = index;
+        document.getElementById('nombreTurno').value = turno.nombre;
+        document.getElementById('emailTurno').value = turno.email;
+        document.getElementById('telefonoTurno').value = turno.telefono;
+        document.getElementById('fechaTurno').value = turno.fecha;
+        document.getElementById('horaTurno').value = turno.hora;
+        document.getElementById('servicioTurno').value = turno.servicio;
+        document.getElementById('duracionTurno').value = turno.duracion;
 
         cargarOpcionesEmpleado(turno.empleado); // Ahora los empleados se obtienen de los creados en su CRUD
 
@@ -142,16 +142,16 @@
     function guardarTurno(e) {
         e.preventDefault();
 
-        const indexEdicion = document.getElementById('indice-edicion').value;
+        const indexEdicion = document.getElementById('indice-edicion-turno').value;
         const turno = {
-            nombre: document.getElementById('nombre').value,
-            email: document.getElementById('email').value,
-            telefono: document.getElementById('telefono').value,
-            fecha: document.getElementById('fecha').value,
-            hora: document.getElementById('hora').value,
-            servicio: document.getElementById('servicio').value,
-            duracion: document.getElementById('duracion').value,
-            empleado: document.getElementById('empleado').value || null
+            nombre: document.getElementById('nombreTurno').value,
+            email: document.getElementById('emailTurno').value,
+            telefono: document.getElementById('telefonoTurno').value,
+            fecha: document.getElementById('fechaTurno').value,
+            hora: document.getElementById('horaTurno').value,
+            servicio: document.getElementById('servicioTurno').value,
+            duracion: document.getElementById('duracionTurno').value,
+            empleado: document.getElementById('empleadoTurno').value || null
         };
 
         if (indexEdicion === '') {
@@ -180,7 +180,7 @@
 
     // Rellena el select de empleados cada vez que se abre el modal
     function cargarOpcionesEmpleado(seleccionado = "") {
-        const select = document.getElementById("empleado");
+        const select = document.getElementById("empleadoTurno");
 
         // Limpiamos las opciones actuales
         select.innerHTML = `<option value="">Sin asignar</option>`;
