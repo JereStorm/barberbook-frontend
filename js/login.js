@@ -39,7 +39,7 @@
         };
 
         // Redirigir con animación si todo fue exitoso
-        navegarConAnimacion("#turnos");
+        navegarConAnimacion("#nosotros");
 
         // Podemos también un mensaje general
         console.log("Credenciales correctas");

@@ -45,7 +45,7 @@ const footer = document.getElementById("footer");
 const rutasSinMenu = ["home", "login", "registro"];
 
 // Estas vistas si tienen JS y CSS propio
-const vistasConRecursos = ["empleados", "login", "registro", "turnos"];
+const vistasConRecursos = ["empleados", "login", "registro", "turnos", "nosotros"];
 
 // Flag para saber si ocultar nav y footer
 let banderaSinMenu = true;

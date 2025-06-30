@@ -35,7 +35,7 @@
         if (!repassValido) esFormularioValido = false;
 
         if (esFormularioValido) {
-            navegarConAnimacion("#turnos");
+            navegarConAnimacion("#nosotros");
         }
     });
 
