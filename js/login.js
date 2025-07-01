@@ -2,24 +2,28 @@
 
 /**Utilizamos una arrow function auto invocada o IIFE para asegurarnos
  * que el código se ejecute solo cuando el script correspondiente es cargado y evaluado por el navegador,
- * espués de que su HTML fue inyectado. */
+ * después de que su HTML fue inyectado. */
 (() => {
     const form = document.getElementById("form-login");
     const email = document.getElementById("email");
     const password = document.getElementById("password");
 
-    // Datos de ejemplo para login
+    // Datos de ejemplo para login que usamos para validar
     const usuarioValido = {
         email: "peluquero@ejemplo.com",
         password: "123123"
     };
 
+    /**
+     * Escuchamos el evento submit del formulario y ejecutamos las validaciones
+     */
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        let esValido = true;
+        //bandera de valides del formulario 
+        let esValido = true; 
 
-        // Limpiar estados anteriores
+        // Limpiar estados anteriores para despues volver a evaluarlos 
         [email, password].forEach(input => input.classList.remove("is-valid", "is-invalid"));
 
         validarEmail();
