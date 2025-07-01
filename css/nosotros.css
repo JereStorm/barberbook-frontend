@@ -4,11 +4,20 @@
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
+  font-size: 70px;
+}
+.sombra-texto {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+.opacity-0{
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;   
 }
 
-blockquote {
-    border-left: 4px solid #555;
-    padding-left: 1rem;
-    color: #555;
-    font-style: italic;
+.testimonioContainer{
+    min-height: 160px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
