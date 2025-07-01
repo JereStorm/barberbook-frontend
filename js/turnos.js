@@ -100,7 +100,7 @@
         tituloForm.textContent = 'Crear Turno';
         formTurno.reset();
         document.getElementById('indice-edicion-turno').value = '';
-        document.getElementById('fecha').min = new Date().toISOString().split('T')[0];
+        document.getElementById('fechaTurno').min = new Date().toISOString().split('T')[0];
 
         cargarOpcionesEmpleado();
         modalTurno.show();
