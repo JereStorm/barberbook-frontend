@@ -126,18 +126,19 @@ body {
 /* Transición suave al cargar contenido */
 #contenido-dinamico {
     opacity: 0;
-    transform: translateY(0px);
+    transform: translateY(-20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 #contenido-dinamico.visible {
     opacity: 1;
-    transform: translateY(20px);
+    transform: translateY(0px);
 }
 
 
 /* Correccion footer superpuesto */
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -150,8 +151,10 @@ body {
 }
 
 main {
-    flex: 1; /* Ocupará el espacio restante, empujando el footer abajo */
+    flex: 1;
+    /* Ocupará el espacio restante, empujando el footer abajo */
 }
+
 main {
-    padding-bottom: 1rem; 
+    padding-bottom: 1rem;
 }
