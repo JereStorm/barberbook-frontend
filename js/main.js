@@ -7,25 +7,50 @@ const sidebar = document.getElementById("mobileSidebar");
 
 let sidebarVisible = false;
 
+const overlay = document.getElementById("sidebarOverlay");
+
 if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
         if (!sidebarVisible) {
-            // Mostrar el sidebar con animacion
+            // Mostrar sidebar
             sidebar.classList.remove("d-none");
             sidebar.classList.add("d-flex", "sidebar-slide-in");
             sidebar.classList.remove("sidebar-slide-out");
+
+            // Mostrar overlay
+            overlay.classList.remove("d-none");
         } else {
-            // Ocultarlo con animacion
+            // Ocultar sidebar con animación
             sidebar.classList.remove("sidebar-slide-in");
             sidebar.classList.add("sidebar-slide-out");
+
+            // Ocultar overlay después de la animación
             setTimeout(() => {
                 sidebar.classList.remove("d-flex", "sidebar-slide-out");
                 sidebar.classList.add("d-none");
-            }, 300); // mismo tiempo que la animacion CSS
+                overlay.classList.add("d-none");
+            }, 200);
         }
+
         sidebarVisible = !sidebarVisible;
     });
+
+    // Cierre si se hace clic sobre el overlay
+    overlay.addEventListener("click", () => {
+        if (sidebarVisible) {
+            sidebar.classList.remove("sidebar-slide-in");
+            sidebar.classList.add("sidebar-slide-out");
+
+            setTimeout(() => {
+                sidebar.classList.remove("d-flex", "sidebar-slide-out");
+                sidebar.classList.add("d-none");
+                overlay.classList.add("d-none");
+                sidebarVisible = false;
+            }, 300);
+        }
+    });
 }
+
 
 /*------------------- AÑO DINAMICO EN EL FOOTER -------------------*/
 

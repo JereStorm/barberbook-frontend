@@ -81,41 +81,39 @@ body {
 }
 
 .sidebar-slide-in {
-    animation: slideIn 0.3s ease forwards;
+    animation: slideInSidebar 0.2s ease-out forwards;
 }
 
 .sidebar-slide-out {
-    animation: slideOut 0.3s ease forwards;
+    animation: slideOutSidebar 0.2s ease-in forwards;
 }
+
 
 .links-container a {
     width: 130px;
 }
 
-/* Animación de entrada */
-@keyframes slideIn {
+@keyframes slideInSidebar {
     from {
-        transform: translateX(-220px);
-        opacity: 0;
+        transform: translateX(-100%);
     }
 
     to {
         transform: translateX(0);
-        opacity: 1;
     }
 }
 
-@keyframes slideOut {
+@keyframes slideOutSidebar {
     from {
         transform: translateX(0);
-        opacity: 1;
     }
 
     to {
-        transform: translateX(-220px);
-        opacity: 0;
+        transform: translateX(-100%);
     }
 }
+
+
 
 @media only screen and (min-width: 768px) {
     .contenedor {
