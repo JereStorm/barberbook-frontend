@@ -1,23 +1,33 @@
-
-.fuente-titulo{
-  font-family: "Outfit", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
-  font-size: 70px;
+.fuente-titulo {
+    font-family: "Outfit", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 70px;
 }
+
 .sombra-texto {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-.opacity-0{
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;   
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.testimonioContainer{
+.opacity-0 {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.testimonioContainer {
     min-height: 160px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

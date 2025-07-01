@@ -6,12 +6,7 @@
       Tu espacio digital para gestionar turnos de peluquería de manera simple y
       eficiente.
     </p>
-    <img
-      src="/assets/peluqueria.png"
-      alt="Logo Barber Book"
-      class="img-fluid my-3"
-      style="max-height: 200px"
-    />
+    <img src="/assets/peluqueria.png" alt="Logo Barber Book" class="img-fluid my-3" style="max-height: 200px" />
   </div>
 
   <!-- ¿Quiénes somos? -->
@@ -28,51 +23,52 @@
       Somos un grupo de desarrolladores apasionados por crear soluciones
       prácticas, elegantes y funcionales.
     </p>
-
-    <div class="row mt-4 g-4">
-      <div class="col-md-6 col-lg-5 mx-md-auto">
-        <div class="card shadow-sm h-100">
-          <div class="card-body">
+    <div class="container mt-5">
+      <div class="row g-4 justify-content-center">
+        <!-- CARD 1 -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="card shadow-sm h-100 text-center p-3">
+            <div class="avatar mb-3 mx-auto" title="Jeremías González Storm"
+              style="background-image: url('../assets/jeremias.jpg');"></div>
             <h5 class="card-title">Jeremías González Storm</h5>
             <p class="card-text">
-              Desarrollador Fullstack. Apasionado por el código limpio, el
-              trabajo en equipo y la mejora continua.
+              Desarrollador Fullstack. Apasionado por el código limpio, el trabajo en equipo y la mejora continua.
             </p>
           </div>
         </div>
-      </div>
 
-      <div class="col-md-6 col-lg-5 mx-md-auto">
-        <div class="card shadow-sm h-100">
-          <div class="card-body">
+        <!-- CARD 2 -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="card shadow-sm h-100 text-center p-3">
+            <div class="avatar mb-3 mx-auto" title="Sofía Domínguez"
+              style="background-image: url('../assets/sofia.jpg');"></div>
             <h5 class="card-title">Sofía Domínguez</h5>
             <p class="card-text">
-              Desarrolladora Fullstack. Comprometida con ofrecer soluciones
-              funcionales y experiencias atractivas.
+              Desarrolladora Fullstack. Comprometida con ofrecer soluciones funcionales y experiencias atractivas.
             </p>
           </div>
         </div>
-      </div>
 
-      <div class="col-md-6 col-lg-5 mx-md-auto">
-        <div class="card shadow-sm h-100">
-          <div class="card-body">
+        <!-- CARD 3 -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="card shadow-sm h-100 text-center p-3">
+            <div class="avatar mb-3 mx-auto" title="Braian Bartolotti"
+              style="background-image: url('../assets/braian.jpg');"></div>
             <h5 class="card-title">Braian Bartolotti</h5>
             <p class="card-text">
-              Desarrollador Fullstack. Enfocado en la calidad, el rendimiento y
-              la entrega de valor constante.
+              Desarrollador Fullstack. Enfocado en la calidad, el rendimiento y la entrega de valor constante.
             </p>
           </div>
         </div>
-      </div>
 
-      <div class="col-md-6 col-lg-5 mx-md-auto">
-        <div class="card shadow-sm h-100">
-          <div class="card-body">
+        <!-- CARD 4 -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="card shadow-sm h-100 text-center p-3">
+            <div class="avatar mb-3 mx-auto" title="Manuel Vásquez"
+              style="background-image: url('../assets/manuel.jpg');"></div>
             <h5 class="card-title">Manuel Vásquez</h5>
             <p class="card-text">
-              Desarrollador Fullstack. Aporta visión técnica y compromiso con la
-              estabilidad del sistema.
+              Desarrollador Fullstack. Aporta visión técnica y compromiso con la estabilidad del sistema.
             </p>
           </div>
         </div>
@@ -102,16 +98,13 @@
       </li>
     </ul>
   </section>
-<hr>
+  <hr>
   <!-- Testimonios -->
   <section class="mb-5">
     <h2 class="fs-4 fs-principal mb-4">Testimonios</h2>
     <div class="position-relative bg-light p-4 rounded shadow testimonioContainer">
       <!-- Botón Anterior -->
-      <button
-        id="prevTestimonio"
-        class="btn btn-link position-absolute top-50 start-0 translate-middle-y"
-      >
+      <button id="prevTestimonio" class="btn btn-link position-absolute top-50 start-0 translate-middle-y">
         <i class="bi bi-chevron-left fs-3 fs-principal"></i>
       </button>
       <blockquote class="blockquote text-center mb-0 px-3">
@@ -124,15 +117,12 @@
         </footer>
       </blockquote>
       <!-- Botón Siguiente -->
-      <button
-        id="nextTestimonio"
-        class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
-      >
+      <button id="nextTestimonio" class="btn btn-link position-absolute top-50 end-0 translate-middle-y">
         <i class="bi bi-chevron-right fs-3 fs-principal"></i>
       </button>
     </div>
   </section>
-<hr>
+  <hr>
   <!-- Formulario de contacto -->
   <section class="mb-5">
     <h2 class="fs-4 fs-principal mb-4">¿Tenés preguntas?</h2>
@@ -144,32 +134,16 @@
     <form class="row g-3 px-md-5 mt-2">
       <div class="col-md-6 px-md-5">
         <label for="nombreContacto" class="form-label">Nombre</label>
-        <input
-          type="text"
-          class="form-control"
-          id="nombreContacto"
-          placeholder="Tu nombre"
-        />
+        <input type="text" class="form-control" id="nombreContacto" placeholder="Tu nombre" />
       </div>
       <div class="col-md-6 px-md-5">
-        <label for="correoContacto" class="form-label"
-          >Correo electrónico</label
-        >
-        <input
-          type="email"
-          class="form-control"
-          id="correoContacto"
-          placeholder="tucorreo@ejemplo.com"
-        />
+        <label for="correoContacto" class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" id="correoContacto" placeholder="tucorreo@ejemplo.com" />
       </div>
       <div class="col-12 px-md-5">
         <label for="mensajeContacto" class="form-label">Mensaje</label>
-        <textarea
-          class="form-control"
-          id="mensajeContacto"
-          rows="3"
-          placeholder="Tu consulta o sugerencia..."
-        ></textarea>
+        <textarea class="form-control" id="mensajeContacto" rows="3"
+          placeholder="Tu consulta o sugerencia..."></textarea>
       </div>
       <div class="col-12 px-md-5">
         <button type="submit" class="btn btn-primario">Enviar</button>
