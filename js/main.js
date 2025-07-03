@@ -148,8 +148,10 @@ function obtenerRutaDesdeHash() {
 //Carga la vista completa cada vez que cambia el hash->se usa una funcion asincrona por la necesidad de usar el await, en este paso, para la carga de los css
 async function manejarCambioDeHash() {
     const ruta = obtenerRutaDesdeHash();
-    await cargarCssPorRuta(ruta);
     cargarVista(ruta);
+    setTimeout(() => {
+        cargarCssPorRuta(ruta);
+    }, 300);
     marcarActivoPorRuta(ruta);
 }
 

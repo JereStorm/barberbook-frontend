@@ -80,6 +80,6 @@
 @media only screen and (min-width: 768px) {
     .banner-separador {
         margin-left: calc(-51vw + 49%);
-
+        transform: translateX(10px);
     }
 }
