@@ -31,3 +31,12 @@
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+#avatarSofi,
+#avatarJere {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
