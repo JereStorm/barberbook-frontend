@@ -44,4 +44,75 @@
     indiceActual = (indiceActual + 1) % testimonios.length;
     mostrarContenido(indiceActual);
   });
+
+
+
+  /**
+ * -------------------- VALIDACIONES FORMULARIO DE CONTACTO
+ */
+  const form = document.getElementById("form-contacto");
+  const nombre = document.getElementById("nombreContacto");
+  const correo = document.getElementById("correoContacto");
+  const mensaje = document.getElementById("mensajeContacto");
+  const mensajeExito = document.getElementById("mensajeExito");
+  const feedbackContainer = document.getElementById("formFeedback");
+  const loader = document.getElementById("loaderContacto");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    let esValido = true;
+
+    // Limpiar mensajes anteriores
+    [nombre, correo, mensaje].forEach(input => {
+      input.classList.remove("is-valid", "is-invalid");
+    });
+    mensajeExito.classList.add("d-none");
+    feedbackContainer.style.display = "none";
+    loader.classList.add("d-none");
+
+    // Validar nombre
+    if (nombre.value.trim().length < 2) {
+      nombre.classList.add("is-invalid");
+      esValido = false;
+    } else {
+      nombre.classList.add("is-valid");
+    }
+
+    // Validar correo
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(correo.value.trim())) {
+      correo.classList.add("is-invalid");
+      esValido = false;
+    } else {
+      correo.classList.add("is-valid");
+    }
+
+    // Validar mensaje
+    if (mensaje.value.trim().length < 5) {
+      mensaje.classList.add("is-invalid");
+      esValido = false;
+    } else {
+      mensaje.classList.add("is-valid");
+    }
+
+    if (!esValido) return;
+
+    // Mostrar loader y simular envío
+    loader.classList.remove("d-none");
+
+    setTimeout(() => {
+      loader.classList.add("d-none");
+      feedbackContainer.style.display = "block";
+      mensajeExito.classList.remove("d-none");
+
+      // Limpiar campos y clases
+      form.reset();
+      [nombre, correo, mensaje].forEach(input => input.classList.remove("is-valid", "is-invalid"));
+    }, 1500); // tiempo en ms del "envío"
+
+    setTimeout(() => {
+      mensajeExito.classList.add("d-none")
+    }, 3000);
+  });
 })();
