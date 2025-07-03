@@ -293,7 +293,7 @@
     // ------------------------------
     // EVENTOS INICIALES
     // ------------------------------
-    
+
     // Configuro los event listeners principales
     btnNuevoTurno.addEventListener('click', mostrarFormularioNuevo);
     formTurno.addEventListener('submit', guardarTurno);

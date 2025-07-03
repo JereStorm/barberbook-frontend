@@ -69,7 +69,7 @@
     width: 100vw;
     /* 100% del ancho de la pantalla */
     height: 220px;
-    margin-left: calc(-51vw + 49%);
+    margin-left: calc(-50vw + 50%);
     /* El truco para romper el container centrado */
     border-radius: 0;
     /* Quitamos border-radius para que se vea completo */
@@ -77,12 +77,9 @@
     position: relative;
 }
 
+@media only screen and (min-width: 768px) {
+    .banner-separador {
+        margin-left: calc(-51vw + 49%);
 
-/* Si algún día querés superposición de color o texto encima:
-.banner-separador::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+    }
 }
-*/
