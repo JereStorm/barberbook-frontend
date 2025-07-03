@@ -75,6 +75,33 @@ const vistasConRecursos = ["empleados", "login", "registro", "turnos", "nosotros
 // Flag para saber si ocultar nav y footer
 let banderaSinMenu = true;
 
+// Dispara cuando cambia el hash (navegacion con #)
+window.addEventListener("hashchange", manejarCambioDeHash);
+
+// Carga inicial al abrir la pagina con hash directo
+window.addEventListener("DOMContentLoaded", () => {
+    manejarCambioDeHash();
+});
+
+/**Carga la vista completa cada vez que cambia el hash->
+ * se usa una funcion asincrona por la necesidad de usar el await, en este paso,
+ * para la carga de los css
+*/
+async function manejarCambioDeHash() {
+    const ruta = obtenerRutaDesdeHash();
+    // 1 Cargamos la vista
+    await cargarVista(ruta);
+    // setTimeout(() => {
+    await cargarCssPorRuta(ruta);
+    // }, 300);
+    marcarActivoPorRuta(ruta);
+}
+
+// Devuelve la ruta actual (sin el #)
+function obtenerRutaDesdeHash() {
+    return window.location.hash.replace("#", "") || "home";
+}
+
 // Carga el HTML parcial de una vista desde /pages/{vista}.html
 async function cargarVista(ruta) {
     const container = document.getElementById("contenido-dinamico");
@@ -93,6 +120,8 @@ async function cargarVista(ruta) {
     container.classList.remove("visible");
     await new Promise(resolve => setTimeout(resolve, 300)); // esperar que termine animacion
 
+    //En este punto ya termino la animacion de salida
+
     try {
         const res = await fetch(`/pages/${ruta}.html`);
         if (res.ok) {
@@ -101,6 +130,8 @@ async function cargarVista(ruta) {
 
             requestAnimationFrame(() => {
                 container.classList.add("visible"); // fade-in
+
+                //En este punto ya existe el nuevo HTML y es Visible
                 cargarScriptDeVista(ruta); // cargar JS especifico si corresponde
             });
         } else {
@@ -114,6 +145,7 @@ async function cargarVista(ruta) {
 
 // Carga el JS de la vista si corresponde (empleados, turnos, etc.)
 function cargarScriptDeVista(vista) {
+    //barrera para buscar el error y no continuar la funcion de ser necesario
     if (!vistasConRecursos.includes(vista)) return;
 
     const idScript = 'script-dinamico';
@@ -139,29 +171,6 @@ function marcarActivoPorRuta(rutaActual) {
         link.classList.toggle("active", linkRuta === rutaActual);
     });
 }
-
-// Devuelve la ruta actual (sin el #)
-function obtenerRutaDesdeHash() {
-    return window.location.hash.replace("#", "") || "home";
-}
-
-//Carga la vista completa cada vez que cambia el hash->se usa una funcion asincrona por la necesidad de usar el await, en este paso, para la carga de los css
-async function manejarCambioDeHash() {
-    const ruta = obtenerRutaDesdeHash();
-    cargarVista(ruta);
-    setTimeout(() => {
-        cargarCssPorRuta(ruta);
-    }, 300);
-    marcarActivoPorRuta(ruta);
-}
-
-// Dispara cuando cambia el hash (navegacion con #)
-window.addEventListener("hashchange", manejarCambioDeHash);
-
-// Carga inicial al abrir la pagina con hash directo
-window.addEventListener("DOMContentLoaded", () => {
-    manejarCambioDeHash();
-});
 
 /*------------------- RENDER DINAMICO DE CSS -------------------*/
 
