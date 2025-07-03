@@ -46,7 +46,7 @@ Si querés levantarlo con un servidor local simple:
 
 1. Abrí index.html
 
-2. Iniciá sesión con las credenciales predefinidas (Usuario: admin@peluqueria.com, contraseña: 1234)
+2. Iniciá sesión con las credenciales predefinidas (Usuario: peluquero@ejemplo.com, contraseña: 123123)
 
 3. Usá el menú de navegación para:
 
@@ -56,7 +56,7 @@ Si querés levantarlo con un servidor local simple:
 
 4. Podés crear, editar o eliminar desde formularios y tablas.
 
-5. La información se guarda en memoria o en localStorage.
+5. La información se guarda en localStorage.
 
 ### Documentacion:
 
@@ -64,6 +64,7 @@ Si querés levantarlo con un servidor local simple:
 - Google Drive: https://drive.google.com/drive/folders/1iNgk87ktPxIVHVjKhX8JX5RhkVyxDoiI?usp=sharing
 - Jira: https://proyecto-fip-grupo-28.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?atlOrigin=eyJpIjoiZWM0YmI1MTY5MzkwNDQxNzk1YzFkOWQwZmM0OTMwYWMiLCJwIjoiaiJ9
 - Figma: https://www.figma.com/design/wnLUC1FCfYv7Dk45079Jni/Maquetado?node-id=0-1&t=6iHRilAAuMIV8MKK-1
+  
 ### Requisitos de aprobacion
 
 - Aplicacion navegable con al menos 3 pantallas.
