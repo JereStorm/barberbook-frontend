@@ -18,10 +18,15 @@
 body {
     font-family: var(--font-principal);
     min-height: 100vh;
+    padding-bottom: 100px;
 }
 
 .contenedor {
     padding-top: 70px;
+}
+
+.nav-link {
+    color: #153b7e;
 }
 
 /* Fondos */
@@ -60,6 +65,11 @@ body {
     color: var(--fs-clara);
 }
 
+.btn-primario:hover,
+.btn-secundario:hover {
+    border: 1px solid var(--bg-oscuro);
+}
+
 .btn-secundario {
     background-color: var(--bg-gris-claro);
     color: var(--fs-gris-oscura);
@@ -67,45 +77,82 @@ body {
 
 .active {
     text-decoration: underline;
+    font-weight: bold;
 }
 
-
-
 .sidebar-slide-in {
-    animation: slideIn 0.3s ease forwards;
+    animation: slideInSidebar 0.2s ease-out forwards;
 }
 
 .sidebar-slide-out {
-    animation: slideOut 0.3s ease forwards;
+    animation: slideOutSidebar 0.2s ease-in forwards;
 }
 
-/* Animación de entrada */
-@keyframes slideIn {
+
+.links-container a {
+    width: 130px;
+}
+
+@keyframes slideInSidebar {
     from {
-        transform: translateX(-220px);
-        opacity: 0;
+        transform: translateX(-100%);
     }
 
     to {
         transform: translateX(0);
-        opacity: 1;
     }
 }
 
-@keyframes slideOut {
+@keyframes slideOutSidebar {
     from {
         transform: translateX(0);
-        opacity: 1;
     }
 
     to {
-        transform: translateX(-220px);
-        opacity: 0;
+        transform: translateX(-100%);
     }
 }
+
+
 
 @media only screen and (min-width: 768px) {
     .contenedor {
         padding-top: 0px;
     }
+}
+
+/* Transición suave al cargar contenido */
+#contenido-dinamico {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#contenido-dinamico.visible {
+    opacity: 1;
+    transform: translateY(0px);
+}
+
+
+/* Correccion footer superpuesto */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+    /* Ocupará el espacio restante, empujando el footer abajo */
+}
+
+main {
+    padding-bottom: 1rem;
 }
