@@ -109,8 +109,10 @@ window.addEventListener("DOMContentLoaded", () => {
  */
 async function manejarCambioDeHash() {
     const ruta = obtenerRutaDesdeHash();
-    await cargarVista(ruta);
-    await cargarCssPorRuta(ruta);
+    cargarVista(ruta);
+    setTimeout(() => {
+        cargarCssPorRuta(ruta);
+    }, 300);
     marcarActivoPorRuta(ruta);
 }
 
