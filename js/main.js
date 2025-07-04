@@ -10,6 +10,7 @@ let sidebarVisible = false;
 const overlay = document.getElementById("sidebarOverlay");
 
 if (toggleBtn) {
+    // Escuchamos el click sobre el boton hamburguesa
     toggleBtn.addEventListener("click", () => {
         if (!sidebarVisible) {
             // Mostrar sidebar
@@ -51,7 +52,6 @@ if (toggleBtn) {
     });
 }
 
-
 /*------------------- AÑO DINAMICO EN EL FOOTER -------------------*/
 
 const yearSpan = document.getElementById("year");
@@ -59,68 +59,86 @@ if (yearSpan) {
     yearSpan.textContent = new Date().getFullYear();
 }
 
-/*------------------- RENDER DINAMICO DE VISTAS CON HASH -------------------*/
-
+/**
+ * ELEMENTOS PRINCIPALES DEL DOM PARA NAVEGACION Y CONTENIDO
+ */
 const contenidoDinamico = document.getElementById("contenido-dinamico");
 const navbarsContainer = document.getElementById("navbars");
 const enlaces = document.querySelectorAll(".nav-link");
 const footer = document.getElementById("footer");
 
-// Estas vistas no muestran navbar ni footer
+/**
+ * Rutas que no deben mostrar navbar ni footer.
+ * @type string[]
+ */
 const rutasSinMenu = ["home", "login", "registro"];
 
-// Estas vistas si tienen JS y CSS propio
+/**
+ * Vistas que tienen archivos CSS y JS propios.
+ * @type string[]
+ */
 const vistasConRecursos = ["empleados", "login", "registro", "turnos", "nosotros"];
 
-// Flag para saber si ocultar nav y footer
+/**
+ * Bandera para controlar si ocultar el nav/footer.
+ * @type boolean
+ */
 let banderaSinMenu = true;
 
-// Dispara cuando cambia el hash (navegacion con #)
+/* ---------------------------------------------------------------------------
+ * EVENTOS DE INICIO DE NAVEGACIÓN SPA
+ * ---------------------------------------------------------------------------
+ */
+
+/**
+ * Evento: se dispara cada vez que cambia el hash en la URL.
+ */
 window.addEventListener("hashchange", manejarCambioDeHash);
 
-// Carga inicial al abrir la pagina con hash directo
+/**
+ * Evento: se dispara al cargar la página, para detectar el hash inicial.
+ */
 window.addEventListener("DOMContentLoaded", () => {
     manejarCambioDeHash();
 });
 
-/**Carga la vista completa cada vez que cambia el hash->
- * se usa una funcion asincrona por la necesidad de usar el await, en este paso,
- * para la carga de los css
-*/
+/**
+ * Maneja el cambio de vista según el hash actual.
+ * Carga la vista HTML, aplica el CSS correspondiente y marca el enlace activo.
+ * @returns {Promise<void>}
+ */
 async function manejarCambioDeHash() {
     const ruta = obtenerRutaDesdeHash();
-    // 1 Cargamos la vista
     await cargarVista(ruta);
-    // setTimeout(() => {
     await cargarCssPorRuta(ruta);
-    // }, 300);
     marcarActivoPorRuta(ruta);
 }
 
-// Devuelve la ruta actual (sin el #)
+/**
+ * Obtiene el nombre de la ruta actual a partir del hash en la URL.
+ * @returns {string} - Ruta limpia sin el símbolo #
+ */
 function obtenerRutaDesdeHash() {
     return window.location.hash.replace("#", "") || "home";
 }
 
-// Carga el HTML parcial de una vista desde /pages/{vista}.html
+/**
+ * Carga dinámicamente el HTML correspondiente a una vista.
+ * Aplica animaciones de transición y controla la visibilidad de navbar/footer.
+ * @param {string} ruta - Nombre de la vista sin extensión.
+ * @returns {Promise<void>}
+ */
 async function cargarVista(ruta) {
-    const container = document.getElementById("contenido-dinamico");
+    const container = contenidoDinamico;
 
-    // Si es una vista sin menu, ocultamos navbars y footer
+    // Ocultar o mostrar el navbar y el footer
     banderaSinMenu = rutasSinMenu.includes(ruta);
-    if (banderaSinMenu) {
-        navbarsContainer.classList.add("d-none");
-        footer.classList.add("d-none");
-    } else {
-        navbarsContainer.classList.remove("d-none");
-        footer.classList.remove("d-none");
-    }
+    navbarsContainer.classList.toggle("d-none", banderaSinMenu);
+    footer.classList.toggle("d-none", banderaSinMenu);
 
-    // Fade-out antes de reemplazar contenido
+    // Fade-out antes de reemplazar el contenido
     container.classList.remove("visible");
-    await new Promise(resolve => setTimeout(resolve, 300)); // esperar que termine animacion
-
-    //En este punto ya termino la animacion de salida
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     try {
         const res = await fetch(`/pages/${ruta}.html`);
@@ -128,11 +146,10 @@ async function cargarVista(ruta) {
             const html = await res.text();
             container.innerHTML = html;
 
+            // Fade-in después de reemplazar
             requestAnimationFrame(() => {
-                container.classList.add("visible"); // fade-in
-
-                //En este punto ya existe el nuevo HTML y es Visible
-                cargarScriptDeVista(ruta); // cargar JS especifico si corresponde
+                container.classList.add("visible");
+                cargarScriptDeVista(ruta);
             });
         } else {
             container.innerHTML = "<p>Error cargando la vista.</p>";
@@ -143,9 +160,12 @@ async function cargarVista(ruta) {
     }
 }
 
-// Carga el JS de la vista si corresponde (empleados, turnos, etc.)
+/**
+ * Carga dinámicamente el archivo JS correspondiente a la vista, si existe.
+ * Elimina el anterior y lo reemplaza con uno nuevo.
+ * @param {string} vista - Nombre de la vista (ej: "turnos").
+ */
 function cargarScriptDeVista(vista) {
-    //barrera para buscar el error y no continuar la funcion de ser necesario
     if (!vistasConRecursos.includes(vista)) return;
 
     const idScript = 'script-dinamico';
@@ -164,7 +184,10 @@ function cargarScriptDeVista(vista) {
     document.body.appendChild(script);
 }
 
-// Marca el link activo segun la vista actual
+/**
+ * Marca visualmente el enlace de navegación activo en función de la ruta actual.
+ * @param {string} rutaActual - Ruta activa (ej: "empleados").
+ */
 function marcarActivoPorRuta(rutaActual) {
     enlaces.forEach(link => {
         const linkRuta = link.getAttribute("href").replace("#", "");
@@ -172,13 +195,19 @@ function marcarActivoPorRuta(rutaActual) {
     });
 }
 
-/*------------------- RENDER DINAMICO DE CSS -------------------*/
+/* ---------------------------------------------------------------------------
+ * CARGA DINÁMICA DE CSS
+ *---------------------------------------------------------------------------
+*/
 
-// Carga dinamicamente el CSS de la vista si corresponde
-
+/**
+ * Carga dinámicamente el archivo CSS correspondiente a la vista, si existe
+ * y reemplaza el anterior si ya había uno cargado.
+ * @param {string} ruta - nombre de la vista
+ * @returns {Promise<void>}
+ */
 function cargarCssPorRuta(ruta) {
     return new Promise((resolve) => {
-        // Si no tiene CSS propio, no cargamos nada
         if (!vistasConRecursos.includes(ruta)) {
             resolve();
             return;
@@ -190,11 +219,9 @@ function cargarCssPorRuta(ruta) {
         nuevoLink.id = 'estilo-dinamico-nuevo';
 
         nuevoLink.onload = () => {
-            // Si ya habia un CSS dinamico antes, lo borramos
             const anterior = document.getElementById('estilo-dinamico');
             if (anterior) anterior.remove();
 
-            // Renombramos el nuevo para mantener consistencia
             nuevoLink.id = 'estilo-dinamico';
             resolve();
         };
