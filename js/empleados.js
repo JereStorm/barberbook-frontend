@@ -6,6 +6,8 @@
 
     // Datos simulados ->(localStorage)
     let empleados = JSON.parse(localStorage.getItem('empleados')) || [];
+    let turnos = JSON.parse(localStorage.getItem('turnos')) || [];
+
 
     // Elementos del DOM
     const tablaEmpleados = document.getElementById('tabla-empleados');
@@ -81,7 +83,18 @@
 
     // Eliminar empleado
     function eliminarEmpleado(e) {
-        if (confirm('¿Estás seguro de que quieres eliminar este empleado?')) {
+        const index = e.currentTarget.getAttribute('data-id');
+        const empleado = empleados[index];
+        let mensaje = "¿Estás seguro de que quieres eliminar este empleado?"; 
+
+        // Validamos si el empleado tiene turnos asignados 
+        turnos.forEach(element => {
+            if (element.empleado == empleado.nombre) {
+                mensaje = "El empleado tiene turnos ¿Seguro que quieres eliminarlo?";
+            }
+        });
+
+        if (confirm(mensaje)) {
             const index = e.currentTarget.getAttribute('data-id');
             empleados.splice(index, 1);
             guardarEmpleados();
