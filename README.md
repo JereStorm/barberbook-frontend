@@ -1,81 +1,90 @@
-# Sistema de Administración de Turnos para Peluquería
 
-## Nombre del Proyecto
-Turnos Peluquería – Frontend
+# BarberBook – Frontend
 
 ## Descripción
 
-Este proyecto es una aplicación web enfocada en la **gestión de turnos y empleados** para una peluquería, desarrollada como trabajo práctico para la materia de Programación.  
-La aplicación permite a los peluqueros o administradores iniciar sesión, cargar turnos de clientes, asociar empleados, y mantener una agenda organizada.
+Este proyecto es una **aplicación web para la gestión de turnos en peluquerías y barberías**. Forma parte del desarrollo de **BarberBook**, el sistema integral que incluye frontend y backend.
 
-### Características principales
+La aplicación está orientada a recepcionistas, administradores y empleados de un salón, permitiéndoles organizar de manera sencilla los turnos, clientes y servicios que ofrece la peluquería.
 
-- Login con validación básica
-- CRUD completo de turnos:
-  - Crear, editar y eliminar turnos
-  - Asignar empleados a turnos o dejarlos sin asignar
-- CRUD completo de empleados:
-  - Crear, editar y eliminar empleados
-  - Validaciones asociadas a turnos existentes
-- Navegación entre pantallas
-- Diseño responsive con Bootstrap
-- Simulación de almacenamiento en memoria (o `localStorage`)
+Su objetivo principal es **mejorar la eficiencia en la administración de citas**, asegurando que cada empleado, cliente y servicio queden correctamente registrados y asociados.
 
 ---
 
-## Instalación
+## Características principales
 
-No requiere instalación de dependencias externas. Solo necesitas un navegador moderno.  
-Cloná o descargá el proyecto y abrí el archivo `index.html` en tu navegador.
+* **Autenticación de usuarios** con roles diferenciados (administrador, recepcionista, empleado).
+* **Gestión de clientes**: registro de información de contacto.
+* **Gestión de empleados**: creación, edición, activación/desactivación.
+* **Gestión de servicios**: alta, edición y control de disponibilidad de los servicios del salón.
+* **Agenda de turnos**:
 
-### Opcional: Servidor local para desarrollo
+  * Crear turnos seleccionando cliente, empleado, servicio, fecha y hora.
+  * Reprogramar turnos (cambio de empleado, horario o servicio).
+  * Cancelar turnos marcando estado como `canceled`.
+* **Historial y trazabilidad**: cada turno guarda quién lo creó y lo modificó.
+* **Interfaz intuitiva y responsive**, pensada para usarse tanto en dispositivos móviles como en escritorio.
 
-Si querés levantarlo con un servidor local simple:
+---
 
-1. Cloná el repositorio:
-   ```bash
-   git clone https://github.com/tuusuario/turnos-peluqueria.git
-2. Ingresa al proyecto:
-   ```bash
-   cd turnos-peluqueria
-3. Usá una extensión como Live Server (VS Code) o corré:
-   ```bash
-   npx serve .
+## Instalación y ejecución
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/tuusuario/turnos-peluqueria-frontend.git
+cd turnos-peluqueria-frontend
+```
+
+### 2. Instalar dependencias
+
+```bash
+npm install
+```
+
+### 3. Levantar el servidor local
+
+```bash
+npm run dev
+```
+
+---
 
 ## Uso
 
-1. Abrí index.html
+1. Iniciar sesión con credenciales válidas según el rol asignado (ejemplo: administrador, recepcionista).
+2. Acceder al menú principal para:
 
-2. Iniciá sesión con las credenciales predefinidas (Usuario: peluquero@ejemplo.com, contraseña: 123123)
+   * 📅 **Gestionar turnos**.
+   * 👤 **Gestionar clientes**.
+   * 💼 **Gestionar empleados**.
+   * ✂️ **Gestionar servicios**.
+3. Operar con formularios y tablas para crear, editar, cancelar o listar información.
 
-3. Usá el menú de navegación para:
+---
 
-    Gestionar turnos
+## Documentación y recursos
 
-    Gestionar empleados
+* 📑 [Presentación en Canva](https://www.canva.com/design/DAGiN-Z6BJY/7ekvPEv_fIHH8W8yAe-MTA/edit)
+* 📁 [Google Drive](https://drive.google.com/drive/folders/1iNgk87ktPxIVHVjKhX8JX5RhkVyxDoiI?usp=sharing)
+* 🗂 [Jira – Gestión del proyecto](https://proyecto-fip-grupo-28.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog)
+* 🎨 [Figma – Maquetado UI](https://www.figma.com/design/wnLUC1FCfYv7Dk45079Jni/Maquetado?node-id=0-1)
 
-4. Podés crear, editar o eliminar desde formularios y tablas.
+---
 
-5. La información se guarda en localStorage.
+## Requisitos de aprobación
 
-### Documentacion:
+* La aplicación debe ser navegable con al menos **3 pantallas funcionales**.
+* Cada pantalla debe incluir al menos un **CRUD completo** (crear, leer, actualizar, eliminar).
+* El flujo principal de gestión de turnos debe estar implementado.
+* El sistema debe aplicar **buenas prácticas de Git y trabajo en equipo**.
+* La interfaz debe ser **usable y responsive**.
 
-- Presentacion: https://www.canva.com/design/DAGiN-Z6BJY/7ekvPEv_fIHH8W8yAe-MTA/edit?utm_content=DAGiN-Z6BJY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
-- Google Drive: https://drive.google.com/drive/folders/1iNgk87ktPxIVHVjKhX8JX5RhkVyxDoiI?usp=sharing
-- Jira: https://proyecto-fip-grupo-28.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?atlOrigin=eyJpIjoiZWM0YmI1MTY5MzkwNDQxNzk1YzFkOWQwZmM0OTMwYWMiLCJwIjoiaiJ9
-- Figma: https://www.figma.com/design/wnLUC1FCfYv7Dk45079Jni/Maquetado?node-id=0-1&t=6iHRilAAuMIV8MKK-1
-  
-### Requisitos de aprobacion
-
-- Aplicacion navegable con al menos 3 pantallas.
-- Desarrollo aplicando buenas practicas de git (branches especificas de desarrollo para cada contribuidor)
-- Una seria un LogIn, las otras dos serian de libre eleccion siempre y cuando contengan el formato para crear un CRUD (para poder practicar toda la parte de backend).
-- Solo seria la parte de Front End de momento.
-- Tema a libre elección (Salen cosas muy buenas cuando los dejamos volar).
-- Nos quedaria poner la parte de limites para que no se vuelen y lo puedan terminar bien. Todo lo que les sobre de tiempo lo pueden usar para extras
+---
 
 ## Licencia
 
-Este proyecto es de uso educativo y no tiene fines comerciales.
-Podés modificarlo y distribuirlo bajo la licencia MIT.
-© 2025 – Grupo de Programación – Turnos Peluquería.
+Este proyecto es de uso **educativo** y no tiene fines comerciales.
+Podés modificarlo y distribuirlo bajo la licencia **MIT**.
+
+© 2025 – Grupo 28 – BarberBook.
