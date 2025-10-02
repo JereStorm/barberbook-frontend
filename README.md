@@ -1,46 +1,90 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# BarberBook – Frontend
 
-## Available Scripts
+## Descripción
 
-In the project directory, you can run:
+Este proyecto es una **aplicación web para la gestión de turnos en peluquerías y barberías**. Forma parte del desarrollo de **BarberBook**, el sistema integral que incluye frontend y backend.
 
-### `npm start`
+La aplicación está orientada a recepcionistas, administradores y empleados de un salón, permitiéndoles organizar de manera sencilla los turnos, clientes y servicios que ofrece la peluquería.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Su objetivo principal es **mejorar la eficiencia en la administración de citas**, asegurando que cada empleado, cliente y servicio queden correctamente registrados y asociados.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## Características principales
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* **Autenticación de usuarios** con roles diferenciados (administrador, recepcionista, empleado).
+* **Gestión de clientes**: registro de información de contacto.
+* **Gestión de empleados**: creación, edición, activación/desactivación.
+* **Gestión de servicios**: alta, edición y control de disponibilidad de los servicios del salón.
+* **Agenda de turnos**:
 
-### `npm run build`
+  * Crear turnos seleccionando cliente, empleado, servicio, fecha y hora.
+  * Reprogramar turnos (cambio de empleado, horario o servicio).
+  * Cancelar turnos marcando estado como `canceled`.
+* **Historial y trazabilidad**: cada turno guarda quién lo creó y lo modificó.
+* **Interfaz intuitiva y responsive**, pensada para usarse tanto en dispositivos móviles como en escritorio.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Instalación y ejecución
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 1. Clonar el repositorio
 
-### `npm run eject`
+```bash
+git clone https://github.com/tuusuario/turnos-peluqueria-frontend.git
+cd turnos-peluqueria-frontend
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### 2. Instalar dependencias
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 3. Levantar el servidor local
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+npm run dev
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Uso
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Iniciar sesión con credenciales válidas según el rol asignado (ejemplo: administrador, recepcionista).
+2. Acceder al menú principal para:
+
+   * 📅 **Gestionar turnos**.
+   * 👤 **Gestionar clientes**.
+   * 💼 **Gestionar empleados**.
+   * ✂️ **Gestionar servicios**.
+3. Operar con formularios y tablas para crear, editar, cancelar o listar información.
+
+---
+
+## Documentación y recursos
+
+* 📑 [Presentación en Canva](https://www.canva.com/design/DAGiN-Z6BJY/7ekvPEv_fIHH8W8yAe-MTA/edit)
+* 📁 [Google Drive](https://drive.google.com/drive/folders/1iNgk87ktPxIVHVjKhX8JX5RhkVyxDoiI?usp=sharing)
+* 🗂 [Jira – Gestión del proyecto](https://proyecto-fip-grupo-28.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog)
+* 🎨 [Figma – Maquetado UI](https://www.figma.com/design/wnLUC1FCfYv7Dk45079Jni/Maquetado?node-id=0-1)
+
+---
+
+## Requisitos de aprobación
+
+* La aplicación debe ser navegable con al menos **3 pantallas funcionales**.
+* Cada pantalla debe incluir al menos un **CRUD completo** (crear, leer, actualizar, eliminar).
+* El flujo principal de gestión de turnos debe estar implementado.
+* El sistema debe aplicar **buenas prácticas de Git y trabajo en equipo**.
+* La interfaz debe ser **usable y responsive**.
+
+---
+
+## Licencia
+
+Este proyecto es de uso **educativo** y no tiene fines comerciales.
+Podés modificarlo y distribuirlo bajo la licencia **MIT**.
+
+© 2025 – Grupo 28 – BarberBook.
