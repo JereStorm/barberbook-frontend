@@ -48,6 +48,13 @@ npm install
 npm run dev
 ```
 
+### 4. Configurar variables de entorno
+
+Crear archivo .env en la raiz del proyecto con las siguientes variables:
+
+REACT_APP_API_URL=http://localhost:3001/
+REACT_APP_VERSION=1.0.0
+
 ---
 
 ## Uso
