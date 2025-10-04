@@ -52,10 +52,13 @@ npm run dev
 
 Crear archivo .env en la raiz del proyecto con las siguientes variables:
 
+```bash
 REACT_APP_API_URL=http://localhost:3001/
+```
 
+```bash
 REACT_APP_VERSION=1.0.0
-
+```
 ---
 
 ## Uso
