@@ -32,8 +32,8 @@ Su objetivo principal es **mejorar la eficiencia en la administración de citas*
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/turnos-peluqueria-frontend.git
-cd turnos-peluqueria-frontend
+git clone https://github.com/JereStorm/barberbook-frontend
+cd barberbook-frontend
 ```
 
 ### 2. Instalar dependencias
