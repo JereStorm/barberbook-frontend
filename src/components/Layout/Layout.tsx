@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Users, Building2, LogOut, Home,Menu,X} from 'lucide-react';
+import { Users, Building2, LogOut, Home, Menu, X, Contact } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
 
@@ -36,6 +36,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         name: 'Usuarios',
         href: '/users',
         icon: Users,
+        show: true,
+      });
+    }
+
+    // Clientes - según permisos
+    if ([UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user.role)) {
+      items.push({
+        name: 'Clientes',
+        href: '/clients',
+        icon: Contact,
         show: true,
       });
     }
@@ -89,7 +99,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="h-screen flex overflow-hidden bg-gray-100">
       {/* Mobile sidebar */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
@@ -116,7 +126,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <X className="w-5 h-5" />
           </button>
         </div>
-        
+
         <div className="p-4 bg-gray-50 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-medium">
@@ -131,13 +141,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </p>
             </div>
           </div>
-          
+
           <div className="mt-3 flex items-center justify-between">
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(user.role)}`}>
               {getRoleDisplayName(user.role)}
             </span>
           </div>
-          
+
           {user.salon && (
             <div className="mt-2 p-2 bg-blue-50 rounded-lg">
               <p className="text-xs font-medium text-blue-800">
@@ -154,16 +164,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? 'bg-blue-100 text-blue-700 border border-blue-200 shadow-sm'
-                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                }`}
+                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${isActive
+                  ? 'bg-blue-100 text-blue-700 border border-blue-200 shadow-sm'
+                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
                 onClick={() => setSidebarOpen(false)}
               >
-                <item.icon className={`mr-3 h-5 w-5 flex-shrink-0 transition-colors ${
-                  isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'
-                }`} />
+                <item.icon className={`mr-3 h-5 w-5 flex-shrink-0 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'
+                  }`} />
                 {item.name}
               </Link>
             );
@@ -190,7 +198,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             >
               <Menu className="w-6 h-6" />
             </button>
-            
+
             <div>
               <h1 className="text-xl font-semibold text-gray-900">
                 {navigationItems.find(item => item.href === location.pathname)?.name || 'Dashboard'}

@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import UsersManagement from './pages/UsersManagement';
 import SalonsManagement from './pages/SalonsManagement';
 import { UserRole } from './types';
+import ClientsManagement from './pages/ClientsManagment';
 
 // Componente para rutas protegidas
 interface ProtectedRouteProps {
@@ -56,7 +57,7 @@ const AppContent: React.FC = () => {
         <Routes>
           {/* Ruta publica */}
           <Route path="/login" element={<Login />} />
-          
+
           {/* Rutas protegidas */}
           <Route
             path="/dashboard"
@@ -66,34 +67,43 @@ const AppContent: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="/users"
             element={
-              <ProtectedRoute 
+              <ProtectedRoute
                 allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA]}
               >
                 <UsersManagement />
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="/salons"
             element={
-              <ProtectedRoute 
+              <ProtectedRoute
                 allowedRoles={[UserRole.SUPER_ADMIN]}
               >
                 <SalonsManagement />
               </ProtectedRoute>
             }
           />
-          
+
+          <Route
+            path="/clients"
+            element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.RECEPCIONISTA]}>
+                <ClientsManagement />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Redirect a dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          
-          <Route 
-            path="*" 
+
+          <Route
+            path="*"
             element={
               <ProtectedRoute>
                 <div className="text-center py-12">
@@ -103,15 +113,15 @@ const AppContent: React.FC = () => {
                   <p className="text-gray-600 mb-4">
                     La página que buscas no existe.
                   </p>
-                  <a 
-                    href="/dashboard" 
+                  <a
+                    href="/dashboard"
                     className="text-blue-600 hover:text-blue-800"
                   >
                     Volver al Dashboard
                   </a>
                 </div>
               </ProtectedRoute>
-            } 
+            }
           />
         </Routes>
 

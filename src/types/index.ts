@@ -100,3 +100,26 @@ export interface ApiError {
   statusCode?: number;
   error?: string;
 }
+
+//CLIENTS (ajustado al DTO y tabla backend)
+export interface Client {
+  id: number;
+  salonId: number;
+  name: string;
+  email?: string | null;
+  mobile?: string | null;
+  createdAt?: string; // ISO string desde backend
+}
+
+export interface CreateClientRequest {
+  salonId: number; // requerido por CreateClientDto
+  name: string;
+  email?: string | null;
+  mobile?: string | null;
+}
+
+export interface UpdateClientRequest {
+  name?: string;
+  email?: string | null;
+  mobile?: string | null;
+}

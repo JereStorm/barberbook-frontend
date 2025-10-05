@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import {LoginRequest,AuthResponse,User,Salon,CreateUserRequest,UpdateUserRequest,CreateSalonRequest,UpdateSalonRequest,ApiError} from '../types';
+import { LoginRequest, AuthResponse, User, Salon, CreateUserRequest, UpdateUserRequest, CreateSalonRequest, UpdateSalonRequest, ApiError } from '../types';
 
 class ApiService {
   private api: AxiosInstance;
@@ -115,14 +115,14 @@ class ApiService {
         error: error.response.data.error,
       };
     }
-    
+
     if (error.request) {
       return {
         message: 'Error de conexión con el servidor',
         statusCode: 0,
       };
     }
-    
+
     return {
       message: error.message || 'Error desconocido',
     };

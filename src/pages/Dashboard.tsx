@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
       if ([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role)) {
         const users = await apiService.getUsers();
         setRecentUsers(users.slice(0, 5)); // Últimos 5 usuarios
-        
+
         setStats(prev => ({
           ...prev,
           totalUsers: users.length,
