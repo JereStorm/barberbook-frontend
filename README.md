@@ -1,3 +1,51 @@
+# Getting Started with Create React App
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+
 # Sistema de Administración de Turnos para Peluquería
 
 ## Nombre del Proyecto
@@ -44,18 +92,12 @@ Si querés levantarlo con un servidor local simple:
 
 ## Uso
 
-1. Abrí index.html
-
-2. Iniciá sesión con las credenciales predefinidas (Usuario: admin@peluqueria.com, contraseña: 1234)
-
+1. Abrí index.html  
+2. Iniciá sesión con las credenciales predefinidas (Usuario: admin@peluqueria.com, contraseña: 1234)  
 3. Usá el menú de navegación para:
-
-    Gestionar turnos
-
-    Gestionar empleados
-
-4. Podés crear, editar o eliminar desde formularios y tablas.
-
+   - Gestionar turnos
+   - Gestionar empleados  
+4. Podés crear, editar o eliminar desde formularios y tablas.  
 5. La información se guarda en memoria o en localStorage.
 
 ### Documentacion:
@@ -64,17 +106,17 @@ Si querés levantarlo con un servidor local simple:
 - Google Drive: https://drive.google.com/drive/folders/1iNgk87ktPxIVHVjKhX8JX5RhkVyxDoiI?usp=sharing
 - Jira: https://proyecto-fip-grupo-28.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?atlOrigin=eyJpIjoiZWM0YmI1MTY5MzkwNDQxNzk1YzFkOWQwZmM0OTMwYWMiLCJwIjoiaiJ9
 - Figma: https://www.figma.com/design/wnLUC1FCfYv7Dk45079Jni/Maquetado?node-id=0-1&t=6iHRilAAuMIV8MKK-1
-### Requisitos de aprobacion
 
-- Aplicacion navegable con al menos 3 pantallas.
-- Desarrollo aplicando buenas practicas de git (branches especificas de desarrollo para cada contribuidor)
-- Una seria un LogIn, las otras dos serian de libre eleccion siempre y cuando contengan el formato para crear un CRUD (para poder practicar toda la parte de backend).
-- Solo seria la parte de Front End de momento.
-- Tema a libre elección (Salen cosas muy buenas cuando los dejamos volar).
-- Nos quedaria poner la parte de limites para que no se vuelen y lo puedan terminar bien. Todo lo que les sobre de tiempo lo pueden usar para extras
+### Requisitos de aprobación
+
+- Aplicacion navegable con al menos 3 pantallas.  
+- Desarrollo aplicando buenas practicas de git (branches específicas de desarrollo para cada contribuidor).  
+- Una sería un LogIn, las otras dos serían de libre elección siempre y cuando contengan el formato CRUD (para poder practicar backend).  
+- Solo sería la parte de Front End de momento.  
+- Tema a libre elección.  
 
 ## Licencia
 
-Este proyecto es de uso educativo y no tiene fines comerciales.
-Podés modificarlo y distribuirlo bajo la licencia MIT.
+Este proyecto es de uso educativo y no tiene fines comerciales.  
+Podés modificarlo y distribuirlo bajo la licencia MIT.  
 © 2025 – Grupo de Programación – Turnos Peluquería.
