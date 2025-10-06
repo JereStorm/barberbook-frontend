@@ -1,0 +1,85 @@
+.fuente-titulo {
+    font-family: "Outfit", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 70px;
+}
+
+.sombra-texto {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.opacity-0 {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.testimonioContainer {
+    min-height: 160px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#avatarSofi,
+#avatarJere {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#formFeedback .alert {
+    animation: fadeSlide 0.5s ease;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#loaderContacto .spinner-border {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.banner-separador {
+    background-image: url('/assets/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    /* 100% del ancho de la pantalla */
+    height: 220px;
+    margin-left: calc(-50vw + 50%);
+    /* El truco para romper el container centrado */
+    border-radius: 0;
+    /* Quitamos border-radius para que se vea completo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+@media only screen and (min-width: 768px) {
+    .banner-separador {
+        margin-left: calc(-51vw + 49%);
+        transform: translateX(10px);
+    }
+}

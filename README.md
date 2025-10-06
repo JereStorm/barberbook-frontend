@@ -32,8 +32,8 @@ Su objetivo principal es **mejorar la eficiencia en la administración de citas*
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/turnos-peluqueria-frontend.git
-cd turnos-peluqueria-frontend
+git clone https://github.com/JereStorm/barberbook-frontend
+cd barberbook-frontend
 ```
 
 ### 2. Instalar dependencias
@@ -48,6 +48,17 @@ npm install
 npm run dev
 ```
 
+### 4. Configurar variables de entorno
+
+Crear archivo .env en la raiz del proyecto con las siguientes variables:
+
+```bash
+REACT_APP_API_URL=http://localhost:3001/
+```
+
+```bash
+REACT_APP_VERSION=1.0.0
+```
 ---
 
 ## Uso
