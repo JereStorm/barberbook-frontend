@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, UserCheck, UserX, Eye,EyeOff,Search,Filter} from 'lucide-react';
+import { Plus, Edit, Trash2, UserCheck, UserX, Eye, EyeOff, Search, Filter } from 'lucide-react';
 import { apiService } from '../services/api';
 import { User, CreateUserRequest, UpdateUserRequest, UserRole } from '../types';
 import { useAuth } from '../hooks/useAuth';
@@ -49,7 +49,7 @@ const UsersManagement: React.FC = () => {
 
   const getAvailableRoles = (): UserRole[] => {
     if (!currentUser) return [];
-    
+
     switch (currentUser.role) {
       case UserRole.SUPER_ADMIN:
         return [UserRole.ADMIN, UserRole.RECEPCIONISTA, UserRole.ESTILISTA];
@@ -223,7 +223,7 @@ const UsersManagement: React.FC = () => {
   // Filtrar usuarios
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
     return matchesSearch && matchesRole;
   });
@@ -239,7 +239,7 @@ const UsersManagement: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center bg-white rounded-lg shadow p-6 py-8">
         <h1 className="text-2xl font-bold text-gray-900">Gestión de Usuarios</h1>
         <button
           onClick={openCreateModal}
