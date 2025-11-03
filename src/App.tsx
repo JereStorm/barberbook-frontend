@@ -9,7 +9,8 @@ import Dashboard from './pages/Dashboard';
 import UsersManagement from './pages/UsersManagement';
 import SalonsManagement from './pages/SalonsManagement';
 import { UserRole } from './types';
-import ClientsManagement from './pages/ClientsManagment';
+import ClientsManagement from './pages/ClientsManagement';
+import ServicesManagement from './pages/ServicesManagement';
 
 // Componente para rutas protegidas
 interface ProtectedRouteProps {
@@ -95,6 +96,15 @@ const AppContent: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.RECEPCIONISTA]}>
                 <ClientsManagement />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/services"
+            element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.RECEPCIONISTA]}>
+                <ServicesManagement />
               </ProtectedRoute>
             }
           />

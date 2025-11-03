@@ -1,9 +1,8 @@
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Users, Building2, LogOut, Home, Menu, X, Contact } from 'lucide-react';
+import { Users, Building2, LogOut, Home, Menu, X, Contact, SquareScissors } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
-
 interface LayoutProps {
   children: ReactNode;
 }
@@ -36,6 +35,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         name: 'Usuarios',
         href: '/users',
         icon: Users,
+        show: true,
+      });
+    }
+
+    // Servicios - según permisos
+    if ([UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user.role)) {
+      items.push({
+        name: 'Servicios',
+        href: '/services',
+        icon: SquareScissors,
         show: true,
       });
     }
@@ -174,6 +183,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   }`} />
                 {item.name}
               </Link>
+
             );
           })}
         </nav>
