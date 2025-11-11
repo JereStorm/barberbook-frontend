@@ -63,13 +63,13 @@ Crea una nueva rama local llamada dev
 
 La sincroniza automáticamente con la remota origin/dev
 
-### 3. Levantar el servidor local
+### 4. Levantar el servidor local
 
 ```bash
 npm run dev
 ```
 
-### 4. Configurar variables de entorno
+### 5. Configurar variables de entorno
 
 Crear archivo .env en la raiz del proyecto con las siguientes variables:
 
