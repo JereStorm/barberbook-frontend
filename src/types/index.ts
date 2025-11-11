@@ -131,6 +131,7 @@ export interface Service {
   name: string;
   durationMin: number;
   price: number;
+  isActive: boolean;
 }
 
 export interface CreateServiceRequest {
@@ -144,4 +145,5 @@ export interface UpdateServiceRequest {
   name?: string;
   price?: string | null;
   durationMin?: string | null;
+  isActive?: boolean;
 }
