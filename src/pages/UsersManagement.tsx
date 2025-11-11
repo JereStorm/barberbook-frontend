@@ -14,6 +14,7 @@ import { apiService } from "../services/api";
 import { User, CreateUserRequest, UpdateUserRequest, UserRole } from "../types";
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
+import AlertService from "../helpers/sweetAlert/AlertService";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -159,7 +160,17 @@ const UsersManagement: React.FC = () => {
   };
 
   const handleDeleteUser = async (user: User) => {
-    if (!window.confirm(`¿Estás seguro de eliminar al usuario ${user.name}?`)) {
+    const confirmed = await AlertService.confirm(
+      `¿Está seguro que desea eliminar al usuario "${user.name}"?`
+    );
+
+    if (!confirmed) {
+      toast.success("Eliminación cancelada");
+      return;
+    }
+
+    if (!currentUser) {
+      toast.error("Usuario no autenticado");
       return;
     }
 
@@ -354,9 +365,8 @@ const UsersManagement: React.FC = () => {
                         <UserX className="w-5 h-5 text-red-500 mr-2" />
                       )}
                       <span
-                        className={`text-sm ${
-                          user.isActive ? "text-green-600" : "text-red-600"
-                        }`}
+                        className={`text-sm ${user.isActive ? "text-green-600" : "text-red-600"
+                          }`}
                       >
                         {user.isActive ? "Activo" : "Inactivo"}
                       </span>
@@ -383,11 +393,10 @@ const UsersManagement: React.FC = () => {
                             currentUser?.id !== user.id && (
                               <button
                                 onClick={() => handleToggleUserStatus(user)}
-                                className={`${
-                                  user.isActive
-                                    ? "text-red-600 hover:text-red-900"
-                                    : "text-green-600 hover:text-green-900"
-                                }`}
+                                className={`${user.isActive
+                                  ? "text-red-600 hover:text-red-900"
+                                  : "text-green-600 hover:text-green-900"
+                                  }`}
                               >
                                 {user.isActive ? (
                                   <UserX className="w-4 h-4" />
@@ -538,8 +547,8 @@ const UsersManagement: React.FC = () => {
                     {isSubmitting
                       ? "Guardando..."
                       : editingUser
-                      ? "Actualizar"
-                      : "Crear"}
+                        ? "Actualizar"
+                        : "Crear"}
                   </button>
                   <button
                     type="button"

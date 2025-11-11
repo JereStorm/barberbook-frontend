@@ -5,6 +5,7 @@ import { CreateSalonRequest, Salon, UpdateSalonRequest } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 import { SalonsCard } from '../components/UI/SalonsCard';
+import AlertService from '../helpers/sweetAlert/AlertService';
 
 
 const SalonsManagement: React.FC = () => {
@@ -93,7 +94,18 @@ const SalonsManagement: React.FC = () => {
   };
 
   const handleDeleteSalon = async (salon: Salon) => {
-    if (!window.confirm(`¿Estás seguro de eliminar el salón "${salon.name}"? Esta acción eliminará todos los usuarios asociados.`)) {
+
+    const confirmed = await AlertService.confirm(
+      `¿Estás seguro de eliminar el salón "${salon.name}"? Esta acción eliminará todos los usuarios asociados.`
+    );
+
+    if (!confirmed) {
+      toast.success("Eliminación cancelada");
+      return;
+    }
+
+    if (!currentUser) {
+      toast.error("Usuario no autenticado");
       return;
     }
 
