@@ -1,9 +1,10 @@
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Users, Building2, LogOut, Home, Menu, X, Contact } from 'lucide-react';
+import { Users, Building2, LogOut, Home, Menu, X, Contact, SquareScissors } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
-
+import ServicesManagement from '../../pages/ServicesManagement';
+import SidebarLink from '../UI/SidebarLink';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -21,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    //navigate('/login');
   };
 
   // Navegación según rol
@@ -36,6 +37,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         name: 'Usuarios',
         href: '/users',
         icon: Users,
+        show: true,
+      });
+    }
+
+    // Servicios - según permisos
+    if ([UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user.role)) {
+      items.push({
+        name: 'Servicios',
+        href: '/services',
+        icon: SquareScissors,
         show: true,
       });
     }
@@ -161,19 +172,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {navigationItems.map((item) => {
             const isActive = location.pathname === item.href;
             return (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${isActive
-                  ? 'bg-blue-100 text-blue-700 border border-blue-200 shadow-sm'
-                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                <item.icon className={`mr-3 h-5 w-5 flex-shrink-0 transition-colors ${isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'
-                  }`} />
-                {item.name}
-              </Link>
+              <SidebarLink sidebarStatus={setSidebarOpen} item={item} isActive={isActive}></SidebarLink>
             );
           })}
         </nav>
@@ -224,8 +223,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
 
-        <main className="flex-1 overflow-auto bg-gray-50">
-          <div className="h-full">
+        <main className="flex-1 overflow-auto">
+          <div className="h-full p-2">
             {children}
           </div>
         </main>

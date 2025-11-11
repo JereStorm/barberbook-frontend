@@ -45,3 +45,13 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+/* SweetAlert2 Custom Styles */
+
+.swal2-icon {
+  font-size: 15px;
+}
+
+.swal2-actions {
+  flex-direction: row-reverse;
+}

@@ -1,10 +1,11 @@
 //Dashboard.tsx
 import React, { useState, useEffect } from 'react';
-import { Users, Building2, UserCheck, UserX } from 'lucide-react';
+import { Users, Building2, UserCheck, UserX, Phone, Calendar } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { apiService } from '../services/api';
 import { User, Salon, UserRole } from '../types';
 import toast from 'react-hot-toast';
+import SummaryCard from '../components/UI/SummaryCard';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -118,32 +119,18 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Users className="h-8 w-8 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Usuarios Totales</h3>
-                <p className="text-2xl font-bold text-blue-600">{stats.totalUsers}</p>
-              </div>
-            </div>
-          </div>
-        )}
+        {
+          [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
+            <SummaryCard title='Usuarios totales' total={stats.totalUsers}>
+              <Users className="h-8 w-8 text-blue-600" />
+            </SummaryCard>
+          )
+        }
 
         {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <UserCheck className="h-8 w-8 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Usuarios Activos</h3>
-                <p className="text-2xl font-bold text-green-600">{stats.activeUsers}</p>
-              </div>
-            </div>
-          </div>
+          <SummaryCard title='Usuarios activos' total={stats.activeUsers}>
+            <UserCheck className="h-8 w-8 text-green-600" />
+          </SummaryCard>
         )}
 
         {user!.role === UserRole.SUPER_ADMIN && (

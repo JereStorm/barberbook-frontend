@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Building2, Users, Eye, EyeOff,Search,MapPin,Phone} from 'lucide-react';
+import { Plus, Edit, Trash2, Building2, Users, Eye, EyeOff, Search, MapPin, Phone } from 'lucide-react';
 import { apiService } from '../services/api';
-import { Salon, CreateSalonRequest, UpdateSalonRequest } from '../types';
+import { CreateSalonRequest, Salon, UpdateSalonRequest } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
+import { SalonsCard } from '../components/UI/SalonsCard';
+
 
 const SalonsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -159,7 +161,7 @@ const SalonsManagement: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center bg-white rounded-lg shadow p-6 py-8">
         <h1 className="text-2xl font-bold text-gray-900">Gestión de Salones</h1>
         <button
           onClick={openCreateModal}
@@ -185,63 +187,8 @@ const SalonsManagement: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredSalons.map((salon) => (
-          <div key={salon.id} className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
-            <div className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center mb-2">
-                    <Building2 className="w-5 h-5 text-blue-600 mr-2" />
-                    <h3 className="text-lg font-semibold text-gray-900 truncate">
-                      {salon.name}
-                    </h3>
-                  </div>
-                  
-                  {salon.address && (
-                    <div className="flex items-start mb-2">
-                      <MapPin className="w-4 h-4 text-gray-400 mr-2 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm text-gray-600">{salon.address}</p>
-                    </div>
-                  )}
-                  
-                  {salon.mobile && (
-                    <div className="flex items-center mb-2">
-                      <Phone className="w-4 h-4 text-gray-400 mr-2" />
-                      <p className="text-sm text-gray-600">{salon.mobile}</p>
-                    </div>
-                  )}
-
-                  <div className="flex items-center mb-4">
-                    <Users className="w-4 h-4 text-gray-400 mr-2" />
-                    <p className="text-sm text-gray-600">
-                      {salon.usersCount || 0} usuarios ({salon.activeUsersCount || 0} activos)
-                    </p>
-                  </div>
-
-                  <p className="text-xs text-gray-400">
-                    Creado: {new Date(salon.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-end space-x-2 mt-4 pt-4 border-t">
-                <button
-                  onClick={() => openEditModal(salon)}
-                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                  title="Editar salón"
-                >
-                  <Edit className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => handleDeleteSalon(salon)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                  title="Eliminar salón"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+          <SalonsCard key={salon.id} salon={salon} openEditModal={openEditModal} handleDeleteSalon={handleDeleteSalon} />)
+        )}
       </div>
 
       {filteredSalons.length === 0 && (
@@ -271,7 +218,7 @@ const SalonsManagement: React.FC = () => {
                     {/* Información del Salón */}
                     <div className="border-b pb-4">
                       <h4 className="text-sm font-medium text-gray-900 mb-3">Información del Salón</h4>
-                      
+
                       <div className="space-y-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700">
@@ -316,7 +263,7 @@ const SalonsManagement: React.FC = () => {
                     {!editingSalon && (
                       <div>
                         <h4 className="text-sm font-medium text-gray-900 mb-3">Administrador del Salón</h4>
-                        
+
                         <div className="space-y-3">
                           <div>
                             <label className="block text-sm font-medium text-gray-700">
@@ -326,8 +273,8 @@ const SalonsManagement: React.FC = () => {
                               type="text"
                               required
                               value={formData.admin.name}
-                              onChange={(e) => setFormData({ 
-                                ...formData, 
+                              onChange={(e) => setFormData({
+                                ...formData,
                                 admin: { ...formData.admin, name: e.target.value }
                               })}
                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -342,8 +289,8 @@ const SalonsManagement: React.FC = () => {
                               type="email"
                               required
                               value={formData.admin.email}
-                              onChange={(e) => setFormData({ 
-                                ...formData, 
+                              onChange={(e) => setFormData({
+                                ...formData,
                                 admin: { ...formData.admin, email: e.target.value }
                               })}
                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -357,8 +304,8 @@ const SalonsManagement: React.FC = () => {
                             <input
                               type="tel"
                               value={formData.admin.mobile}
-                              onChange={(e) => setFormData({ 
-                                ...formData, 
+                              onChange={(e) => setFormData({
+                                ...formData,
                                 admin: { ...formData.admin, mobile: e.target.value }
                               })}
                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -374,8 +321,8 @@ const SalonsManagement: React.FC = () => {
                                 type={showPassword ? 'text' : 'password'}
                                 required
                                 value={formData.admin.password}
-                                onChange={(e) => setFormData({ 
-                                  ...formData, 
+                                onChange={(e) => setFormData({
+                                  ...formData,
                                   admin: { ...formData.admin, password: e.target.value }
                                 })}
                                 className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"

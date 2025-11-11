@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, UserCheck, UserX, Eye,EyeOff,Search,Filter} from 'lucide-react';
-import { apiService } from '../services/api';
-import { User, CreateUserRequest, UpdateUserRequest, UserRole } from '../types';
-import { useAuth } from '../hooks/useAuth';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  UserCheck,
+  UserX,
+  Eye,
+  EyeOff,
+  Search,
+  Filter,
+} from "lucide-react";
+import { apiService } from "../services/api";
+import { User, CreateUserRequest, UpdateUserRequest, UserRole } from "../types";
+import { useAuth } from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -11,14 +21,14 @@ const UsersManagement: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [roleFilter, setRoleFilter] = useState<UserRole | 'all'>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
 
   const [formData, setFormData] = useState<CreateUserRequest>({
-    name: '',
-    email: '',
-    mobile: '',
-    password: '',
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
     role: UserRole.ESTILISTA,
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -43,13 +53,13 @@ const UsersManagement: React.FC = () => {
 
   // Función para obtener el nombre del salón (igual que en dashboard)
   const getSalonName = (user: User): string => {
-    console.log('Checking salon for user:', user.name, 'salon:', user.salon);
-    return user.salon ? user.salon.name : 'Sin salón';
+    console.log("Checking salon for user:", user.name, "salon:", user.salon);
+    return user.salon ? user.salon.name : "Sin salón";
   };
 
   const getAvailableRoles = (): UserRole[] => {
     if (!currentUser) return [];
-    
+
     switch (currentUser.role) {
       case UserRole.SUPER_ADMIN:
         return [UserRole.ADMIN, UserRole.RECEPCIONISTA, UserRole.ESTILISTA];
@@ -91,7 +101,7 @@ const UsersManagement: React.FC = () => {
 
     try {
       await apiService.createUser(formData);
-      toast.success('Usuario creado correctamente');
+      toast.success("Usuario creado correctamente");
       setIsModalOpen(false);
       resetForm();
       loadUsers();
@@ -122,7 +132,7 @@ const UsersManagement: React.FC = () => {
       }
 
       await apiService.updateUser(editingUser.id, updateData);
-      toast.success('Usuario actualizado correctamente');
+      toast.success("Usuario actualizado correctamente");
       setIsModalOpen(false);
       setEditingUser(null);
       resetForm();
@@ -138,7 +148,9 @@ const UsersManagement: React.FC = () => {
   const handleToggleUserStatus = async (user: User) => {
     try {
       await apiService.updateUser(user.id, { isActive: !user.isActive });
-      toast.success(`Usuario ${!user.isActive ? 'activado' : 'desactivado'} correctamente`);
+      toast.success(
+        `Usuario ${!user.isActive ? "activado" : "desactivado"} correctamente`
+      );
       loadUsers();
     } catch (error) {
       const apiError = apiService.handleError(error);
@@ -153,7 +165,7 @@ const UsersManagement: React.FC = () => {
 
     try {
       await apiService.deleteUser(user.id);
-      toast.success('Usuario eliminado correctamente');
+      toast.success("Usuario eliminado correctamente");
       loadUsers();
     } catch (error) {
       const apiError = apiService.handleError(error);
@@ -171,8 +183,8 @@ const UsersManagement: React.FC = () => {
     setFormData({
       name: user.name,
       email: user.email,
-      mobile: user.mobile || '',
-      password: '',
+      mobile: user.mobile || "",
+      password: "",
       role: user.role,
     });
     setEditingUser(user);
@@ -181,10 +193,10 @@ const UsersManagement: React.FC = () => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      email: '',
-      mobile: '',
-      password: '',
+      name: "",
+      email: "",
+      mobile: "",
+      password: "",
       role: UserRole.ESTILISTA,
     });
     setShowPassword(false);
@@ -193,13 +205,13 @@ const UsersManagement: React.FC = () => {
   const getRoleDisplayName = (role: UserRole) => {
     switch (role) {
       case UserRole.SUPER_ADMIN:
-        return 'Super Admin';
+        return "Super Admin";
       case UserRole.ADMIN:
-        return 'Administrador';
+        return "Administrador";
       case UserRole.RECEPCIONISTA:
-        return 'Recepcionista';
+        return "Recepcionista";
       case UserRole.ESTILISTA:
-        return 'Estilista';
+        return "Estilista";
       default:
         return role;
     }
@@ -208,23 +220,24 @@ const UsersManagement: React.FC = () => {
   const getRoleBadgeColor = (role: UserRole) => {
     switch (role) {
       case UserRole.SUPER_ADMIN:
-        return 'bg-purple-100 text-purple-800';
+        return "bg-purple-100 text-purple-800";
       case UserRole.ADMIN:
-        return 'bg-blue-100 text-blue-800';
+        return "bg-blue-100 text-blue-800";
       case UserRole.RECEPCIONISTA:
-        return 'bg-green-100 text-green-800';
+        return "bg-green-100 text-green-800";
       case UserRole.ESTILISTA:
-        return 'bg-yellow-100 text-yellow-800';
+        return "bg-yellow-100 text-yellow-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   // Filtrar usuarios
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = roleFilter === "all" || user.role === roleFilter;
     return matchesSearch && matchesRole;
   });
 
@@ -239,8 +252,10 @@ const UsersManagement: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Gestión de Usuarios</h1>
+      <div className="flex justify-between items-center bg-white rounded-lg shadow p-6 py-8">
+        <h1 className="text-2xl font-bold text-gray-900">
+          Gestión de Usuarios
+        </h1>
         <button
           onClick={openCreateModal}
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -268,12 +283,16 @@ const UsersManagement: React.FC = () => {
             <Filter className="w-4 h-4 text-gray-400" />
             <select
               value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value as UserRole | 'all')}
+              onChange={(e) =>
+                setRoleFilter(e.target.value as UserRole | "all")
+              }
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">Todos los roles</option>
-              {Object.values(UserRole).map(role => (
-                <option key={role} value={role}>{getRoleDisplayName(role)}</option>
+              {Object.values(UserRole).map((role) => (
+                <option key={role} value={role}>
+                  {getRoleDisplayName(role)}
+                </option>
               ))}
             </select>
           </div>
@@ -307,15 +326,23 @@ const UsersManagement: React.FC = () => {
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {user.name}
+                      </div>
                       <div className="text-sm text-gray-500">{user.email}</div>
                       {user.mobile && (
-                        <div className="text-sm text-gray-500">{user.mobile}</div>
+                        <div className="text-sm text-gray-500">
+                          {user.mobile}
+                        </div>
                       )}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(user.role)}`}>
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(
+                        user.role
+                      )}`}
+                    >
                       {getRoleDisplayName(user.role)}
                     </span>
                   </td>
@@ -326,8 +353,12 @@ const UsersManagement: React.FC = () => {
                       ) : (
                         <UserX className="w-5 h-5 text-red-500 mr-2" />
                       )}
-                      <span className={`text-sm ${user.isActive ? 'text-green-600' : 'text-red-600'}`}>
-                        {user.isActive ? 'Activo' : 'Inactivo'}
+                      <span
+                        className={`text-sm ${
+                          user.isActive ? "text-green-600" : "text-red-600"
+                        }`}
+                      >
+                        {user.isActive ? "Activo" : "Inactivo"}
                       </span>
                     </div>
                   </td>
@@ -335,29 +366,43 @@ const UsersManagement: React.FC = () => {
                     {getSalonName(user)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end space-x-2">
+                    <div className="flex items-center justify-end text-center space-x-2">
                       {canEditUser(user) && (
                         <>
+                          {user.role !== UserRole.SUPER_ADMIN &&
+                            currentUser?.id !== user.id && (
+                              <button
+                                onClick={() => handleDeleteUser(user)}
+                                className="text-red-600 hover:text-red-900"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            )}
+
+                          {user.role !== UserRole.SUPER_ADMIN &&
+                            currentUser?.id !== user.id && (
+                              <button
+                                onClick={() => handleToggleUserStatus(user)}
+                                className={`${
+                                  user.isActive
+                                    ? "text-red-600 hover:text-red-900"
+                                    : "text-green-600 hover:text-green-900"
+                                }`}
+                              >
+                                {user.isActive ? (
+                                  <UserX className="w-4 h-4" />
+                                ) : (
+                                  <UserCheck className="w-4 h-4" />
+                                )}
+                              </button>
+                            )}
+
                           <button
                             onClick={() => openEditModal(user)}
                             className="text-blue-600 hover:text-blue-900"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
-                          <button
-                            onClick={() => handleToggleUserStatus(user)}
-                            className={`${user.isActive ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'}`}
-                          >
-                            {user.isActive ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
-                          </button>
-                          {user.role !== UserRole.SUPER_ADMIN && currentUser?.id !== user.id && (
-                            <button
-                              onClick={() => handleDeleteUser(user)}
-                              className="text-red-600 hover:text-red-900"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          )}
                         </>
                       )}
                     </div>
@@ -379,7 +424,7 @@ const UsersManagement: React.FC = () => {
               <form onSubmit={editingUser ? handleEditUser : handleCreateUser}>
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <h3 className="text-lg font-medium text-gray-900 mb-4">
-                    {editingUser ? 'Editar Usuario' : 'Crear Usuario'}
+                    {editingUser ? "Editar Usuario" : "Crear Usuario"}
                   </h3>
 
                   <div className="space-y-4">
@@ -391,7 +436,9 @@ const UsersManagement: React.FC = () => {
                         type="text"
                         required
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
@@ -404,7 +451,9 @@ const UsersManagement: React.FC = () => {
                         type="email"
                         required
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
@@ -416,21 +465,29 @@ const UsersManagement: React.FC = () => {
                       <input
                         type="tel"
                         value={formData.mobile}
-                        onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, mobile: e.target.value })
+                        }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Contraseña {editingUser && '(dejar vacío para mantener actual)'}
+                        Contraseña{" "}
+                        {editingUser && "(dejar vacío para mantener actual)"}
                       </label>
                       <div className="mt-1 relative">
                         <input
-                          type={showPassword ? 'text' : 'password'}
+                          type={showPassword ? "text" : "password"}
                           required={!editingUser}
                           value={formData.password}
-                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              password: e.target.value,
+                            })
+                          }
                           className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         />
                         <button
@@ -454,10 +511,15 @@ const UsersManagement: React.FC = () => {
                       <select
                         required
                         value={formData.role}
-                        onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            role: e.target.value as UserRole,
+                          })
+                        }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       >
-                        {getAvailableRoles().map(role => (
+                        {getAvailableRoles().map((role) => (
                           <option key={role} value={role}>
                             {getRoleDisplayName(role)}
                           </option>
@@ -473,7 +535,11 @@ const UsersManagement: React.FC = () => {
                     disabled={isSubmitting}
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
                   >
-                    {isSubmitting ? 'Guardando...' : (editingUser ? 'Actualizar' : 'Crear')}
+                    {isSubmitting
+                      ? "Guardando..."
+                      : editingUser
+                      ? "Actualizar"
+                      : "Crear"}
                   </button>
                   <button
                     type="button"

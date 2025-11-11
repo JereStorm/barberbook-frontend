@@ -123,3 +123,25 @@ export interface UpdateClientRequest {
   email?: string | null;
   mobile?: string | null;
 }
+
+//SERVICES (ajustado al DTO y tabla backend)
+export interface Service {
+  id: number;
+  salonId: number;
+  name: string;
+  durationMin: number;
+  price: number;
+}
+
+export interface CreateServiceRequest {
+  salonId: number;
+  name: string;
+  durationMin: number;
+  price: number;
+}
+
+export interface UpdateServiceRequest {
+  name?: string;
+  price?: string | null;
+  durationMin?: string | null;
+}
