@@ -1,4 +1,4 @@
-import { Service } from '../types';
+import { CreateServiceRequest, Service, UpdateServiceRequest } from '../types';
 import { apiService } from './api';
 
 // Usamos la instancia axios interna del apiService (propiedad privada -> access vía any)
@@ -10,7 +10,23 @@ async function getServices(): Promise<Service[]> {
     return response.data;
 }
 
+async function createService(serviceData: CreateServiceRequest): Promise<Service> {
+    const response = await axiosInstance.post<Service>('/services', serviceData);
+    return response.data;
+}
+
+async function updateService(id: number, serviceData: UpdateServiceRequest): Promise<Service> {
+    const response = await axiosInstance.patch<Service>(`/services/${id}`, serviceData);
+    return response.data;
+}
+
+async function deleteService(id: number): Promise<void> {
+    await axiosInstance.delete(`/services/${id}`);
+}
 
 export {
     getServices,
+    createService,
+    updateService,
+    deleteService,
 }
