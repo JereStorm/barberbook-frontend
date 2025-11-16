@@ -24,7 +24,7 @@ const ServicesManagement: React.FC = () => {
   const [formData, setFormData] = useState<CreateServiceRequest>({
     salonId: currentUser?.salonId ?? 0,
     name: "",
-    price: "0",
+    price: "",
     durationMin: 15,
   });
 
@@ -56,7 +56,7 @@ const ServicesManagement: React.FC = () => {
     setFormData({
       salonId: currentUser?.salonId ?? 0,
       name: "",
-      price: "0",
+      price: "",
       durationMin: 15,
     });
   };
@@ -342,6 +342,7 @@ const ServicesManagement: React.FC = () => {
                           Nombre del servicio
                         </label>
                         <input
+                          placeholder="Corte Basico"
                           type="text"
                           required
                           value={formData.name}
@@ -353,6 +354,9 @@ const ServicesManagement: React.FC = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Precio</label>
                         <input
+                          required
+                          min={0}
+                          placeholder="16.000"
                           type="number"
                           value={formData.price ?? ""}
                           onChange={(e) =>
@@ -365,6 +369,7 @@ const ServicesManagement: React.FC = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Duración (min)</label>
                         <input
+                          min={15}
                           type="number"
                           placeholder="15"
                           value={formData.durationMin ?? ""}

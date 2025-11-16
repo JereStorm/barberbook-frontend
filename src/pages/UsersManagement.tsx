@@ -25,6 +25,8 @@ const UsersManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
 
+  const DEFAULT_COUNTRY_CODE = "+54"; // cambia si lo necesitás
+
   const [formData, setFormData] = useState<CreateUserRequest>({
     name: "",
     email: "",
@@ -50,6 +52,28 @@ const UsersManagement: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Normalización muy simple: quita todo excepto + y dígitos, convierte 00... -> +..., si no empieza con + antepone DEFAULT_COUNTRY_CODE.
+  // Devuelve undefined si está vacío; devuelve undefined también si la cantidad de dígitos no está en rango razonable (8-15).
+
+  const normalizeMobileVerySimple = (value?: string): string | undefined => {
+    if (!value) return undefined;
+    const v = value.trim();
+    if (!v) return undefined;
+
+    let cleaned = v.replace(/[^+\d]/g, ""); // queda + y dígitos
+    cleaned = cleaned.replace(/^00/, "+"); // 00 -> +
+    if (!cleaned.startsWith("+")) {
+      // quitar ceros iniciales locales
+      const digits = cleaned.replace(/^0+/, "");
+      cleaned = `${DEFAULT_COUNTRY_CODE}${digits}`;
+    }
+
+    const digitsOnly = cleaned.replace(/\D/g, "");
+    if (digitsOnly.length < 8 || digitsOnly.length > 15) return undefined;
+
+    return cleaned;
   };
 
   // Función para obtener el nombre del salón (igual que en dashboard)
@@ -101,7 +125,19 @@ const UsersManagement: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await apiService.createUser(formData);
+      const normalizedMobile = normalizeMobileVerySimple(formData.mobile);
+      
+      if (formData.mobile && !normalizedMobile) {
+        toast.error("Número de teléfono inválido. Corrige antes de guardar.");
+        setIsSubmitting(false);
+        return;
+      }
+      
+      await apiService.createUser({
+        ...formData,
+        mobile: normalizedMobile,
+      });
+
       toast.success("Usuario creado correctamente");
       setIsModalOpen(false);
       resetForm();
@@ -124,7 +160,7 @@ const UsersManagement: React.FC = () => {
       const updateData: UpdateUserRequest = {
         name: formData.name,
         email: formData.email,
-        mobile: formData.mobile || undefined,
+        mobile: formData.mobile,
         role: formData.role,
       };
 
@@ -365,8 +401,9 @@ const UsersManagement: React.FC = () => {
                         <UserX className="w-5 h-5 text-red-500 mr-2" />
                       )}
                       <span
-                        className={`text-sm ${user.isActive ? "text-green-600" : "text-red-600"
-                          }`}
+                        className={`text-sm ${
+                          user.isActive ? "text-green-600" : "text-red-600"
+                        }`}
                       >
                         {user.isActive ? "Activo" : "Inactivo"}
                       </span>
@@ -393,10 +430,11 @@ const UsersManagement: React.FC = () => {
                             currentUser?.id !== user.id && (
                               <button
                                 onClick={() => handleToggleUserStatus(user)}
-                                className={`${user.isActive
-                                  ? "text-red-600 hover:text-red-900"
-                                  : "text-green-600 hover:text-green-900"
-                                  }`}
+                                className={`${
+                                  user.isActive
+                                    ? "text-red-600 hover:text-red-900"
+                                    : "text-green-600 hover:text-green-900"
+                                }`}
                               >
                                 {user.isActive ? (
                                   <UserX className="w-4 h-4" />
@@ -442,6 +480,7 @@ const UsersManagement: React.FC = () => {
                         Nombre
                       </label>
                       <input
+                        placeholder="Josefina"
                         type="text"
                         required
                         value={formData.name}
@@ -457,6 +496,7 @@ const UsersManagement: React.FC = () => {
                         Email
                       </label>
                       <input
+                        placeholder="josefina@email.com"
                         type="email"
                         required
                         value={formData.email}
@@ -469,9 +509,11 @@ const UsersManagement: React.FC = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Teléfono (opcional)
+                        Teléfono
                       </label>
                       <input
+                        required
+                        placeholder="2284602570"
                         type="tel"
                         value={formData.mobile}
                         onChange={(e) =>
@@ -488,6 +530,7 @@ const UsersManagement: React.FC = () => {
                       </label>
                       <div className="mt-1 relative">
                         <input
+                          placeholder="********"
                           type={showPassword ? "text" : "password"}
                           required={!editingUser}
                           value={formData.password}
@@ -547,8 +590,8 @@ const UsersManagement: React.FC = () => {
                     {isSubmitting
                       ? "Guardando..."
                       : editingUser
-                        ? "Actualizar"
-                        : "Crear"}
+                      ? "Actualizar"
+                      : "Crear"}
                   </button>
                   <button
                     type="button"

@@ -284,16 +284,16 @@ const ClientsManagement: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
                       <button
-                        onClick={() => openEditModal(client)}
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button
                         onClick={() => handleDeleteClient(client)}
                         className="text-red-600 hover:text-red-900"
                       >
                         <Trash2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => openEditModal(client)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        <Edit className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
@@ -334,6 +334,7 @@ const ClientsManagement: React.FC = () => {
                         Nombre
                       </label>
                       <input
+                        placeholder="Manuel"
                         type="text"
                         required
                         value={formData.name}
@@ -349,6 +350,8 @@ const ClientsManagement: React.FC = () => {
                         Email
                       </label>
                       <input
+                        required
+                        placeholder="manuel@email.com"
                         type="email"
                         value={formData.email ?? ""}
                         onChange={(e) =>
@@ -363,9 +366,10 @@ const ClientsManagement: React.FC = () => {
                         Teléfono
                       </label>
                       <input
+                        required
                         type="tel"
                         inputMode="tel"
-                        placeholder="+549112345678"
+                        placeholder="2284557890"
                         value={formData.mobile ?? ""}
                         onChange={(e) =>
                           setFormData({ ...formData, mobile: e.target.value })

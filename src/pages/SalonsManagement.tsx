@@ -237,6 +237,7 @@ const SalonsManagement: React.FC = () => {
                             Nombre del Salón
                           </label>
                           <input
+                            placeholder="Two Brother's Barber"
                             type="text"
                             required
                             value={formData.name}
@@ -247,9 +248,11 @@ const SalonsManagement: React.FC = () => {
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700">
-                            Dirección (opcional)
+                            Dirección
                           </label>
                           <input
+                            required
+                            placeholder="Calle Callao 123"
                             type="text"
                             value={formData.address}
                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -259,9 +262,11 @@ const SalonsManagement: React.FC = () => {
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700">
-                            Teléfono (opcional)
+                            Teléfono 
                           </label>
                           <input
+                            required
+                            placeholder="2284557890"
                             type="tel"
                             value={formData.mobile}
                             onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
@@ -282,6 +287,7 @@ const SalonsManagement: React.FC = () => {
                               Nombre del Administrador
                             </label>
                             <input
+                              placeholder="Juan Pérez"
                               type="text"
                               required
                               value={formData.admin.name}
@@ -298,6 +304,7 @@ const SalonsManagement: React.FC = () => {
                               Email del Administrador
                             </label>
                             <input
+                              placeholder="juan.perez@email.com"
                               type="email"
                               required
                               value={formData.admin.email}
@@ -311,10 +318,12 @@ const SalonsManagement: React.FC = () => {
 
                           <div>
                             <label className="block text-sm font-medium text-gray-700">
-                              Teléfono del Administrador (opcional)
+                              Teléfono del Administrador
                             </label>
                             <input
                               type="tel"
+                              required
+                              placeholder="2284557890"
                               value={formData.admin.mobile}
                               onChange={(e) => setFormData({
                                 ...formData,
@@ -330,6 +339,7 @@ const SalonsManagement: React.FC = () => {
                             </label>
                             <div className="mt-1 relative">
                               <input
+                                placeholder="********"
                                 type={showPassword ? 'text' : 'password'}
                                 required
                                 value={formData.admin.password}
