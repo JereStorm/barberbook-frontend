@@ -42,13 +42,34 @@ cd barberbook-frontend
 npm install
 ```
 
-### 3. Levantar el servidor local
+### 3.1 (Devs) Traer las ramas del remoto
+
+(Esto actualiza tus referencias locales)
+
+```bash
+git fetch --all
+```
+### 3.2 Crear tu rama dev local
+
+Ahora creás una rama local dev que siga a la remota origin/dev:
+
+```bash
+git checkout -b dev origin/dev
+```
+
+Esto hace dos cosas:
+
+Crea una nueva rama local llamada dev
+
+La sincroniza automáticamente con la remota origin/dev
+
+### 4. Levantar el servidor local
 
 ```bash
 npm run dev
 ```
 
-### 4. Configurar variables de entorno
+### 5. Configurar variables de entorno
 
 Crear archivo .env en la raiz del proyecto con las siguientes variables:
 

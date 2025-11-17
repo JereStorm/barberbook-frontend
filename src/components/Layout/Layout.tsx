@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Users, Building2, LogOut, Home, Menu, X, Contact, SquareScissors } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
-import ServicesManagement from '../../pages/ServicesManagement';
 import SidebarLink from '../UI/SidebarLink';
 interface LayoutProps {
   children: ReactNode;
@@ -172,7 +171,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {navigationItems.map((item) => {
             const isActive = location.pathname === item.href;
             return (
-              <SidebarLink sidebarStatus={setSidebarOpen} item={item} isActive={isActive}></SidebarLink>
+              <SidebarLink key={item.name} sidebarStatus={setSidebarOpen} item={item} isActive={isActive}></SidebarLink>
             );
           })}
         </nav>

@@ -14,6 +14,7 @@ import { apiService } from "../services/api";
 import { User, CreateUserRequest, UpdateUserRequest, UserRole } from "../types";
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
+import AlertService from "../helpers/sweetAlert/AlertService";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -23,6 +24,8 @@ const UsersManagement: React.FC = () => {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
+
+  const DEFAULT_COUNTRY_CODE = "+54"; // cambia si lo necesitás
 
   const [formData, setFormData] = useState<CreateUserRequest>({
     name: "",
@@ -49,6 +52,28 @@ const UsersManagement: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Normalización muy simple: quita todo excepto + y dígitos, convierte 00... -> +..., si no empieza con + antepone DEFAULT_COUNTRY_CODE.
+  // Devuelve undefined si está vacío; devuelve undefined también si la cantidad de dígitos no está en rango razonable (8-15).
+
+  const normalizeMobileVerySimple = (value?: string): string | undefined => {
+    if (!value) return undefined;
+    const v = value.trim();
+    if (!v) return undefined;
+
+    let cleaned = v.replace(/[^+\d]/g, ""); // queda + y dígitos
+    cleaned = cleaned.replace(/^00/, "+"); // 00 -> +
+    if (!cleaned.startsWith("+")) {
+      // quitar ceros iniciales locales
+      const digits = cleaned.replace(/^0+/, "");
+      cleaned = `${DEFAULT_COUNTRY_CODE}${digits}`;
+    }
+
+    const digitsOnly = cleaned.replace(/\D/g, "");
+    if (digitsOnly.length < 8 || digitsOnly.length > 15) return undefined;
+
+    return cleaned;
   };
 
   // Función para obtener el nombre del salón (igual que en dashboard)
@@ -100,7 +125,19 @@ const UsersManagement: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await apiService.createUser(formData);
+      const normalizedMobile = normalizeMobileVerySimple(formData.mobile);
+      
+      if (formData.mobile && !normalizedMobile) {
+        toast.error("Número de teléfono inválido. Corrige antes de guardar.");
+        setIsSubmitting(false);
+        return;
+      }
+      
+      await apiService.createUser({
+        ...formData,
+        mobile: normalizedMobile,
+      });
+
       toast.success("Usuario creado correctamente");
       setIsModalOpen(false);
       resetForm();
@@ -123,7 +160,7 @@ const UsersManagement: React.FC = () => {
       const updateData: UpdateUserRequest = {
         name: formData.name,
         email: formData.email,
-        mobile: formData.mobile || undefined,
+        mobile: formData.mobile,
         role: formData.role,
       };
 
@@ -159,7 +196,17 @@ const UsersManagement: React.FC = () => {
   };
 
   const handleDeleteUser = async (user: User) => {
-    if (!window.confirm(`¿Estás seguro de eliminar al usuario ${user.name}?`)) {
+    const confirmed = await AlertService.confirm(
+      `¿Está seguro que desea eliminar al usuario "${user.name}"?`
+    );
+
+    if (!confirmed) {
+      toast.success("Eliminación cancelada");
+      return;
+    }
+
+    if (!currentUser) {
+      toast.error("Usuario no autenticado");
       return;
     }
 
@@ -433,6 +480,7 @@ const UsersManagement: React.FC = () => {
                         Nombre
                       </label>
                       <input
+                        placeholder="Josefina"
                         type="text"
                         required
                         value={formData.name}
@@ -448,6 +496,7 @@ const UsersManagement: React.FC = () => {
                         Email
                       </label>
                       <input
+                        placeholder="josefina@email.com"
                         type="email"
                         required
                         value={formData.email}
@@ -460,9 +509,11 @@ const UsersManagement: React.FC = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Teléfono (opcional)
+                        Teléfono
                       </label>
                       <input
+                        required
+                        placeholder="2284602570"
                         type="tel"
                         value={formData.mobile}
                         onChange={(e) =>
@@ -479,6 +530,7 @@ const UsersManagement: React.FC = () => {
                       </label>
                       <div className="mt-1 relative">
                         <input
+                          placeholder="********"
                           type={showPassword ? "text" : "password"}
                           required={!editingUser}
                           value={formData.password}

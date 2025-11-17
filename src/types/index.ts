@@ -130,18 +130,20 @@ export interface Service {
   salonId: number;
   name: string;
   durationMin: number;
-  price: number;
+  price: string;
+  isActive: boolean;
 }
 
 export interface CreateServiceRequest {
   salonId: number;
   name: string;
   durationMin: number;
-  price: number;
+  price: string;
 }
 
 export interface UpdateServiceRequest {
   name?: string;
   price?: string | null;
-  durationMin?: string | null;
+  durationMin?: number | null;
+  isActive?: boolean;
 }
