@@ -11,7 +11,13 @@ import {
   Filter,
 } from "lucide-react";
 import { apiService } from "../services/api";
-import { User, CreateUserRequest, UpdateUserRequest, UserRole, Salon } from "../types";
+import {
+  User,
+  CreateUserRequest,
+  UpdateUserRequest,
+  UserRole,
+  Salon,
+} from "../types";
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import AlertService from "../helpers/sweetAlert/AlertService";
@@ -150,7 +156,7 @@ const UsersManagement: React.FC = () => {
         setIsSubmitting(false);
         return;
       }
-      console.log(formData)
+      console.log(formData);
       await apiService.createUser({
         ...formData,
         mobile: normalizedMobile,
@@ -420,8 +426,9 @@ const UsersManagement: React.FC = () => {
                         <UserX className="w-5 h-5 text-red-500 mr-2" />
                       )}
                       <span
-                        className={`text-sm ${user.isActive ? "text-green-600" : "text-red-600"
-                          }`}
+                        className={`text-sm ${
+                          user.isActive ? "text-green-600" : "text-red-600"
+                        }`}
                       >
                         {user.isActive ? "Activo" : "Inactivo"}
                       </span>
@@ -448,10 +455,11 @@ const UsersManagement: React.FC = () => {
                             currentUser?.id !== user.id && (
                               <button
                                 onClick={() => handleToggleUserStatus(user)}
-                                className={`${user.isActive
-                                  ? "text-red-600 hover:text-red-900"
-                                  : "text-green-600 hover:text-green-900"
-                                  }`}
+                                className={`${
+                                  user.isActive
+                                    ? "text-red-600 hover:text-red-900"
+                                    : "text-green-600 hover:text-green-900"
+                                }`}
                               >
                                 {user.isActive ? (
                                   <UserX className="w-4 h-4" />
@@ -492,8 +500,8 @@ const UsersManagement: React.FC = () => {
                   </h3>
 
                   <div className="space-y-4">
-                    {
-                      currentUser?.role === UserRole.SUPER_ADMIN && !editingUser && (
+                    {currentUser?.role === UserRole.SUPER_ADMIN &&
+                      !editingUser && (
                         <>
                           <div>
                             <label className="block text-sm font-medium text-gray-700">
@@ -503,16 +511,21 @@ const UsersManagement: React.FC = () => {
                               required
                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                               onChange={(e) => {
-                                console.log("Selected salon ID:", e.target.value, typeof e.target.value);
+                                console.log(
+                                  "Selected salon ID:",
+                                  e.target.value,
+                                  typeof e.target.value
+                                );
                                 setFormData({
                                   ...formData,
                                   salonId: Number(e.target.value),
-                                })
-                              }
-                              }
+                                });
+                              }}
                               defaultValue={""}
                             >
-                              <option disabled value="">Selecciona una Barberia</option>
+                              <option disabled value="">
+                                Selecciona una Barberia
+                              </option>
                               {salons.map((salon) => (
                                 <option key={salon.id} value={salon.id}>
                                   {salon.name}
@@ -521,8 +534,7 @@ const UsersManagement: React.FC = () => {
                             </select>
                           </div>
                         </>
-                      )
-                    }
+                      )}
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
                         Nombre
@@ -610,7 +622,6 @@ const UsersManagement: React.FC = () => {
                       </label>
                       <select
                         required
-                        value={formData.role}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -618,7 +629,12 @@ const UsersManagement: React.FC = () => {
                           })
                         }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        defaultValue={""}
                       >
+                        <option disabled value="">
+                          Selecciona un Rol
+                        </option>
+
                         {getAvailableRoles().map((role) => (
                           <option key={role} value={role}>
                             {getRoleDisplayName(role)}
@@ -638,8 +654,8 @@ const UsersManagement: React.FC = () => {
                     {isSubmitting
                       ? "Guardando..."
                       : editingUser
-                        ? "Actualizar"
-                        : "Crear"}
+                      ? "Actualizar"
+                      : "Crear"}
                   </button>
                   <button
                     type="button"
@@ -656,9 +672,9 @@ const UsersManagement: React.FC = () => {
               </form>
             </div>
           </div>
-        </div >
+        </div>
       )}
-    </div >
+    </div>
   );
 };
 
