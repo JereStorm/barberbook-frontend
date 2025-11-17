@@ -66,6 +66,7 @@ export interface CreateUserRequest {
   mobile?: string;
   password: string;
   role: UserRole;
+  salonId?: number | null;
 }
 
 export interface UpdateUserRequest {
