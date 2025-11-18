@@ -11,7 +11,13 @@ import {
   Filter,
 } from "lucide-react";
 import { apiService } from "../services/api";
-import { User, CreateUserRequest, UpdateUserRequest, UserRole } from "../types";
+import {
+  User,
+  CreateUserRequest,
+  UpdateUserRequest,
+  UserRole,
+  Salon,
+} from "../types";
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import AlertService from "../helpers/sweetAlert/AlertService";
@@ -19,6 +25,7 @@ import AlertService from "../helpers/sweetAlert/AlertService";
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
+  const [salons, setSalons] = useState<Salon[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -33,13 +40,30 @@ const UsersManagement: React.FC = () => {
     mobile: "",
     password: "",
     role: UserRole.ESTILISTA,
+    salonId: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     loadUsers();
+    if (currentUser?.role === UserRole.SUPER_ADMIN) {
+      loadSalons();
+    }
   }, []);
+
+  const loadSalons = async () => {
+    try {
+      setIsLoading(true);
+      const salonsData = await apiService.getSalons();
+      setSalons(salonsData);
+    } catch (error) {
+      const apiError = apiService.handleError(error);
+      toast.error(apiError.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const loadUsers = async () => {
     try {
@@ -78,7 +102,7 @@ const UsersManagement: React.FC = () => {
 
   // Función para obtener el nombre del salón (igual que en dashboard)
   const getSalonName = (user: User): string => {
-    console.log("Checking salon for user:", user.name, "salon:", user.salon);
+    // console.log("Checking salon for user:", user.name, "salon:", user.salon);
     return user.salon ? user.salon.name : "Sin salón";
   };
 
@@ -126,13 +150,13 @@ const UsersManagement: React.FC = () => {
 
     try {
       const normalizedMobile = normalizeMobileVerySimple(formData.mobile);
-      
+
       if (formData.mobile && !normalizedMobile) {
         toast.error("Número de teléfono inválido. Corrige antes de guardar.");
         setIsSubmitting(false);
         return;
       }
-      
+      console.log(formData);
       await apiService.createUser({
         ...formData,
         mobile: normalizedMobile,
@@ -245,6 +269,7 @@ const UsersManagement: React.FC = () => {
       mobile: "",
       password: "",
       role: UserRole.ESTILISTA,
+      salonId: null,
     });
     setShowPassword(false);
   };
@@ -475,6 +500,41 @@ const UsersManagement: React.FC = () => {
                   </h3>
 
                   <div className="space-y-4">
+                    {currentUser?.role === UserRole.SUPER_ADMIN &&
+                      !editingUser && (
+                        <>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                              Salon
+                            </label>
+                            <select
+                              required
+                              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                              onChange={(e) => {
+                                console.log(
+                                  "Selected salon ID:",
+                                  e.target.value,
+                                  typeof e.target.value
+                                );
+                                setFormData({
+                                  ...formData,
+                                  salonId: Number(e.target.value),
+                                });
+                              }}
+                              defaultValue={""}
+                            >
+                              <option disabled value="">
+                                Selecciona una Barberia
+                              </option>
+                              {salons.map((salon) => (
+                                <option key={salon.id} value={salon.id}>
+                                  {salon.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </>
+                      )}
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
                         Nombre
@@ -562,7 +622,6 @@ const UsersManagement: React.FC = () => {
                       </label>
                       <select
                         required
-                        value={formData.role}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -570,7 +629,12 @@ const UsersManagement: React.FC = () => {
                           })
                         }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        defaultValue={""}
                       >
+                        <option disabled value="">
+                          Selecciona un Rol
+                        </option>
+
                         {getAvailableRoles().map((role) => (
                           <option key={role} value={role}>
                             {getRoleDisplayName(role)}

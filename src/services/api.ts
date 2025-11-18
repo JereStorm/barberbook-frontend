@@ -106,7 +106,7 @@ class ApiService {
     await this.api.delete(`/salons/${id}`);
   }
 
-  // === MANEJO DE ERRORES ===
+  // === MANEJO DE ERRORES ESTANDARIZADO ===
   handleError(error: any): ApiError {
     if (error.response?.data) {
       return {
