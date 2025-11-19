@@ -111,6 +111,7 @@ REACT_APP_VERSION=1.0.0
 * El flujo principal de gestión de turnos debe estar implementado.
 * El sistema debe aplicar **buenas prácticas de Git y trabajo en equipo**.
 * La interfaz debe ser **usable y responsive**.
+* [TP Final Presentacion](https://docs.google.com/document/d/1rcEGIIxWzZiS8ruxRiIUUR9JHqElNHg48p111dAePJo/edit?usp=sharing)
 
 ---
 
