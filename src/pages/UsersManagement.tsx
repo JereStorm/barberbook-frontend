@@ -426,9 +426,8 @@ const UsersManagement: React.FC = () => {
                         <UserX className="w-5 h-5 text-red-500 mr-2" />
                       )}
                       <span
-                        className={`text-sm ${
-                          user.isActive ? "text-green-600" : "text-red-600"
-                        }`}
+                        className={`text-sm ${user.isActive ? "text-green-600" : "text-red-600"
+                          }`}
                       >
                         {user.isActive ? "Activo" : "Inactivo"}
                       </span>
@@ -455,11 +454,10 @@ const UsersManagement: React.FC = () => {
                             currentUser?.id !== user.id && (
                               <button
                                 onClick={() => handleToggleUserStatus(user)}
-                                className={`${
-                                  user.isActive
+                                className={`${user.isActive
                                     ? "text-red-600 hover:text-red-900"
                                     : "text-green-600 hover:text-green-900"
-                                }`}
+                                  }`}
                               >
                                 {user.isActive ? (
                                   <UserX className="w-4 h-4" />
@@ -629,7 +627,7 @@ const UsersManagement: React.FC = () => {
                           })
                         }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        defaultValue={""}
+                        defaultValue={editingUser ? editingUser.role : ""}
                       >
                         <option disabled value="">
                           Selecciona un Rol
@@ -654,8 +652,8 @@ const UsersManagement: React.FC = () => {
                     {isSubmitting
                       ? "Guardando..."
                       : editingUser
-                      ? "Actualizar"
-                      : "Crear"}
+                        ? "Actualizar"
+                        : "Crear"}
                   </button>
                   <button
                     type="button"
