@@ -188,17 +188,26 @@ export interface ServiceAppointmentData {
   id: number
   name: string
   price: string
+  salonId: number
+  durationMin: number,
+  isActive: boolean
 }
 
 export interface ClientAppointmentData {
   id: number
   name: string
   mobile: string
+  email: string
+  salonId: number
 }
 
 export interface EmployeeAppointmentData {
   id: number
   name: string
+  email: string
+  mobile?: string
+  salonId: number
+  isActive: boolean
 }
 
 export interface UpdateAppointmentRequest {
@@ -213,3 +222,4 @@ export interface UpdateAppointmentRequest {
   notes?: string | null
   createdBy: number
 }
+
