@@ -21,6 +21,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import AlertService from "../helpers/sweetAlert/AlertService";
+import { normalizeMobileVerySimple } from "../components/Utils";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -31,8 +32,6 @@ const UsersManagement: React.FC = () => {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
-
-  const DEFAULT_COUNTRY_CODE = "+54"; // cambia si lo necesitás
 
   const [formData, setFormData] = useState<CreateUserRequest>({
     name: "",
@@ -76,28 +75,6 @@ const UsersManagement: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Normalización muy simple: quita todo excepto + y dígitos, convierte 00... -> +..., si no empieza con + antepone DEFAULT_COUNTRY_CODE.
-  // Devuelve undefined si está vacío; devuelve undefined también si la cantidad de dígitos no está en rango razonable (8-15).
-
-  const normalizeMobileVerySimple = (value?: string): string | undefined => {
-    if (!value) return undefined;
-    const v = value.trim();
-    if (!v) return undefined;
-
-    let cleaned = v.replace(/[^+\d]/g, ""); // queda + y dígitos
-    cleaned = cleaned.replace(/^00/, "+"); // 00 -> +
-    if (!cleaned.startsWith("+")) {
-      // quitar ceros iniciales locales
-      const digits = cleaned.replace(/^0+/, "");
-      cleaned = `${DEFAULT_COUNTRY_CODE}${digits}`;
-    }
-
-    const digitsOnly = cleaned.replace(/\D/g, "");
-    if (digitsOnly.length < 8 || digitsOnly.length > 15) return undefined;
-
-    return cleaned;
   };
 
   // Función para obtener el nombre del salón (igual que en dashboard)
@@ -455,8 +432,8 @@ const UsersManagement: React.FC = () => {
                               <button
                                 onClick={() => handleToggleUserStatus(user)}
                                 className={`${user.isActive
-                                    ? "text-red-600 hover:text-red-900"
-                                    : "text-green-600 hover:text-green-900"
+                                  ? "text-red-600 hover:text-red-900"
+                                  : "text-green-600 hover:text-green-900"
                                   }`}
                               >
                                 {user.isActive ? (
