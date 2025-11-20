@@ -19,6 +19,7 @@ import { apiService } from "../services/api";
 import AlertService from "../helpers/sweetAlert/AlertService";
 import { getClients } from "../services/api-clients";
 import ClientAutocomplete from "../components/Autocomplete/ClientAutocomplete";
+import { CalendarInput } from "../components/Calendar/CalendarInput";
 
 const AppointmentsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -328,20 +329,27 @@ const AppointmentsManagement: React.FC = () => {
                 </h3>
 
                 <div className="space-y-4">
+                  {/* Calendar + time selector integrado */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Horario
-                    </label>
-                    <input
-                      placeholder="10:00 AM"
-                      type="time"
-                      required
-                      value={formData.startTime}
-                      onChange={(e) =>
-                        setFormData({ ...formData, startTime: e.target.value })
-                      }
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    <CalendarInput
+                      initialValue={formData.startTime}
+                      minDate={new Date().toISOString().slice(0, 10)}
+                      onChange={(iso) => {
+                        // actualización en vivo (opcional)
+                        setFormData((prev) => ({ ...prev, startTime: iso }));
+                      }}
+                      onApply={(iso) => {
+                        setFormData((prev) => ({ ...prev, startTime: iso }));
+                      }}
+                      onCancel={() => {
+                        // opcional: reset formData.startTime si hace falta
+                      }}
                     />
+
+                    {/* Preview muy simple (local) */}
+                    <div className="mt-2 text-sm text-gray-600">
+                      Inicio: {formData.startTime ? formatDateTime(formData.startTime) : "-"}
+                    </div>
                   </div>
 
                   <div>
