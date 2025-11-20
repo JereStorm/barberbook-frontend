@@ -148,3 +148,55 @@ export interface UpdateServiceRequest {
   durationMin?: number | null;
   isActive?: boolean;
 }
+
+export enum AppointmentStatus {
+  ACTIVO = 'activo',
+  PENDIENTE = 'pendiente',
+  CONFIRMADO = 'confirmado',
+  CANCELADO = 'cancelado',
+  COMPLETADO = 'completado',
+}
+
+export interface CreateAppointmentRequest {
+  salonId: number
+  startTime: string
+  clientId: number
+  serviceId: number
+  status: AppointmentStatus
+  employeeId?: number | null
+  notes?: string | null
+  createdBy: number
+}
+export interface Appointment {
+  id: number
+  salonId: number
+  startTime: string
+  finishTime: string
+  duration: number
+  clientId: number
+  employeeId: number
+  serviceId: number
+  status: string
+  notes: string
+  createdBy: number
+  service: ServiceAppointmentData
+}
+
+export interface ServiceAppointmentData {
+  id: number
+  name: string
+  price: string
+}
+
+export interface UpdateAppointmentRequest {
+  salonId: number
+  startTime: string
+  finishTime: string
+  duration: number
+  clientId: number
+  employeeId: number
+  serviceId: number
+  status: AppointmentStatus
+  notes?: string | null
+  createdBy: number
+}
