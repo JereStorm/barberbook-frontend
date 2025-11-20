@@ -14,8 +14,13 @@ async function deleteAppointment(appointmentId: number): Promise<void> {
     await axiosInstance.delete(`/appointments/${appointmentId}`);
 }
 
+async function cancelAppointment(appointmentId: number): Promise<void> {
+    await axiosInstance.patch(`/appointments/cancel/${appointmentId}`);
+}
+
 
 export {
     getAppointments,
     deleteAppointment,
+    cancelAppointment,
 };

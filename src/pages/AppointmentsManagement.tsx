@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { Appointment, AppointmentStatus, CreateAppointmentRequest } from "../types";
 import toast from "react-hot-toast";
 import {
+    cancelAppointment,
     deleteAppointment,
     getAppointments,
     // deleteAppointment,
@@ -47,6 +48,7 @@ const AppointmentsManagement: React.FC = () => {
         try {
             setIsLoading(true);
             const data = await getAppointments();
+            console.log(data)
             setAppointments(data);
         } catch (error) {
             const apiError = apiService.handleError(error);
@@ -104,7 +106,7 @@ const AppointmentsManagement: React.FC = () => {
             return;
         }
         try {
-            // await cancelAppointment(appointment.id, { ...appointment, status: AppointmentStatus.CANCELADO });
+            await cancelAppointment(appointment.id);
             toast.success("Turno cancelado");
             loadAppointments();
         } catch (error) {
@@ -208,10 +210,10 @@ const AppointmentsManagement: React.FC = () => {
                                 <tr key={apt.id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDateTime(apt.startTime)}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-medium text-gray-900">{apt.clientId ?? "-"}</div>
-                                        <div className="text-sm text-gray-500">{apt.clientId ?? apt.clientId ?? ""}</div>
+                                        <div className="text-sm font-medium text-gray-900">{apt.client.name ?? "-"}</div>
+                                        <div className="text-sm text-gray-500">{apt.client.mobile ?? apt.clientId ?? ""}</div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{apt.employeeId ?? "Sin asignar"}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{apt.employee?.name ?? "Sin asignar"}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{apt.service?.name ?? "-"}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div

@@ -174,7 +174,9 @@ export interface Appointment {
   finishTime: string
   duration: number
   clientId: number
+  client: ClientAppointmentData
   employeeId: number
+  employee?: EmployeeAppointmentData | null;
   serviceId: number
   status: string
   notes: string
@@ -186,6 +188,17 @@ export interface ServiceAppointmentData {
   id: number
   name: string
   price: string
+}
+
+export interface ClientAppointmentData {
+  id: number
+  name: string
+  mobile: string
+}
+
+export interface EmployeeAppointmentData {
+  id: number
+  name: string
 }
 
 export interface UpdateAppointmentRequest {
