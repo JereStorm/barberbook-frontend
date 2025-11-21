@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import { Client } from "../../types";
+import { Appointment, Client } from "../../types";
 
 interface Props {
   options: Client[];
   value: string;
+  editingAppointment: Appointment | null;
   onChange: (v: string) => void;
   onSelect: (client: Client) => void;
   placeholder?: string;
@@ -15,6 +16,7 @@ const normalize = (s: string) => s?.toLowerCase().trim() ?? "";
 
 const ClientAutocomplete: React.FC<Props> = ({
   options,
+  editingAppointment,
   value,
   onChange,
   onSelect,
@@ -43,6 +45,9 @@ const ClientAutocomplete: React.FC<Props> = ({
   useEffect(() => {
     if (filtered.length > 0) {
       setOpen(true);
+      if (editingAppointment) {
+        onSelect(editingAppointment.client)
+      }
     } else {
       setOpen(false);
     }
@@ -108,9 +113,8 @@ const ClientAutocomplete: React.FC<Props> = ({
                 onSelect(c);
                 setOpen(false);
               }}
-              className={`px-3 py-2 cursor-pointer hover:bg-gray-100 ${
-                idx === highlight ? "bg-gray-100" : ""
-              }`}
+              className={`px-3 py-2 cursor-pointer hover:bg-gray-100 ${idx === highlight ? "bg-gray-100" : ""
+                }`}
             >
               <div className="text-sm font-medium text-gray-900">
                 {c.name ?? "Sin nombre"}

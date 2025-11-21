@@ -110,6 +110,9 @@ const AppointmentsManagement: React.FC = () => {
       notes: null,
       createdBy: currentUser?.id ?? 0,
     });
+
+    setSelectedClient(null);
+    setSearchClient("");
   };
 
   const handleCancelAppointment = (appointment: Appointment) => async () => {
@@ -363,8 +366,9 @@ const AppointmentsManagement: React.FC = () => {
 
                   <div>
                     <ClientAutocomplete
+                      editingAppointment={editingAppointment ?? null}
                       options={clients}
-                      value={searchClient}
+                      value={editingAppointment ? editingAppointment.client.name : searchClient}
                       onChange={setSearchClient}
                       onSelect={(c) => {
                         setFormData({ ...formData, clientId: c.id ?? 0 });
