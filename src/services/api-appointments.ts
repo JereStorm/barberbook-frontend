@@ -1,4 +1,4 @@
-import { Appointment } from '../types';
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest } from '../types';
 import { apiService } from './api';
 
 // Usamos la instancia axios interna del apiService (propiedad privada -> access vía any)
@@ -19,9 +19,20 @@ async function cancelAppointment(appointmentId: number): Promise<void> {
     await axiosInstance.patch(`/appointments/cancel/${appointmentId}`);
 }
 
+async function createAppointment(appointmentData: CreateAppointmentRequest): Promise<Appointment> {
+    const response = await axiosInstance.post<Appointment>('/appointments', appointmentData);
+    return response.data;
+}
+
+async function editAppointment(appointmentId: number, appointmentData: UpdateAppointmentRequest): Promise<Appointment> {
+    const response = await axiosInstance.patch<Appointment>(`/appointments/${appointmentId}`, appointmentData);
+    return response.data;
+}
 
 export {
     getAppointments,
+    createAppointment,
+    editAppointment,
     deleteAppointment,
     cancelAppointment,
 };

@@ -211,15 +211,15 @@ export interface EmployeeAppointmentData {
 }
 
 export interface UpdateAppointmentRequest {
-  salonId: number
-  startTime: string
-  finishTime: string
-  duration: number
-  clientId: number
-  employeeId: number
-  serviceId: number
-  status: AppointmentStatus
+  salonId?: number
+  startTime?: string
+  finishTime?: string
+  duration?: number
+  clientId?: number
+  employeeId?: number
+  serviceId?: number
+  status?: AppointmentStatus
   notes?: string | null
-  createdBy: number
+  createdBy?: number
 }
 

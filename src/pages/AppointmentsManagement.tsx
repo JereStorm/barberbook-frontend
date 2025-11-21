@@ -6,11 +6,17 @@ import {
   AppointmentStatus,
   Client,
   CreateAppointmentRequest,
+  EmployeeAppointmentData,
+  Service,
+  UpdateAppointmentRequest,
+  User,
 } from "../types";
 import toast from "react-hot-toast";
 import {
   cancelAppointment,
+  createAppointment,
   deleteAppointment,
+  editAppointment,
   getAppointments,
 } from "../services/api-appointments";
 import { apiService } from "../services/api";
@@ -18,6 +24,8 @@ import AlertService from "../helpers/sweetAlert/AlertService";
 import { getClients } from "../services/api-clients";
 import ClientAutocomplete from "../components/Autocomplete/ClientAutocomplete";
 import { CalendarInput } from "../components/Calendar/CalendarInput";
+import { getServices } from "../services/api-services";
+import { create } from "domain";
 
 const AppointmentsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -26,8 +34,10 @@ const AppointmentsManagement: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [employees, setEmployees] = useState<User[]>([]);
   const [searchClient, setSearchClient] = useState("");
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -57,6 +67,8 @@ const AppointmentsManagement: React.FC = () => {
     }
 
     loadClients();
+    loadServices();
+    loadEmployees();
 
     try {
       setIsLoading(true);
@@ -74,7 +86,16 @@ const AppointmentsManagement: React.FC = () => {
   const loadClients = async () => {
     const data = await getClients();
     setClients(data);
-    console.log("Clientes cargados", data);
+  };
+
+  const loadEmployees = async () => {
+    const data = await apiService.getUsers();
+    setEmployees(data);
+  };
+
+  const loadServices = async () => {
+    const data = await getServices();
+    setServices(data);
   };
 
   const openCreateModal = () => {
@@ -117,7 +138,8 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleCancelAppointment = (appointment: Appointment) => async () => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${appointment.clientId ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${
+        appointment.clientId ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -138,9 +160,82 @@ const AppointmentsManagement: React.FC = () => {
     }
   };
 
+  const handleCreateAppointment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser) {
+      toast.error("Usuario no autenticado");
+      return;
+    }
+
+    if (!formData.salonId) {
+      toast.error("El salón es obligatorio para crear el cliente");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      
+      //Validar aqui si es necesario crear el cliente primero
+
+      const payload: CreateAppointmentRequest = {
+        salonId: formData.salonId,
+        startTime: formData.startTime,
+        clientId: formData.clientId,
+        serviceId: formData.serviceId,
+        status: formData.status,
+        employeeId: formData.employeeId,
+        notes: formData.notes,
+        createdBy: formData.createdBy,
+      };
+
+      await createAppointment(payload);
+      toast.success("Turno creado correctamente");
+      setIsModalOpen(false);
+      resetForm();
+      loadAppointments();
+    } catch (error) {
+      const apiError = apiService.handleError(error);
+      toast.error(apiError.message || "Error creando turno");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEditAppointment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingAppointment || !currentUser) return;
+
+    setIsSubmitting(true);
+    try {
+      //Validar aqui si es necesario crear el cliente primero
+      const updateData: UpdateAppointmentRequest = {
+        startTime: formData.startTime,
+        clientId: formData.clientId,
+        serviceId: formData.serviceId,
+        status: formData.status,
+        employeeId: formData.employeeId!,
+        notes: formData.notes,
+        createdBy: formData.createdBy,
+      };
+
+      await editAppointment(editingAppointment.id, updateData);
+      toast.success("Cliente actualizado correctamente");
+      setIsModalOpen(false);
+      setEditingAppointment(null);
+      resetForm();
+      loadAppointments();
+    } catch (error) {
+      const apiError = apiService.handleError(error);
+      toast.error(apiError.message || "Error actualizando cliente");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${appointment.clientId ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${
+        appointment.clientId ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -263,13 +358,14 @@ const AppointmentsManagement: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium ${apt.status === AppointmentStatus.CONFIRMADO ||
+                      className={`px-3 py-1 text-sm font-medium ${
+                        apt.status === AppointmentStatus.CONFIRMADO ||
                         apt.status === AppointmentStatus.COMPLETADO
-                        ? "text-green-600"
-                        : apt.status === AppointmentStatus.CANCELADO
+                          ? "text-green-600"
+                          : apt.status === AppointmentStatus.CANCELADO
                           ? "text-red-600"
                           : "text-yellow-600"
-                        }`}
+                      }`}
                     >
                       {apt.status}
                     </div>
@@ -320,107 +416,196 @@ const AppointmentsManagement: React.FC = () => {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              {/* El formulario de creación/edición puede implementarse aquí reutilizando formData */}
-              <div className="p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                  {editingAppointment ? "Editar Turno" : "Crear Turno"}
-                </h3>
+              <form
+                onSubmit={editingAppointment ? handleEditAppointment : handleCreateAppointment}
+              >
+                {/* El formulario de creación/edición puede implementarse aquí reutilizando formData */}
+                <div className="p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    {editingAppointment ? "Editar Turno" : "Crear Turno"}
+                  </h3>
 
-                <div className="space-y-4">
-                  {/* Calendar + time selector integrado */}
-                  <div>
-
-                    {!isCalendarOpen ?
-                      <button onClick={() => setIsCalendarOpen(true)} className="flex align-baseline gap-2 px-4 py-2 bg-white border rounded text-gray-700 hover:bg-gray-50">
-                        Horario <Timer className="w-6 h-6"></Timer>
-                      </button> :
-                      (
+                  <div className="space-y-4">
+                    {/* Calendar + time selector integrado */}
+                    <div>
+                      {!isCalendarOpen ? (
+                        <button
+                          onClick={() => setIsCalendarOpen(true)}
+                          className="flex align-baseline gap-2 px-4 py-2 bg-white border rounded text-gray-700 hover:bg-gray-50"
+                        >
+                          Horario <Timer className="w-6 h-6"></Timer>
+                        </button>
+                      ) : (
                         <CalendarInput
                           initialValue={formData.startTime}
                           minDate={new Date().toISOString().slice(0, 10)}
                           onChange={(iso) => {
                             // actualización en vivo (opcional)
-                            setFormData((prev) => ({ ...prev, startTime: iso }));
+                            setFormData((prev) => ({
+                              ...prev,
+                              startTime: iso,
+                            }));
                           }}
                           onApply={(iso) => {
-                            setFormData((prev) => ({ ...prev, startTime: iso }));
-                            setIsCalendarOpen(false)
+                            setFormData((prev) => ({
+                              ...prev,
+                              startTime: iso,
+                            }));
+                            setIsCalendarOpen(false);
                           }}
                           onCancel={() => {
                             // opcional: reset formData.startTime si hace falta
                             setFormData((prev) => ({ ...prev, startTime: "" }));
-                            setIsCalendarOpen(false)
-
+                            setIsCalendarOpen(false);
                           }}
                         />
                       )}
 
-                    {/* Preview muy simple (local) */}
-                    <div className="mt-2 text-sm text-gray-600">
-                      <p>
-                        Inicio: {formData.startTime ? formatDateTime(formData.startTime) : "-"}
-                      </p>
+                      {/* Preview muy simple (local) */}
+                      <div className="mt-2 text-sm text-gray-600">
+                        <p>
+                          Inicio:{" "}
+                          {formData.startTime
+                            ? formatDateTime(formData.startTime)
+                            : "-"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <ClientAutocomplete
+                        editingAppointment={editingAppointment ?? null}
+                        options={clients}
+                        value={
+                          editingAppointment
+                            ? editingAppointment.client.name
+                            : searchClient
+                        }
+                        onChange={setSearchClient}
+                        onSelect={(c) => {
+                          setFormData({ ...formData, clientId: c.id ?? 0 });
+                          setSearchClient(c.name ?? "");
+                          setSelectedClient(c);
+                        }}
+                        placeholder="Busque a su cliente por nombre, móvil o email..."
+                      />
+
+                      {selectedClient && (
+                        <div className="mt-2 text-sm text-gray-500">
+                          {/* Mostrar al cliente seleccionado */}
+                          <p>
+                            Cliente: {selectedClient.name}
+                            <span className="ms-1">
+                              ({selectedClient.mobile})
+                            </span>
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Servicio
+                      </label>
+                      <select
+                        required
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            serviceId: Number(e.target.value),
+                          })
+                        }
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        defaultValue={
+                          editingAppointment ? editingAppointment.serviceId : ""
+                        }
+                      >
+                        <option disabled value="">
+                          Selecciona un Servicio
+                        </option>
+
+                        {services.map((service) => (
+                          <option key={service.id} value={service.id}>
+                            {service.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Empleado
+                      </label>
+                      <select
+                        required
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            employeeId: Number(e.target.value),
+                          })
+                        }
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        defaultValue={
+                          editingAppointment
+                            ? editingAppointment.employeeId
+                            : ""
+                        }
+                      >
+                        <option disabled value="">
+                          Selecciona un Empleado
+                        </option>
+
+                        {employees.map((employee) => (
+                          <option key={employee.id} value={employee.id}>
+                            {employee.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Notas
+                      </label>
+                      <input
+                        placeholder="Notas del turno"
+                        type="text"
+                        value={formData.notes ?? ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, notes: e.target.value })
+                        }
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      />
                     </div>
                   </div>
 
-                  <div>
-                    <ClientAutocomplete
-                      editingAppointment={editingAppointment ?? null}
-                      options={clients}
-                      value={editingAppointment ? editingAppointment.client.name : searchClient}
-                      onChange={setSearchClient}
-                      onSelect={(c) => {
-                        setFormData({ ...formData, clientId: c.id ?? 0 });
-                        setSearchClient(c.name ?? "");
-                        setSelectedClient(c);
+                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                    >
+                      {isSubmitting
+                        ? "Guardando..."
+                        : editingAppointment
+                        ? "Actualizar"
+                        : "Crear"}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsModalOpen(false);
+                        setEditingAppointment(null);
+                        resetForm();
                       }}
-                      placeholder="Busque a su cliente por nombre, móvil o email..."
-                    />
-
-                    {selectedClient && (
-                      <div className="mt-2 text-sm text-gray-500">
-                        {/* Mostrar al cliente seleccionado */}
-                        <p>
-                          Cliente: {selectedClient.name}
-                          <span className="ms-1">
-                            ({selectedClient.mobile})
-                          </span>
-                        </p>
-
-                      </div>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Notas
-                    </label>
-                    <input
-                      placeholder="Notas del turno"
-                      type="text"
-                      value={formData.notes ?? ""}
-                      onChange={(e) =>
-                        setFormData({ ...formData, notes: e.target.value })
-                      }
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    />
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Cancelar
+                    </button>
                   </div>
                 </div>
-
-                <div className="mt-6 flex justify-end">
-                  <button
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      setEditingAppointment(null);
-                      resetForm();
-                    }}
-                    className="px-4 py-2 bg-white border rounded text-gray-700 hover:bg-gray-50"
-                  >
-                    Cerrar
-                  </button>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
