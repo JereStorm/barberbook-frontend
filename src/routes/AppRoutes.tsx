@@ -14,6 +14,7 @@ import ServicesManagement from '../pages/ServicesManagement';
 
 // Toast
 import { ToastNotifications } from '../helpers/toastNotifications/ToastService';
+import AppointmentsManagement from '../pages/AppointmentsManagement';
 
 // ProtectedRoute
 interface ProtectedRouteProps {
@@ -99,6 +100,15 @@ const AppRoutes: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.RECEPCIONISTA]}>
                 <ServicesManagement />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/appointments"
+            element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.RECEPCIONISTA, UserRole.ESTILISTA]}>
+                <AppointmentsManagement />
               </ProtectedRoute>
             }
           />

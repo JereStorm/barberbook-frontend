@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Users, Building2, LogOut, Home, Menu, X, Contact, SquareScissors } from 'lucide-react';
+import { Users, Building2, LogOut, Home, Menu, X, Contact, SquareScissors, CalendarCog } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
 import SidebarLink from '../UI/SidebarLink';
@@ -36,6 +36,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         name: 'Usuarios',
         href: '/users',
         icon: Users,
+        show: true,
+      });
+    }
+
+    // Turnos - según permisos
+    if ([UserRole.ADMIN, UserRole.RECEPCIONISTA, UserRole.ESTILISTA].includes(user.role)) {
+      items.push({
+        name: 'Turnos',
+        href: '/appointments',
+        icon: CalendarCog,
         show: true,
       });
     }
