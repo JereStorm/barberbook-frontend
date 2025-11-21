@@ -1,4 +1,4 @@
-import { Plus, Search, Edit, Trash2, CircleX } from "lucide-react";
+import { Plus, Search, Edit, Trash2, CircleX, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import {
@@ -12,8 +12,6 @@ import {
   cancelAppointment,
   deleteAppointment,
   getAppointments,
-  // deleteAppointment,
-  // updateAppointment,
 } from "../services/api-appointments";
 import { apiService } from "../services/api";
 import AlertService from "../helpers/sweetAlert/AlertService";
@@ -29,6 +27,7 @@ const AppointmentsManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [searchClient, setSearchClient] = useState("");
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -115,8 +114,7 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleCancelAppointment = (appointment: Appointment) => async () => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${
-        appointment.clientId ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${appointment.clientId ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -139,8 +137,7 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${
-        appointment.clientId ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${appointment.clientId ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -263,14 +260,13 @@ const AppointmentsManagement: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium ${
-                        apt.status === AppointmentStatus.CONFIRMADO ||
+                      className={`px-3 py-1 text-sm font-medium ${apt.status === AppointmentStatus.CONFIRMADO ||
                         apt.status === AppointmentStatus.COMPLETADO
-                          ? "text-green-600"
-                          : apt.status === AppointmentStatus.CANCELADO
+                        ? "text-green-600"
+                        : apt.status === AppointmentStatus.CANCELADO
                           ? "text-red-600"
                           : "text-yellow-600"
-                      }`}
+                        }`}
                     >
                       {apt.status}
                     </div>
@@ -331,24 +327,37 @@ const AppointmentsManagement: React.FC = () => {
                 <div className="space-y-4">
                   {/* Calendar + time selector integrado */}
                   <div>
-                    <CalendarInput
-                      initialValue={formData.startTime}
-                      minDate={new Date().toISOString().slice(0, 10)}
-                      onChange={(iso) => {
-                        // actualización en vivo (opcional)
-                        setFormData((prev) => ({ ...prev, startTime: iso }));
-                      }}
-                      onApply={(iso) => {
-                        setFormData((prev) => ({ ...prev, startTime: iso }));
-                      }}
-                      onCancel={() => {
-                        // opcional: reset formData.startTime si hace falta
-                      }}
-                    />
+
+                    {!isCalendarOpen ?
+                      <button onClick={() => setIsCalendarOpen(true)} className="flex align-baseline gap-2 px-4 py-2 bg-white border rounded text-gray-700 hover:bg-gray-50">
+                        Horario <Timer className="w-6 h-6"></Timer>
+                      </button> :
+                      (
+                        <CalendarInput
+                          initialValue={formData.startTime}
+                          minDate={new Date().toISOString().slice(0, 10)}
+                          onChange={(iso) => {
+                            // actualización en vivo (opcional)
+                            setFormData((prev) => ({ ...prev, startTime: iso }));
+                          }}
+                          onApply={(iso) => {
+                            setFormData((prev) => ({ ...prev, startTime: iso }));
+                            setIsCalendarOpen(false)
+                          }}
+                          onCancel={() => {
+                            // opcional: reset formData.startTime si hace falta
+                            setFormData((prev) => ({ ...prev, startTime: "" }));
+                            setIsCalendarOpen(false)
+
+                          }}
+                        />
+                      )}
 
                     {/* Preview muy simple (local) */}
                     <div className="mt-2 text-sm text-gray-600">
-                      Inicio: {formData.startTime ? formatDateTime(formData.startTime) : "-"}
+                      <p>
+                        Inicio: {formData.startTime ? formatDateTime(formData.startTime) : "-"}
+                      </p>
                     </div>
                   </div>
 
@@ -368,8 +377,13 @@ const AppointmentsManagement: React.FC = () => {
                     {selectedClient && (
                       <div className="mt-2 text-sm text-gray-500">
                         {/* Mostrar al cliente seleccionado */}
-                        Seleccionado: {selectedClient.name} (
-                        {selectedClient.mobile} - {selectedClient.email})
+                        <p>
+                          Cliente: {selectedClient.name}
+                          <span className="ms-1">
+                            ({selectedClient.mobile})
+                          </span>
+                        </p>
+
                       </div>
                     )}
                   </div>

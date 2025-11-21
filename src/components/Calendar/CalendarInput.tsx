@@ -54,19 +54,20 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   const initial = useMemo(() => parseISOToLocal(initialValue), [initialValue]);
   const [date, setDate] = useState<string>(
     initial.date ||
-      (() => {
-        const t = new Date();
-        return t.toISOString().slice(0, 10);
-      })()
+    (() => {
+      const t = new Date();
+      return t.toISOString().slice(0, 10);
+    })()
   );
   const [time, setTime] = useState<string>(
     initial.time ||
-      (() => {
-        const t = new Date();
-        t.setMinutes(0, 0, 0);
-        t.setHours(t.getHours());
-        return t.toTimeString().slice(0, 5);
-      })()
+    (() => {
+      const t = new Date();
+      t.setMinutes(0, 0, 0);
+      //aca deberia setearse el menor horario disponible
+      t.setHours(t.getHours());
+      return t.toTimeString().slice(0, 5);
+    })()
   );
 
   // month state for the visual calendar
@@ -136,6 +137,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
       2,
       "0"
     )}`;
+    //TODO: Asegurarse que el minDate sea local al navegador del usuario
     return candidate >= minDate;
   };
 
@@ -317,7 +319,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                   onClick={() => dayClick(day)}
                   className={`py-2 text-sm rounded-full w-full flex items-center justify-center
                     ${!selectable ? "text-gray-300 cursor-not-allowed" : "hover:bg-gray-100"}
-                    ${isSelected ? "bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-md transform scale-105" : "" }
+                    ${isSelected ? "bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-md transform scale-105" : ""}
                   `}
                 >
                   {day}
@@ -427,14 +429,14 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
               </div>
             </div>
 
-            
+
           </div>
           <div className="min-w-0">
-              <div className="text-xs text-gray-600">Datos de Seleccion Actual</div>
-              <div className="mt-1 text-sm font-medium">
-                {formatShortPreview(combineLocalDateTimeToISO(date, time))}
-              </div>
+            <div className="text-xs text-gray-600">Datos de Seleccion Actual</div>
+            <div className="mt-1 text-sm font-medium">
+              {formatShortPreview(combineLocalDateTimeToISO(date, time))}
             </div>
+          </div>
         </div>
 
         <div className="p-3 border-t flex justify-end gap-2">
