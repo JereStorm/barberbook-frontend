@@ -25,7 +25,6 @@ import { getClients } from "../services/api-clients";
 import ClientAutocomplete from "../components/Autocomplete/ClientAutocomplete";
 import { CalendarInput } from "../components/Calendar/CalendarInput";
 import { getServices } from "../services/api-services";
-import { create } from "domain";
 
 const AppointmentsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -39,7 +38,6 @@ const AppointmentsManagement: React.FC = () => {
   const [searchClient, setSearchClient] = useState("");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  //const [isTimeConfirmed, setIsTimeConfirmed] = useState(false);
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [editingAppointment, setEditingAppointment] =
@@ -57,7 +55,6 @@ const AppointmentsManagement: React.FC = () => {
 
   useEffect(() => {
     loadAppointments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadAppointments = async () => {
@@ -140,7 +137,7 @@ const AppointmentsManagement: React.FC = () => {
   const handleCancelAppointment = (appointment: Appointment) => async () => {
     const confirmed = await AlertService.confirm(
       `¿Está seguro que desea cancelar el turno para "${
-        appointment.clientId ?? "sin nombre"
+        appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -235,7 +232,7 @@ const AppointmentsManagement: React.FC = () => {
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
       `¿Está seguro que desea eliminar el turno para "${
-        appointment.clientId ?? "sin nombre"
+        appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -285,32 +282,13 @@ const AppointmentsManagement: React.FC = () => {
     }
   }
 
-  const loadTimeNow = (): string => {
-    const now = new Date();
-
-    // Calcular próximo múltiplo de 5 minutos
-    const minutes = now.getMinutes();
-    const next5 = Math.ceil(minutes / 5) * 5;
-
-    if (next5 >= 60) {
-      now.setHours(now.getHours() + 1);
-      now.setMinutes(0);
-    } else {
-      now.setMinutes(next5);
-    }
-
-    now.setSeconds(0);
-    now.setMilliseconds(0);
-
-    // Formatear DD/MM/YYYY HH:mm
-    const dd = String(now.getDate()).padStart(2, "0");
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const yyyy = now.getFullYear();
-    const hh = String(now.getHours()).padStart(2, "0");
-    const min = String(now.getMinutes()).padStart(2, "0");
-
-    return `Dia ${dd}/${mm} del ${yyyy} a las ${hh}:${min}`;
-  };
+  const getStatusDisplayName: AppointmentStatus[] = [
+    AppointmentStatus.PENDIENTE, 
+    AppointmentStatus.ACTIVO,
+    AppointmentStatus.CONFIRMADO,
+    AppointmentStatus.CANCELADO,
+    AppointmentStatus.COMPLETADO
+  ];
 
   return (
     <div className="space-y-6">
@@ -478,12 +456,8 @@ const AppointmentsManagement: React.FC = () => {
                         <CalendarInput
                           initialValue={formData.startTime}
                           minDate={new Date().toISOString().slice(0, 10)}
-                          onChange={(iso) => {
-                            // actualización en vivo (opcional)
-                            /*setFormData((prev) => ({
-                              ...prev,
-                              startTime: iso,
-                            }));*/
+                          onChange={() => {
+                            //actualizacion en vivo opcional
                           }}
                           onApply={(iso) => {
                             setFormData((prev) => ({
@@ -494,8 +468,8 @@ const AppointmentsManagement: React.FC = () => {
                           }}
                           onCancel={() => {
                             // opcional: reset formData.startTime si hace falta
-                             setFormData((prev) => ({ ...prev}));
-                            
+                            setFormData((prev) => ({ ...prev }));
+
                             setIsCalendarOpen(false);
                           }}
                         />
@@ -507,7 +481,7 @@ const AppointmentsManagement: React.FC = () => {
                           Fecha del Turno:{" "}
                           {formData.startTime
                             ? formatDateTime(formData.startTime)
-                            : '-'}
+                            : "-"}
                         </p>
                       </div>
                     </div>
@@ -598,6 +572,35 @@ const AppointmentsManagement: React.FC = () => {
                         {employees.map((employee) => (
                           <option key={employee.id} value={employee.id}>
                             {employee.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Estado
+                      </label>
+                      <select
+                        required
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            status: e.target.value as AppointmentStatus,
+                          })
+                        }
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        defaultValue={
+                          editingAppointment ? editingAppointment.status : ""
+                        }
+                      >
+                        <option disabled value="">
+                          Selecciona un Estado
+                        </option>
+
+                        {getStatusDisplayName.map((status) => (
+                          <option key={status} value={status}>
+                            {status[0].toUpperCase() + status.slice(1)}
                           </option>
                         ))}
                       </select>

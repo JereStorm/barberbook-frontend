@@ -62,7 +62,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
 
   // --- Styled time picker with separate hour/minute columns ---
   const startHour = 8;
-  const endHour = 22; // exclusive
+  const endHour = 22; 
   const minuteStep = 5; // minutos de precisión (puedes cambiar)
   const hours = useMemo(
     () =>
@@ -93,13 +93,10 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
     const [y, m, d] = dateStr.split("-").map(Number);
     const selectedDate = new Date(y, m - 1, d);
 
-    console.log('linea 77', selectedDate);
     const isToday =
       selectedDate.getFullYear() === now.getFullYear() &&
       selectedDate.getMonth() === now.getMonth() &&
       selectedDate.getDate() === now.getDate();
-
-      console.log('selected date ', selectedDate);
 
     // Si NO es hoy → primer horario del día
     if (!isToday) {
@@ -138,7 +135,6 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   useEffect(() => {
     const iso = combineLocalDateTimeToISO(date, time);
     if (onChange) onChange(iso);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, time]);
 
   const handleApply = () => {
@@ -179,7 +175,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
     const newDate = `${y}-${mm}-${dd}`;
 
     setDate(newDate);
-    setTime(getNextTimeForDate(newDate)); // <- importante
+    setTime(getNextTimeForDate(newDate)); 
   };
 
   const isSelectable = (y: number, m: number, d: number) => {
