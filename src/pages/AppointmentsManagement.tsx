@@ -1,5 +1,5 @@
 import { Plus, Search, Edit, Trash2, CircleX, Timer } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import {
   Appointment,
@@ -63,6 +63,9 @@ const AppointmentsManagement: React.FC = () => {
 
   useEffect(() => {
     loadAppointments();
+    loadClients();
+    loadServices();
+    loadEmployees();
   }, []);
 
   const loadAppointments = async () => {
@@ -71,10 +74,6 @@ const AppointmentsManagement: React.FC = () => {
       setIsLoading(false);
       return;
     }
-
-    loadClients();
-    loadServices();
-    loadEmployees();
 
     try {
       setIsLoading(true);
@@ -173,7 +172,7 @@ const AppointmentsManagement: React.FC = () => {
     }
 
     if (!formData.salonId) {
-      toast.error("El salón es obligatorio para crear el cliente");
+      toast.error("El salón es obligatorio para crear el turno");
       return;
     }
 
@@ -223,14 +222,14 @@ const AppointmentsManagement: React.FC = () => {
       };
 
       await editAppointment(editingAppointment.id, updateData);
-      toast.success("Cliente actualizado correctamente");
+      toast.success("Turno actualizado correctamente");
       setIsModalOpen(false);
       setEditingAppointment(null);
       resetForm();
       loadAppointments();
     } catch (error) {
       const apiError = apiService.handleError(error);
-      toast.error(apiError.message || "Error actualizando cliente");
+      toast.error(apiError.message || "Error actualizando turno");
     } finally {
       setIsSubmitting(false);
     }
@@ -261,15 +260,14 @@ const AppointmentsManagement: React.FC = () => {
     }
   };
 
-  const filteredAppointments = appointments.filter((a) => {
+  const filteredAppointments = useMemo(() => {
     const term = searchTerm.toLowerCase();
-    return (
-      // (a.client?.name ?? "").toLowerCase().includes(term) ||
-      // (a.employeeId?.name ?? "").toLowerCase().includes(term) ||
-      (a.service?.name ?? "").toLowerCase().includes(term) ||
+    return appointments.filter(a =>
+      (a.client.name ?? "").toLowerCase().includes(term) ||
       (a.startTime ?? "").toLowerCase().includes(term)
     );
-  });
+  }, [appointments, searchTerm]);
+
 
   if (isLoading) {
     return (
