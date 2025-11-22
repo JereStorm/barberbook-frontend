@@ -138,8 +138,7 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleCancelAppointment = (appointment: Appointment) => async () => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${
-        appointment.clientId ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${appointment.clientId ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -174,7 +173,7 @@ const AppointmentsManagement: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      
+
       //Validar aqui si es necesario crear el cliente primero
 
       const payload: CreateAppointmentRequest = {
@@ -234,8 +233,7 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${
-        appointment.clientId ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${appointment.clientId ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -358,14 +356,13 @@ const AppointmentsManagement: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium ${
-                        apt.status === AppointmentStatus.CONFIRMADO ||
+                      className={`px-3 py-1 text-sm font-medium ${apt.status === AppointmentStatus.CONFIRMADO ||
                         apt.status === AppointmentStatus.COMPLETADO
-                          ? "text-green-600"
-                          : apt.status === AppointmentStatus.CANCELADO
+                        ? "text-green-600"
+                        : apt.status === AppointmentStatus.CANCELADO
                           ? "text-red-600"
                           : "text-yellow-600"
-                      }`}
+                        }`}
                     >
                       {apt.status}
                     </div>
@@ -590,8 +587,8 @@ const AppointmentsManagement: React.FC = () => {
                       {isSubmitting
                         ? "Guardando..."
                         : editingAppointment
-                        ? "Actualizar"
-                        : "Crear"}
+                          ? "Actualizar"
+                          : "Crear"}
                     </button>
                     <button
                       onClick={() => {
