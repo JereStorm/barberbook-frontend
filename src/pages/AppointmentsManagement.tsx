@@ -1,4 +1,4 @@
-import { Plus, Search, Edit, Trash2, CircleX, Timer } from "lucide-react";
+import { Plus, Search, Edit, Trash2, CircleX, Timer, CircleCheckBig } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import {
@@ -142,6 +142,28 @@ const AppointmentsManagement: React.FC = () => {
   };
 
   const handleCancelAppointment = (appointment: Appointment) => async () => {
+    if (appointment.status === AppointmentStatus.CANCELADO) {
+      try {
+        const updateData: UpdateAppointmentRequest = {
+          startTime: appointment.startTime,
+          clientId: appointment.clientId,
+          serviceId: appointment.serviceId,
+          status: AppointmentStatus.ACTIVO,
+          employeeId: appointment.employeeId!,
+          notes: appointment.notes,
+          createdBy: appointment.createdBy,
+        };
+        await editAppointment(appointment.id, updateData);
+        toast.success("Turno activado");
+        loadAppointments();
+        return
+      } catch (error) {
+        const apiError = apiService.handleError(error);
+        toast.error(apiError.message || "Error cancelando turno");
+        return
+      }
+    }
+
     const confirmed = await AlertService.confirm(
       `¿Está seguro que desea cancelar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
@@ -390,9 +412,16 @@ const AppointmentsManagement: React.FC = () => {
                       </button>
                       <button
                         onClick={handleCancelAppointment(apt)}
-                        className="text-red-600 hover:text-red-900"
+                        className={`${apt.status !== AppointmentStatus.CANCELADO
+                          ? "text-red-600 hover:text-red-900"
+                          : "text-green-600 hover:text-green-900"
+                          }`}
                       >
-                        <CircleX className="w-4 h-4 " />
+                        {
+                          apt.status !== AppointmentStatus.CANCELADO ?
+                            <CircleX className="w-4 h-4 " /> :
+                            <CircleCheckBig className="w-4 h-4" />
+                        }
                       </button>
                       <button
                         onClick={() => handleDeleteAppointment(apt)}
