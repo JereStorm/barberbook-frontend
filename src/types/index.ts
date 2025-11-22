@@ -158,30 +158,31 @@ export enum AppointmentStatus {
 }
 
 export interface CreateAppointmentRequest {
-  salonId: number
-  startTime: string
-  clientId: number
-  serviceId: number
-  status: AppointmentStatus
-  employeeId?: number | null
-  notes?: string | null
-  createdBy: number
+  salonId: number;
+  startTime: string;
+  clientId: number;
+  serviceIds: number[]; // <--- Ahora es un array
+  status: AppointmentStatus;
+  employeeId?: number | null;
+  notes?: string | null;
+  createdBy: number;
 }
+
 export interface Appointment {
-  id: number
-  salonId: number
-  startTime: string
-  finishTime: string
-  duration: number
-  clientId: number
-  client: ClientAppointmentData
-  employeeId: number
+  id: number;
+  salonId: number;
+  startTime: string;
+  finishTime: string;
+  duration: number;
+  totalPrice?: number; // <--- Precio total 
+  clientId: number;
+  client: ClientAppointmentData;
+  employeeId: number;
   employee?: EmployeeAppointmentData | null;
-  serviceId: number
-  status: string
-  notes: string
-  createdBy: number
-  service: ServiceAppointmentData
+  status: string;
+  notes: string;
+  createdBy: number;
+  services: ServiceAppointmentData[]; // <--- Ahora es un array
 }
 
 export interface ServiceAppointmentData {
@@ -211,15 +212,14 @@ export interface EmployeeAppointmentData {
 }
 
 export interface UpdateAppointmentRequest {
-  salonId?: number
-  startTime?: string
-  finishTime?: string
-  duration?: number
-  clientId?: number
-  employeeId?: number
-  serviceId?: number
-  status?: AppointmentStatus
-  notes?: string | null
-  createdBy?: number
+  salonId?: number;
+  startTime?: string;
+  finishTime?: string;
+  duration?: number;
+  clientId?: number;
+  employeeId?: number;
+  serviceIds?: number[]; // <--- Ahora es un array
+  status?: AppointmentStatus;
+  notes?: string | null;
+  createdBy?: number;
 }
-
