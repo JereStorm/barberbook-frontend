@@ -39,6 +39,7 @@ const AppointmentsManagement: React.FC = () => {
   const [searchClient, setSearchClient] = useState("");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  //const [isTimeConfirmed, setIsTimeConfirmed] = useState(false);
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [editingAppointment, setEditingAppointment] =
@@ -174,7 +175,6 @@ const AppointmentsManagement: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      
       //Validar aqui si es necesario crear el cliente primero
 
       const payload: CreateAppointmentRequest = {
@@ -284,6 +284,33 @@ const AppointmentsManagement: React.FC = () => {
       return dt;
     }
   }
+
+  const loadTimeNow = (): string => {
+    const now = new Date();
+
+    // Calcular próximo múltiplo de 5 minutos
+    const minutes = now.getMinutes();
+    const next5 = Math.ceil(minutes / 5) * 5;
+
+    if (next5 >= 60) {
+      now.setHours(now.getHours() + 1);
+      now.setMinutes(0);
+    } else {
+      now.setMinutes(next5);
+    }
+
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
+    // Formatear DD/MM/YYYY HH:mm
+    const dd = String(now.getDate()).padStart(2, "0");
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const yyyy = now.getFullYear();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const min = String(now.getMinutes()).padStart(2, "0");
+
+    return `Dia ${dd}/${mm} del ${yyyy} a las ${hh}:${min}`;
+  };
 
   return (
     <div className="space-y-6">
@@ -419,7 +446,11 @@ const AppointmentsManagement: React.FC = () => {
 
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <form
-                onSubmit={editingAppointment ? handleEditAppointment : handleCreateAppointment}
+                onSubmit={
+                  editingAppointment
+                    ? handleEditAppointment
+                    : handleCreateAppointment
+                }
               >
                 {/* El formulario de creación/edición puede implementarse aquí reutilizando formData */}
                 <div className="p-6">
@@ -431,22 +462,28 @@ const AppointmentsManagement: React.FC = () => {
                     {/* Calendar + time selector integrado */}
                     <div>
                       {!isCalendarOpen ? (
-                        <button
-                          onClick={() => setIsCalendarOpen(true)}
-                          className="flex align-baseline gap-2 px-4 py-2 bg-white border rounded text-gray-700 hover:bg-gray-50"
-                        >
-                          Horario <Timer className="w-6 h-6"></Timer>
-                        </button>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Horario
+                          </label>
+                          <button
+                            onClick={() => setIsCalendarOpen(true)}
+                            className="flex align-baseline gap-2 px-4 py-2 bg-white border rounded text-gray-700 hover:bg-gray-50"
+                          >
+                            Seleccionar Fecha y Hora{" "}
+                            <Timer className="w-6 h-6"></Timer>
+                          </button>
+                        </div>
                       ) : (
                         <CalendarInput
                           initialValue={formData.startTime}
                           minDate={new Date().toISOString().slice(0, 10)}
                           onChange={(iso) => {
                             // actualización en vivo (opcional)
-                            setFormData((prev) => ({
+                            /*setFormData((prev) => ({
                               ...prev,
                               startTime: iso,
-                            }));
+                            }));*/
                           }}
                           onApply={(iso) => {
                             setFormData((prev) => ({
@@ -457,7 +494,8 @@ const AppointmentsManagement: React.FC = () => {
                           }}
                           onCancel={() => {
                             // opcional: reset formData.startTime si hace falta
-                            setFormData((prev) => ({ ...prev, startTime: "" }));
+                             setFormData((prev) => ({ ...prev}));
+                            
                             setIsCalendarOpen(false);
                           }}
                         />
@@ -466,10 +504,10 @@ const AppointmentsManagement: React.FC = () => {
                       {/* Preview muy simple (local) */}
                       <div className="mt-2 text-sm text-gray-600">
                         <p>
-                          Inicio:{" "}
+                          Fecha del Turno:{" "}
                           {formData.startTime
                             ? formatDateTime(formData.startTime)
-                            : "-"}
+                            : '-'}
                         </p>
                       </div>
                     </div>
@@ -486,7 +524,7 @@ const AppointmentsManagement: React.FC = () => {
                         onChange={setSearchClient}
                         onSelect={(c) => {
                           setFormData({ ...formData, clientId: c.id ?? 0 });
-                          setSearchClient(c.name ?? "");
+                          setSearchClient("");
                           setSelectedClient(c);
                         }}
                         placeholder="Busque a su cliente por nombre, móvil o email..."
@@ -597,6 +635,7 @@ const AppointmentsManagement: React.FC = () => {
                       onClick={() => {
                         setIsModalOpen(false);
                         setEditingAppointment(null);
+                        setIsCalendarOpen(false);
                         resetForm();
                       }}
                       className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"

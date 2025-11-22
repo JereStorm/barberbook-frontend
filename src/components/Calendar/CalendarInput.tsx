@@ -37,7 +37,7 @@ const formatShortPreview = (iso?: string) => {
     const dd = String(d.getDate()).padStart(2, "0");
     const hh = String(d.getHours()).padStart(2, "0");
     const min = String(d.getMinutes()).padStart(2, "0");
-    return `Fecha: ${yyyy}-${mm}-${dd} Hora: ${hh}:${min}`;
+    return `Dia ${dd}/${mm} del ${yyyy} a las: ${hh}:${min}hs`;
   } catch {
     return iso;
   }
@@ -54,20 +54,29 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   const initial = useMemo(() => parseISOToLocal(initialValue), [initialValue]);
   const [date, setDate] = useState<string>(
     initial.date ||
-    (() => {
-      const t = new Date();
-      return t.toISOString().slice(0, 10);
-    })()
+      (() => {
+        const t = new Date();
+        return t.toISOString().slice(0, 10);
+      })()
   );
-  const [time, setTime] = useState<string>(
-    initial.time ||
-    (() => {
-      const t = new Date();
-      t.setMinutes(0, 0, 0);
-      //aca deberia setearse el menor horario disponible
-      t.setHours(t.getHours());
-      return t.toTimeString().slice(0, 5);
-    })()
+
+  // --- Styled time picker with separate hour/minute columns ---
+  const startHour = 8;
+  const endHour = 22; // exclusive
+  const minuteStep = 5; // minutos de precisión (puedes cambiar)
+  const hours = useMemo(
+    () =>
+      Array.from({ length: endHour - startHour }, (_, i) =>
+        String(startHour + i).padStart(2, "0")
+      ),
+    []
+  );
+  const minutes = useMemo(
+    () =>
+      Array.from({ length: 60 / minuteStep }, (_, i) =>
+        String(i * minuteStep).padStart(2, "0")
+      ),
+    []
   );
 
   // month state for the visual calendar
@@ -76,6 +85,45 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   );
   const [viewMonth, setViewMonth] = useState<number>(() =>
     new Date(date).getMonth()
+  );
+
+  const getNextTimeForDate = (dateStr: string): string => {
+    const now = new Date();
+
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const selectedDate = new Date(y, m - 1, d);
+
+    console.log('linea 77', selectedDate);
+    const isToday =
+      selectedDate.getFullYear() === now.getFullYear() &&
+      selectedDate.getMonth() === now.getMonth() &&
+      selectedDate.getDate() === now.getDate();
+
+      console.log('selected date ', selectedDate);
+
+    // Si NO es hoy → primer horario del día
+    if (!isToday) {
+      return `0${startHour}:00`; // puedes cambiar a "08:05" si deseas respetar el step
+    }
+
+    // Si sí es hoy → siguiente múltiplo de 5
+    const minutes = now.getMinutes();
+    const next5 = Math.ceil(minutes / 5) * 5;
+
+    if (next5 >= 60) {
+      now.setHours(now.getHours() + 1);
+      now.setMinutes(0);
+    } else {
+      now.setMinutes(next5);
+    }
+
+    
+    return now.toTimeString().slice(0, 5);
+  };
+
+  //calculate initial time
+  const [time, setTime] = useState<string>(
+    initial.time || getNextTimeForDate(date)
   );
 
   useEffect(() => {
@@ -128,15 +176,17 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
     const m = viewMonth + 1;
     const dd = String(day).padStart(2, "0");
     const mm = String(m).padStart(2, "0");
-    setDate(`${y}-${mm}-${dd}`);
+    const newDate = `${y}-${mm}-${dd}`;
+
+    setDate(newDate);
+    setTime(getNextTimeForDate(newDate)); // <- importante
   };
 
   const isSelectable = (y: number, m: number, d: number) => {
     if (!minDate) return true;
-    const candidate = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(
-      2,
-      "0"
-    )}`;
+    const candidate = `${y}-${String(m + 1).padStart(2, "0")}-${String(
+      d
+    ).padStart(2, "0")}`;
     //TODO: Asegurarse que el minDate sea local al navegador del usuario
     return candidate >= minDate;
   };
@@ -155,27 +205,12 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
     }
   })();
 
-  // --- Styled time picker with separate hour/minute columns ---
-  const startHour = 8;
-  const endHour = 22; // exclusive
-  const minuteStep = 5; // minutos de precisión (puedes cambiar)
-  const hours = useMemo(
-    () =>
-      Array.from({ length: endHour - startHour }, (_, i) =>
-        String(startHour + i).padStart(2, "0")
-      ),
-    []
-  );
-  const minutes = useMemo(
-    () =>
-      Array.from({ length: 60 / minuteStep }, (_, i) =>
-        String(i * minuteStep).padStart(2, "0")
-      ),
-    []
-  );
+  
 
   const [timeOpen, setTimeOpen] = useState(false);
   const timeRef = useRef<HTMLDivElement | null>(null);
+  const hourScrollRef = useRef<HTMLDivElement | null>(null);
+  const minuteScrollRef = useRef<HTMLDivElement | null>(null);
 
   // local selections inside dropdown (don't commit until confirm)
   const [selHour, setSelHour] = useState<string>(() => time.split(":")[0]);
@@ -218,7 +253,11 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
       if (!date) return false;
       const [y, m, d] = date.split("-").map(Number);
       const now = new Date();
-      return y === now.getFullYear() && m === now.getMonth() + 1 && d === now.getDate();
+      return (
+        y === now.getFullYear() &&
+        m === now.getMonth() + 1 &&
+        d === now.getDate()
+      );
     } catch {
       return false;
     }
@@ -244,6 +283,32 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
     if (!isSelectedDateToday) return false;
     return minutes.every((mm) => isTimeBeforeNow(hourStr, mm));
   };
+
+  //efecto scroll to selected hour/minute when opening
+  useEffect(() => {
+    if (!timeOpen) return;
+
+    // Primero MINUTOS (si seleccionó minuto)
+    if (minuteScrollRef.current) {
+      const minItem = minuteScrollRef.current.querySelector(
+        `li[data-minute="${selMinute}"]`
+      );
+      if (minItem) {
+        minItem.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+    }
+
+    // Luego HORAS
+    if (hourScrollRef.current) {
+      const hourItem = hourScrollRef.current.querySelector(
+        `li[data-hour="${selHour}"]`
+      );
+
+      if (hourItem) {
+        hourItem.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+    }
+  }, [timeOpen, selHour, selMinute]);
 
   return (
     <div className={className ?? "w-full"}>
@@ -318,8 +383,16 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                   disabled={!selectable}
                   onClick={() => dayClick(day)}
                   className={`py-2 text-sm rounded-full w-full flex items-center justify-center
-                    ${!selectable ? "text-gray-300 cursor-not-allowed" : "hover:bg-gray-100"}
-                    ${isSelected ? "bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-md transform scale-105" : ""}
+                    ${
+                      !selectable
+                        ? "text-gray-300 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }
+                    ${
+                      isSelected
+                        ? "bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-md transform scale-105"
+                        : ""
+                    }
                   `}
                 >
                   {day}
@@ -335,19 +408,27 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
               <div className="relative" ref={timeRef}>
                 <button
                   type="button"
-                  onClick={() => (timeOpen ? setTimeOpen(false) : openTimeDropdown())}
+                  onClick={() =>
+                    timeOpen ? setTimeOpen(false) : openTimeDropdown()
+                  }
                   className="w-full text-left px-3 py-2 border border-gray-200 rounded flex items-center justify-between bg-white hover:shadow-sm"
                   aria-haspopup="dialog"
                   aria-expanded={timeOpen}
                 >
                   <span className="font-medium">{time}</span>
                   <svg
-                    className={`w-4 h-4 text-gray-500 transform ${timeOpen ? "rotate-180" : ""}`}
+                    className={`w-4 h-4 text-gray-500 transform ${
+                      timeOpen ? "rotate-180" : ""
+                    }`}
                     viewBox="0 0 20 20"
                     fill="currentColor"
                     aria-hidden="true"
                   >
-                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clipRule="evenodd" />
+                    <path
+                      fillRule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </button>
 
@@ -357,9 +438,14 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                       {/* Hours column */}
                       <div className="col-span-1 flex flex-col">
                         <div className="sticky top-0 bg-white z-20 pb-2 border-b border-gray-100">
-                          <div className="text-xs text-gray-500 mb-1">Horas</div>
+                          <div className="text-xs text-gray-500 mb-1">
+                            Horas
+                          </div>
                         </div>
-                        <div className="overflow-auto max-h-56 pt-2">
+                        <div
+                          ref={hourScrollRef}
+                          className="overflow-auto max-h-56 pt-2"
+                        >
                           <ul className="space-y-1 px-1">
                             {hours.map((h) => {
                               const active = h === selHour;
@@ -367,19 +453,30 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                               return (
                                 <li
                                   key={h}
+                                  data-hour={h}
                                   onClick={() => {
                                     if (disabledHour) return;
+
                                     const newHour = h;
                                     setSelHour(newHour);
                                     setHasPickedHour(true);
                                     // confirmar solo si el usuario ya pickeó minutos en esta sesión
                                     // y el minuto seleccionado no está deshabilitado para la nueva hora
-                                    if (hasPickedMinute && !isMinuteDisabled(newHour, selMinute)) {
+                                    if (
+                                      hasPickedMinute &&
+                                      !isMinuteDisabled(newHour, selMinute)
+                                    ) {
                                       setTime(`${newHour}:${selMinute}`);
                                       setTimeOpen(false);
                                     }
                                   }}
-                                  className={`px-3 py-2 rounded cursor-pointer text-sm ${disabledHour ? "text-gray-300 cursor-not-allowed opacity-60" : active ? "bg-blue-600 text-white font-semibold" : "hover:bg-gray-100"}`}
+                                  className={`px-3 py-2 rounded cursor-pointer text-sm ${
+                                    disabledHour
+                                      ? "text-gray-300 cursor-not-allowed opacity-60"
+                                      : active
+                                      ? "bg-blue-600 text-white font-semibold"
+                                      : "hover:bg-gray-100"
+                                  }`}
                                 >
                                   {h}
                                 </li>
@@ -392,16 +489,25 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                       {/* Minutes column */}
                       <div className="col-span-1 flex flex-col border-l border-r border-gray-50">
                         <div className="sticky top-0 bg-white z-20 pb-2 border-b border-gray-100 pl-2">
-                          <div className="text-xs text-gray-500 mb-1">Minutos</div>
+                          <div className="text-xs text-gray-500 mb-1">
+                            Minutos
+                          </div>
                         </div>
-                        <div className="overflow-auto max-h-56 pt-2">
+                        <div
+                          ref={minuteScrollRef}
+                          className="overflow-auto max-h-56 pt-2"
+                        >
                           <ul className="space-y-1 px-1">
                             {minutes.map((mm) => {
                               const active = mm === selMinute;
-                              const disabledMinute = isMinuteDisabled(selHour, mm);
+                              const disabledMinute = isMinuteDisabled(
+                                selHour,
+                                mm
+                              );
                               return (
                                 <li
                                   key={mm}
+                                  data-minute={mm}
                                   onClick={() => {
                                     if (disabledMinute) return;
                                     const newMinute = mm;
@@ -413,7 +519,13 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                                       setTimeOpen(false);
                                     }
                                   }}
-                                  className={`px-3 py-2 rounded cursor-pointer text-sm ${disabledMinute ? "text-gray-300 cursor-not-allowed opacity-60" : active ? "bg-blue-600 text-white font-semibold" : "hover:bg-gray-100"}`}
+                                  className={`px-3 py-2 rounded cursor-pointer text-sm ${
+                                    disabledMinute
+                                      ? "text-gray-300 cursor-not-allowed opacity-60"
+                                      : active
+                                      ? "bg-blue-600 text-white font-semibold"
+                                      : "hover:bg-gray-100"
+                                  }`}
                                 >
                                   {mm}
                                 </li>
@@ -422,17 +534,16 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                           </ul>
                         </div>
                       </div>
-
                     </div>
                   </div>
                 )}
               </div>
             </div>
-
-
           </div>
           <div className="min-w-0">
-            <div className="text-xs text-gray-600">Datos de Seleccion Actual</div>
+            <div className="text-xs text-gray-600 mt-2 mb-1">
+              Datos de Seleccion Actual
+            </div>
             <div className="mt-1 text-sm font-medium">
               {formatShortPreview(combineLocalDateTimeToISO(date, time))}
             </div>
@@ -452,7 +563,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
             onClick={handleApply}
             className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
           >
-            Aplicar
+            Confirmar
           </button>
         </div>
       </div>
