@@ -6,7 +6,6 @@ import {
   AppointmentStatus,
   Client,
   CreateAppointmentRequest,
-  EmployeeAppointmentData,
   Service,
   UpdateAppointmentRequest,
   User,
@@ -52,6 +51,15 @@ const AppointmentsManagement: React.FC = () => {
     notes: null,
     createdBy: currentUser?.id ?? 0,
   });
+
+
+  const statusDisplayName: AppointmentStatus[] = [
+    AppointmentStatus.PENDIENTE,
+    AppointmentStatus.ACTIVO,
+    AppointmentStatus.CONFIRMADO,
+    AppointmentStatus.CANCELADO,
+    AppointmentStatus.COMPLETADO
+  ];
 
   useEffect(() => {
     loadAppointments();
@@ -280,13 +288,20 @@ const AppointmentsManagement: React.FC = () => {
     }
   }
 
-  const getStatusDisplayName: AppointmentStatus[] = [
-    AppointmentStatus.PENDIENTE,
-    AppointmentStatus.ACTIVO,
-    AppointmentStatus.CONFIRMADO,
-    AppointmentStatus.CANCELADO,
-    AppointmentStatus.COMPLETADO
-  ];
+  const getStatusBadgeColor = (status: AppointmentStatus) => {
+    switch (status) {
+      case AppointmentStatus.PENDIENTE:
+        return 'bg-purple-100 text-purple-800 border border-purple-200';
+      case AppointmentStatus.ACTIVO:
+        return 'bg-blue-100 text-blue-800 border border-blue-200';
+      case AppointmentStatus.CONFIRMADO:
+        return 'bg-green-100 text-green-800 border border-green-200';
+      case AppointmentStatus.COMPLETADO:
+        return 'bg-amber-100 text-amber-800 border border-amber-200';
+      default:
+        return 'bg-red-100 text-red-800 border border-red-200';
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -361,13 +376,7 @@ const AppointmentsManagement: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium ${apt.status === AppointmentStatus.CONFIRMADO ||
-                        apt.status === AppointmentStatus.COMPLETADO
-                        ? "text-green-600"
-                        : apt.status === AppointmentStatus.CANCELADO
-                          ? "text-red-600"
-                          : "text-yellow-600"
-                        }`}
+                      className={`px-3 py-1 flex justify-center text-sm font-medium ${getStatusBadgeColor(apt.status as AppointmentStatus)}`}
                     >
                       {apt.status}
                     </div>
@@ -595,7 +604,7 @@ const AppointmentsManagement: React.FC = () => {
                           Selecciona un Estado
                         </option>
 
-                        {getStatusDisplayName.map((status) => (
+                        {statusDisplayName.map((status) => (
                           <option key={status} value={status}>
                             {status[0].toUpperCase() + status.slice(1)}
                           </option>
