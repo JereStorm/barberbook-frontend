@@ -1,4 +1,4 @@
-import { UserPlus, Plus, Search, Edit, Trash2, CircleX, Timer, MessageCircle } from "lucide-react";
+import { UserPlus, Plus, Search, Edit, Trash2, CircleX, Timer, MessageCircle, CircleCheckBig } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import {
@@ -55,14 +55,14 @@ const AppointmentsManagement: React.FC = () => {
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
-  
+
   // serviceIds inicializado como array vacío----->array de servicios
   const [formData, setFormData] = useState<CreateAppointmentRequest>({
     salonId: currentUser?.salonId ?? 0,
     startTime: "",
     clientId: 0,
-    employeeId: 0,
-    serviceIds: [], 
+    employeeId: null,
+    serviceIds: [],
     status: AppointmentStatus.PENDIENTE,
     notes: null,
     createdBy: currentUser?.id ?? 0,
@@ -70,6 +70,13 @@ const AppointmentsManagement: React.FC = () => {
 
   useEffect(() => {
     loadAppointments();
+    // Solo se cargan las listas completas si el usuario NO es estilista
+    if (!isStylist) {
+      loadClients();
+      loadEmployees();
+    }
+    // Los servicios siempre se cargan
+    loadServices();
   }, []);
 
   const loadAppointments = async () => {
@@ -78,14 +85,6 @@ const AppointmentsManagement: React.FC = () => {
       setIsLoading(false);
       return;
     }
-
-    // Solo se cargan las listas completas si el usuario NO es estilista
-    if (!isStylist) {
-      loadClients();
-      loadEmployees();
-    }
-    // Los servicios siempre se cargan
-    loadServices();
 
     try {
       setIsLoading(true);
@@ -124,11 +123,11 @@ const AppointmentsManagement: React.FC = () => {
 
   const openEditModal = (appointment: Appointment) => {
     setEditingAppointment(appointment);
-    
+
     // Extraer IDs de los servicios del turno para llenar el estado
-    const currentServiceIds = appointment.services 
-        ? appointment.services.map(s => s.id) 
-        : [];
+    const currentServiceIds = appointment.services
+      ? appointment.services.map(s => s.id)
+      : [];
 
     setFormData({
       salonId: appointment.salonId ?? currentUser?.salonId ?? 0,
@@ -148,7 +147,7 @@ const AppointmentsManagement: React.FC = () => {
       salonId: currentUser?.salonId ?? 0,
       startTime: "",
       clientId: 0,
-      employeeId: 0,
+      employeeId: null,
       serviceIds: [], // Resetear array
       status: AppointmentStatus.PENDIENTE,
       notes: null,
@@ -192,23 +191,23 @@ const AppointmentsManagement: React.FC = () => {
     const servicesList = apt.services.map(s => `• ${s.name} ($${s.price})`).join('\n');
 
     // Construir el mensaje
-    const message = 
-`Hola *${apt.client.name}*! 👋
-Aquí tienes los detalles de tu turno en BarberBook:
+    const message =
+      `Hola *${apt.client.name}*! 👋
+        Aquí tienes los detalles de tu turno en BarberBook:
 
-📅 *Fecha:* ${formatDateTime(apt.startTime)}
-👤 *Profesional:* ${apt.employee?.name || 'Sin asignar'}
+        📅 *Fecha:* ${formatDateTime(apt.startTime)}
+        👤 *Profesional:* ${apt.employee?.name || 'Sin asignar'}
 
-✂️ *Servicios:*
-${servicesList}
+        ✂️ *Servicios:*
+        ${servicesList}
 
-⏳ *Duración est:* ${apt.duration} min
-💰 *Total:* $${apt.totalPrice || 0}
+        ⏳ *Duración est:* ${apt.duration} min
+        💰 *Total:* $${apt.totalPrice || 0}
 
-Estado: ${apt.status.toUpperCase()}
-${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
+        Estado: ${apt.status.toUpperCase()}
+        ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
 
-¡Gracias por elegirnos!`;
+        ¡Gracias por elegirnos!`;
 
     // Abrir WhatsApp
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
@@ -216,9 +215,30 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
   };
 
   const handleCancelAppointment = (appointment: Appointment) => async () => {
+    if (appointment.status === AppointmentStatus.CANCELADO) {
+      try {
+        const updateData: UpdateAppointmentRequest = {
+          startTime: appointment.startTime,
+          clientId: appointment.clientId,
+          serviceIds: appointment.services.map(item => item.id),
+          status: AppointmentStatus.PENDIENTE,
+          employeeId: appointment.employeeId || null,
+          notes: appointment.notes,
+          createdBy: appointment.createdBy,
+        };
+        await editAppointment(appointment.id, updateData);
+        toast.success("Turno activado");
+        loadAppointments();
+        return
+      } catch (error) {
+        const apiError = apiService.handleError(error);
+        toast.error(apiError.message || "Error cancelando turno");
+        return
+      }
+    }
+
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -240,6 +260,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
   };
 
   const handleCreateAppointment = async (e: React.FormEvent) => {
+    console.log("ESTOY CREANDO UN TURNO")
     e.preventDefault();
     if (!currentUser) {
       toast.error("Usuario no autenticado");
@@ -252,8 +273,8 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
     }
 
     if (formData.serviceIds.length === 0) {
-        toast.error("Debe seleccionar al menos un servicio");
-        return;
+      toast.error("Debe seleccionar al menos un servicio");
+      return;
     }
 
     setIsSubmitting(true);
@@ -264,7 +285,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
         clientId: formData.clientId,
         serviceIds: formData.serviceIds,
         status: formData.status,
-        employeeId: formData.employeeId,
+        employeeId: formData.employeeId == 0 ? null : formData.employeeId,
         notes: formData.notes,
         createdBy: formData.createdBy,
       };
@@ -283,13 +304,16 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
   };
 
   const handleEditAppointment = async (e: React.FormEvent) => {
+    console.log("ESTOY EDITANDO UN TURNO")
+
     e.preventDefault();
     if (!editingAppointment || !currentUser) return;
 
     if (formData.serviceIds.length === 0) {
-        toast.error("Debe seleccionar al menos un servicio");
-        return;
+      toast.error("Debe seleccionar al menos un servicio");
+      return;
     }
+
 
     setIsSubmitting(true);
     try {
@@ -302,6 +326,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
         notes: formData.notes,
         createdBy: formData.createdBy,
       };
+      console.log(updateData)
 
       await editAppointment(editingAppointment.id, updateData);
       toast.success("Turno actualizado correctamente");
@@ -319,8 +344,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
 
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -349,7 +373,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
     const hasServiceMatch = a.services?.some(s => s.name.toLowerCase().includes(term));
     return (
       hasServiceMatch ||
-      (a.startTime ?? "").toLowerCase().includes(term) || 
+      (a.startTime ?? "").toLowerCase().includes(term) ||
       (a.client?.name ?? "").toLowerCase().includes(term)
     );
   });
@@ -371,7 +395,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
     }
   }
 
-  const getStatusDisplayName: AppointmentStatus[] = [
+  const statusDisplayName: AppointmentStatus[] = [
     AppointmentStatus.PENDIENTE,
     AppointmentStatus.ACTIVO,
     AppointmentStatus.CONFIRMADO,
@@ -408,7 +432,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
       setClients((prev) => [...prev, createdClient]);
       setFormData((prev) => ({ ...prev, clientId: createdClient.id }));
       setSelectedClient(createdClient);
-      setSearchClient(""); 
+      setSearchClient("");
 
       toast.success(`Cliente "${createdClient.name}" creado y seleccionado`);
       setIsClientModalOpen(false);
@@ -425,7 +449,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
     <div className="space-y-6">
       <div className="flex justify-between items-center bg-white rounded-lg shadow p-6 py-8">
         <h1 className="text-2xl font-bold text-gray-900">Gestión de Turnos</h1>
-        
+
         {!isStylist && (
           <button
             onClick={openCreateModal}
@@ -452,7 +476,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
-<table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -496,21 +520,21 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {apt.employee?.name ?? "Sin asignar"}
                   </td>
-                  
+
                   {/* COLUMNA SERVICIOS + PRECIO */}
                   <td className="px-6 py-4 text-sm text-gray-500">
                     <div className="flex flex-col gap-1">
                       {apt.services && apt.services.length > 0 ? (
                         <>
-                            {apt.services.map((s) => (
+                          {apt.services.map((s) => (
                             <span key={s.id} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 w-fit">
-                                {s.name}
+                              {s.name}
                             </span>
-                            ))}
-                            {/* Aca se muestra el precio total */}
-                            {apt.totalPrice && (
-                                <span className="text-xs font-bold mt-1 text-gray-700">Total: ${apt.totalPrice}</span>
-                            )}
+                          ))}
+                          {/* Aca se muestra el precio total */}
+                          {apt.totalPrice && (
+                            <span className="text-xs font-bold mt-1 text-gray-700">Total: ${apt.totalPrice}</span>
+                          )}
                         </>
                       ) : (
                         <span className="text-gray-400 italic">Sin servicios</span>
@@ -525,21 +549,20 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${
-                        apt.status === AppointmentStatus.CONFIRMADO ||
+                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${apt.status === AppointmentStatus.CONFIRMADO ||
                         apt.status === AppointmentStatus.COMPLETADO
-                          ? "text-green-800 bg-green-100"
-                          : apt.status === AppointmentStatus.CANCELADO
+                        ? "text-green-800 bg-green-100"
+                        : apt.status === AppointmentStatus.CANCELADO
                           ? "text-red-800 bg-red-100"
                           : "text-yellow-800 bg-yellow-100"
-                      }`}
+                        }`}
                     >
                       {apt.status}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
-                      
+
                       {/* Agregue un boton para enviar detalles del turno por whatsapp--->esto esta "hardcodeado" desde el front, se genera
                       el wa.me/numero tomando el numero del cliente, me parecio un buen detalle, pero la implementacion desde el back llevaria mucho tiempo!*/}
                       <button
@@ -557,14 +580,21 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                       >
                         <Edit className="w-4 h-4" />
                       </button>
-                      
+
                       {!isStylist && (
                         <button
                           onClick={handleCancelAppointment(apt)}
-                          className="text-red-600 hover:text-red-900"
+                          className={`${apt.status !== AppointmentStatus.CANCELADO
+                            ? "text-red-600 hover:text-red-900"
+                            : "text-green-600 hover:text-green-900"
+                            }`}
                           title="Cancelar Turno"
                         >
-                          <CircleX className="w-4 h-4 " />
+                          {
+                            apt.status !== AppointmentStatus.CANCELADO ?
+                              <CircleX className="w-4 h-4 " /> :
+                              <CircleCheckBig className="w-4 h-4" />
+                          }
                         </button>
                       )}
 
@@ -649,7 +679,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                             <CalendarInput
                               initialValue={formData.startTime}
                               minDate={new Date().toISOString().slice(0, 10)}
-                              onChange={() => {}}
+                              onChange={() => { }}
                               onApply={(iso) => {
                                 setFormData((prev) => ({
                                   ...prev,
@@ -662,22 +692,27 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                               }}
                             />
                           )}
+                          {!formData.startTime && !isStylist && (
+                            <p className="text-xs text-red-500 mt-1">Confirme la fecha y hora.</p>
+                          )}
                         </>
                       )}
                     </div>
 
                     {/* Campo Cliente */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Cliente
-                      </label>
                       {isStylist ? (
-                        <input
-                          type="text"
-                          disabled
-                          value={editingAppointment?.client?.name || "Cliente no especificado"}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
-                        />
+                        <>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Cliente
+                          </label>
+                          <input
+                            type="text"
+                            disabled
+                            value={editingAppointment?.client?.name || "Cliente no especificado"}
+                            className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
+                          />
+                        </>
                       ) : (
                         <>
                           <div className="flex gap-2 items-end">
@@ -732,13 +767,13 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                         </label>
                         {/* Resumen de cálculo en vivo */}
                         <span className="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded">
-                           Est: {estimatedDuration} min | ${estimatedTotal}
+                          Est: {estimatedDuration} min | ${estimatedTotal}
                         </span>
                       </div>
 
                       <div className="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto bg-white">
                         {services.length === 0 && <p className="text-sm text-gray-400">No hay servicios disponibles</p>}
-                        
+
                         {services.map((service) => {
                           const isSelected = formData.serviceIds.includes(service.id);
                           return (
@@ -759,8 +794,8 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                                   {service.name}
                                 </label>
                                 <div className="flex justify-between w-full text-gray-500 text-xs mt-0.5">
-                                    <span>{service.durationMin} min</span>
-                                    <span>${service.price}</span>
+                                  <span>{service.durationMin} min</span>
+                                  <span>${service.price}</span>
                                 </div>
                               </div>
                             </div>
@@ -768,7 +803,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                         })}
                       </div>
                       {formData.serviceIds.length === 0 && !isStylist && (
-                         <p className="text-xs text-red-500 mt-1">Seleccione al menos uno.</p>
+                        <p className="text-xs text-red-500 mt-1">Seleccione al menos uno.</p>
                       )}
                     </div>
 
@@ -786,7 +821,6 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                         />
                       ) : (
                         <select
-                          required
                           onChange={(e) =>
                             setFormData({
                               ...formData,
@@ -796,7 +830,7 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                           value={formData.employeeId ?? 0}
                         >
-                          <option disabled value={0}>
+                          <option disabled value="0">
                             Selecciona un Empleado
                           </option>
                           {employees.map((employee) => (
@@ -823,13 +857,13 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                         }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         defaultValue={
-                          editingAppointment ? editingAppointment.status : ""
+                          editingAppointment ? editingAppointment.status : AppointmentStatus.PENDIENTE
                         }
                       >
                         <option disabled value="">
                           Selecciona un Estado
                         </option>
-                        {getStatusDisplayName.map((status) => (
+                        {statusDisplayName.map((status) => (
                           <option key={status} value={status}>
                             {status[0].toUpperCase() + status.slice(1)}
                           </option>
@@ -863,8 +897,8 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
                       {isSubmitting
                         ? "Guardando..."
                         : editingAppointment
-                        ? "Actualizar"
-                        : "Crear"}
+                          ? "Actualizar"
+                          : "Crear"}
                     </button>
                     <button
                       onClick={() => {
@@ -882,88 +916,90 @@ ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
               </form>
             </div>
           </div>
-        </div>
+        </div >
       )}
 
       {/* Modal Creación Rápida de Cliente */}
-      {isClientModalOpen && (
-        <div className="fixed inset-0 z-[60] overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-200">
-              <form onSubmit={handleQuickClientCreate}>
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <UserPlus className="h-6 w-6 text-green-600" />
-                    </div>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">
-                        Registrar Nuevo Cliente
-                      </h3>
-                      <div className="mt-4 space-y-4">
-                        <div>
-                           <label className="block text-xs font-medium text-gray-700">Nombre *</label>
-                           <input
-                            type="text"
-                            required
-                            placeholder="Nombre del cliente"
-                            className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            value={newClientData.name}
-                            onChange={(e) => setNewClientData({...newClientData, name: e.target.value})}
-                          />
-                        </div>
-                        <div>
-                           <label className="block text-xs font-medium text-gray-700">Email</label>
-                           <input
-                            type="email"
-                            placeholder="email@ejemplo.com"
-                            className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            value={newClientData.email}
-                            onChange={(e) => setNewClientData({...newClientData, email: e.target.value})}
-                          />
-                        </div>
-                        <div>
-                           <label className="block text-xs font-medium text-gray-700">Teléfono</label>
-                           <input
-                            type="tel"
-                            inputMode="tel"
-                            placeholder="Número de móvil"
-                            className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            value={newClientData.mobile}
-                            onChange={(e) => setNewClientData({...newClientData, mobile: e.target.value})}
-                          />
+      {
+        isClientModalOpen && (
+          <div className="fixed inset-0 z-[60] overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-200">
+                <form onSubmit={handleQuickClientCreate}>
+                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start">
+                      <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <UserPlus className="h-6 w-6 text-green-600" />
+                      </div>
+                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                        <h3 className="text-lg leading-6 font-medium text-gray-900">
+                          Registrar Nuevo Cliente
+                        </h3>
+                        <div className="mt-4 space-y-4">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700">Nombre *</label>
+                            <input
+                              type="text"
+                              required
+                              placeholder="Nombre del cliente"
+                              className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                              value={newClientData.name}
+                              onChange={(e) => setNewClientData({ ...newClientData, name: e.target.value })}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700">Email</label>
+                            <input
+                              type="email"
+                              placeholder="email@ejemplo.com"
+                              className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                              value={newClientData.email}
+                              onChange={(e) => setNewClientData({ ...newClientData, email: e.target.value })}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700">Teléfono</label>
+                            <input
+                              type="tel"
+                              inputMode="tel"
+                              placeholder="Número de móvil"
+                              className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                              value={newClientData.mobile}
+                              onChange={(e) => setNewClientData({ ...newClientData, mobile: e.target.value })}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="submit"
-                    disabled={isCreatingClient}
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
-                  >
-                    {isCreatingClient ? "Guardando..." : "Guardar y Seleccionar"}
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => {
+                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="submit"
+                      disabled={isCreatingClient}
+                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                    >
+                      {isCreatingClient ? "Guardando..." : "Guardar y Seleccionar"}
+                    </button>
+                    <button
+                      type="button"
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      onClick={() => {
                         setIsClientModalOpen(false);
                         setNewClientData({ name: "", email: "", mobile: "" });
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </form>
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 

@@ -217,7 +217,7 @@ export interface UpdateAppointmentRequest {
   finishTime?: string;
   duration?: number;
   clientId?: number;
-  employeeId?: number;
+  employeeId?: number | null;
   serviceIds?: number[]; // <--- Ahora es un array
   status?: AppointmentStatus;
   notes?: string | null;
