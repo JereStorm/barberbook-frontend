@@ -158,10 +158,13 @@ const UsersManagement: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      const normalizedMobile = normalizeMobileVerySimple(formData.mobile);
+
+
       const updateData: UpdateUserRequest = {
         name: formData.name,
         email: formData.email,
-        mobile: formData.mobile,
+        mobile: normalizedMobile,
         role: formData.role,
       };
 

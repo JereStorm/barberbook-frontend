@@ -782,8 +782,9 @@ const AppointmentsManagement: React.FC = () => {
                                 <input
                                   id={`service-${service.id}`}
                                   type="checkbox"
+                                  //TODO: Aca se puede renderizar condicionalmente o no el input checkbox de un servicio que este desactivado
                                   // Si es estilista, disabled (solo lectura)
-                                  disabled={isStylist}
+                                  disabled={isStylist || !service.isActive}
                                   checked={isSelected}
                                   onChange={() => handleServiceToggle(service.id)}
                                   className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded disabled:opacity-50"
