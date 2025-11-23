@@ -41,6 +41,7 @@ const AppointmentsManagement: React.FC = () => {
   const [searchClient, setSearchClient] = useState("");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const inActiveText = "(Desactivado)";
 
   const isStylist = currentUser?.role === "estilista";
 
@@ -791,8 +792,8 @@ const AppointmentsManagement: React.FC = () => {
                                 />
                               </div>
                               <div className="ml-3 text-sm w-full">
-                                <label htmlFor={`service-${service.id}`} className={`font-medium block cursor-pointer ${isStylist ? 'text-gray-500' : 'text-gray-700'}`}>
-                                  {service.name}
+                                <label htmlFor={`service-${service.id}`} className={`font-medium block cursor-pointer ${isStylist || !service.isActive ? 'text-gray-500' : 'text-gray-700'}`}>
+                                  {service.name} {!service.isActive && inActiveText}
                                 </label>
                                 <div className="flex justify-between w-full text-gray-500 text-xs mt-0.5">
                                   <span>{service.durationMin} min</span>
@@ -835,8 +836,8 @@ const AppointmentsManagement: React.FC = () => {
                             Selecciona un Empleado
                           </option>
                           {employees.map((employee) => (
-                            <option key={employee.id} value={employee.id}>
-                              {employee.name}
+                            <option key={employee.id} disabled={!employee.isActive} value={employee.id}>
+                              {employee.name} {!employee.isActive && inActiveText}
                             </option>
                           ))}
                         </select>
