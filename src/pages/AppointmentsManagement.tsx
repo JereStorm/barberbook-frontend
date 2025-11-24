@@ -261,7 +261,6 @@ const AppointmentsManagement: React.FC = () => {
   };
 
   const handleCreateAppointment = async (e: React.FormEvent) => {
-    console.log("ESTOY CREANDO UN TURNO")
     e.preventDefault();
     if (!currentUser) {
       toast.error("Usuario no autenticado");
@@ -270,6 +269,16 @@ const AppointmentsManagement: React.FC = () => {
 
     if (!formData.salonId) {
       toast.error("El salón es obligatorio");
+      return;
+    }
+
+    if (!formData.startTime) {
+      toast.error("Debe confirmar la fecha");
+      return;
+    }
+
+    if (!formData.clientId) {
+      toast.error("Debe seleccionar un cliente")
       return;
     }
 
@@ -756,7 +765,11 @@ const AppointmentsManagement: React.FC = () => {
                               </p>
                             </div>
                           )}
+                          {!selectedClient && !isStylist && (
+                            <p className="text-xs text-red-500 mt-1">Seleccione un cliente.</p>
+                          )}
                         </>
+
                       )}
                     </div>
 
