@@ -1,4 +1,14 @@
-import { UserPlus, Plus, Search, Edit, Trash2, CircleX, Timer, MessageCircle, CircleCheckBig } from "lucide-react";
+import {
+  UserPlus,
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  CircleX,
+  Timer,
+  MessageCircle,
+  CircleCheckBig,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import {
@@ -55,7 +65,8 @@ const AppointmentsManagement: React.FC = () => {
   });
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+  const [editingAppointment, setEditingAppointment] =
+    useState<Appointment | null>(null);
 
   // serviceIds inicializado como array vacío----->array de servicios
   const [formData, setFormData] = useState<CreateAppointmentRequest>({
@@ -127,7 +138,7 @@ const AppointmentsManagement: React.FC = () => {
 
     // Extraer IDs de los servicios del turno para llenar el estado
     const currentServiceIds = appointment.services
-      ? appointment.services.map(s => s.id)
+      ? appointment.services.map((s) => s.id)
       : [];
 
     setFormData({
@@ -161,11 +172,14 @@ const AppointmentsManagement: React.FC = () => {
 
   // --- NUEVA FUNCION: Manejar Checkboxes de Servicios --- (Ahora un turno, puede tener varios servicios)
   const handleServiceToggle = (serviceId: number) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       const currentIds = prev.serviceIds;
       if (currentIds.includes(serviceId)) {
         // Si ya está, lo sacamos
-        return { ...prev, serviceIds: currentIds.filter(id => id !== serviceId) };
+        return {
+          ...prev,
+          serviceIds: currentIds.filter((id) => id !== serviceId),
+        };
       } else {
         // Si no está, lo agregamos
         return { ...prev, serviceIds: [...currentIds, serviceId] };
@@ -174,9 +188,17 @@ const AppointmentsManagement: React.FC = () => {
   };
 
   // --- CALCULO DE TOTALES EN VIVO (Para mostrar en el modal) ---
-  const selectedServicesObjects = services.filter(s => formData.serviceIds.includes(s.id));
-  const estimatedTotal = selectedServicesObjects.reduce((sum, s) => sum + Number(s.price), 0);
-  const estimatedDuration = selectedServicesObjects.reduce((sum, s) => sum + s.durationMin, 0);
+  const selectedServicesObjects = services.filter((s) =>
+    formData.serviceIds.includes(s.id)
+  );
+  const estimatedTotal = selectedServicesObjects.reduce(
+    (sum, s) => sum + Number(s.price),
+    0
+  );
+  const estimatedDuration = selectedServicesObjects.reduce(
+    (sum, s) => sum + s.durationMin,
+    0
+  );
 
   // --- FUNCIÓN PARA ENVIAR RECIBO POR WHATSAPP ---
   const handleSendReceipt = (apt: Appointment) => {
@@ -186,18 +208,21 @@ const AppointmentsManagement: React.FC = () => {
     }
 
     // Normalizar numero (quitar espacios, guiones, etc...)
-    let phone = normalizeMobileVerySimple(apt.client.mobile) || apt.client.mobile.replace(/\D/g, '');
+    let phone =
+      normalizeMobileVerySimple(apt.client.mobile) ||
+      apt.client.mobile.replace(/\D/g, "");
 
     // Formatear lista de servicios
-    const servicesList = apt.services.map(s => `• ${s.name} ($${s.price})`).join('\n');
+    const servicesList = apt.services
+      .map((s) => `• ${s.name} ($${s.price})`)
+      .join("\n");
 
     // Construir el mensaje
-    const message =
-      `Hola *${apt.client.name}*! 👋
+    const message = `Hola *${apt.client.name}*! 👋
         Aquí tienes los detalles de tu turno en BarberBook:
 
         📅 *Fecha:* ${formatDateTime(apt.startTime)}
-        👤 *Profesional:* ${apt.employee?.name || 'Sin asignar'}
+        👤 *Profesional:* ${apt.employee?.name || "Sin asignar"}
 
         ✂️ *Servicios:*
         ${servicesList}
@@ -206,13 +231,13 @@ const AppointmentsManagement: React.FC = () => {
         💰 *Total:* $${apt.totalPrice || 0}
 
         Estado: ${apt.status.toUpperCase()}
-        ${apt.notes ? `📝 Notas: ${apt.notes}` : ''}
+        ${apt.notes ? `📝 Notas: ${apt.notes}` : ""}
 
         ¡Gracias por elegirnos!`;
 
     // Abrir WhatsApp
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   const handleCancelAppointment = (appointment: Appointment) => async () => {
@@ -221,7 +246,7 @@ const AppointmentsManagement: React.FC = () => {
         const updateData: UpdateAppointmentRequest = {
           startTime: appointment.startTime,
           clientId: appointment.clientId,
-          serviceIds: appointment.services.map(item => item.id),
+          serviceIds: appointment.services.map((item) => item.id),
           status: AppointmentStatus.PENDIENTE,
           employeeId: appointment.employeeId || null,
           notes: appointment.notes,
@@ -230,16 +255,17 @@ const AppointmentsManagement: React.FC = () => {
         await editAppointment(appointment.id, updateData);
         toast.success("Turno activado");
         loadAppointments();
-        return
+        return;
       } catch (error) {
         const apiError = apiService.handleError(error);
         toast.error(apiError.message || "Error cancelando turno");
-        return
+        return;
       }
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${
+        appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -278,7 +304,7 @@ const AppointmentsManagement: React.FC = () => {
     }
 
     if (!formData.clientId) {
-      toast.error("Debe seleccionar un cliente")
+      toast.error("Debe seleccionar un cliente");
       return;
     }
 
@@ -314,7 +340,7 @@ const AppointmentsManagement: React.FC = () => {
   };
 
   const handleEditAppointment = async (e: React.FormEvent) => {
-    console.log("ESTOY EDITANDO UN TURNO")
+    console.log("ESTOY EDITANDO UN TURNO");
 
     e.preventDefault();
     if (!editingAppointment || !currentUser) return;
@@ -323,7 +349,6 @@ const AppointmentsManagement: React.FC = () => {
       toast.error("Debe seleccionar al menos un servicio");
       return;
     }
-
 
     setIsSubmitting(true);
     try {
@@ -336,7 +361,7 @@ const AppointmentsManagement: React.FC = () => {
         notes: formData.notes,
         createdBy: formData.createdBy,
       };
-      console.log(updateData)
+      console.log(updateData);
 
       await editAppointment(editingAppointment.id, updateData);
       toast.success("Turno actualizado correctamente");
@@ -354,7 +379,8 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${
+        appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -380,7 +406,9 @@ const AppointmentsManagement: React.FC = () => {
   const filteredAppointments = appointments.filter((a) => {
     const term = searchTerm.toLowerCase();
     // Logica de busqueda por servicio
-    const hasServiceMatch = a.services?.some(s => s.name.toLowerCase().includes(term));
+    const hasServiceMatch = a.services?.some((s) =>
+      s.name.toLowerCase().includes(term)
+    );
     return (
       hasServiceMatch ||
       (a.startTime ?? "").toLowerCase().includes(term) ||
@@ -423,7 +451,9 @@ const AppointmentsManagement: React.FC = () => {
 
     setIsCreatingClient(true);
     try {
-      const normalizedMobile = normalizeMobileVerySimple(newClientData.mobile || "");
+      const normalizedMobile = normalizeMobileVerySimple(
+        newClientData.mobile || ""
+      );
       if (newClientData.mobile && !normalizedMobile) {
         toast.error("Número de teléfono inválido.");
         setIsCreatingClient(false);
@@ -501,12 +531,12 @@ const AppointmentsManagement: React.FC = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Servicios
                 </th>
-                {/* NUEVA COLUMNA: DURACIÓN */}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Duración
-                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Estado
+                </th>
+                {/* NUEVA COLUMNA: TOTAL (INCLUYE DURACION Y PRECIO) */}
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Total
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Acciones
@@ -537,42 +567,49 @@ const AppointmentsManagement: React.FC = () => {
                       {apt.services && apt.services.length > 0 ? (
                         <>
                           {apt.services.map((s) => (
-                            <span key={s.id} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 w-fit">
+                            <span
+                              key={s.id}
+                              className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 w-fit"
+                            >
                               {s.name}
                             </span>
                           ))}
-                          {/* Aca se muestra el precio total */}
-                          {apt.totalPrice && (
-                            <span className="text-xs font-bold mt-1 text-gray-700">Total: ${apt.totalPrice}</span>
-                          )}
                         </>
                       ) : (
-                        <span className="text-gray-400 italic">Sin servicios</span>
+                        <span className="text-gray-400 italic">
+                          Sin servicios
+                        </span>
                       )}
                     </div>
                   </td>
-
-                  {/* Nueva celda->duracion total del turno */}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {apt.duration ? `${apt.duration} min` : "-"}
-                  </td>
-
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${apt.status === AppointmentStatus.CONFIRMADO ||
+                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${
+                        apt.status === AppointmentStatus.CONFIRMADO ||
                         apt.status === AppointmentStatus.COMPLETADO
-                        ? "text-green-800 bg-green-100"
-                        : apt.status === AppointmentStatus.CANCELADO
+                          ? "text-green-800 bg-green-100"
+                          : apt.status === AppointmentStatus.CANCELADO
                           ? "text-red-800 bg-red-100"
                           : "text-yellow-800 bg-yellow-100"
-                        }`}
+                      }`}
                     >
                       {apt.status}
                     </div>
                   </td>
+                  {/* Nueva celda->duracion total del turno */}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <p>{apt.duration ? `${apt.duration} min` : "-"}</p>
+                    {/* Aca se muestra el precio total */}
+                    <p>
+                      {apt.totalPrice && (
+                        <span className="text-xs mt-1 text-gray-700">
+                          Total: ${apt.totalPrice}
+                        </span>
+                      )}
+                    </p>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
-
                       {/* Agregue un boton para enviar detalles del turno por whatsapp--->esto esta "hardcodeado" desde el front, se genera
                       el wa.me/numero tomando el numero del cliente, me parecio un buen detalle, pero la implementacion desde el back llevaria mucho tiempo!*/}
                       <button
@@ -594,17 +631,18 @@ const AppointmentsManagement: React.FC = () => {
                       {!isStylist && (
                         <button
                           onClick={handleCancelAppointment(apt)}
-                          className={`${apt.status !== AppointmentStatus.CANCELADO
-                            ? "text-red-600 hover:text-red-900"
-                            : "text-green-600 hover:text-green-900"
-                            }`}
+                          className={`${
+                            apt.status !== AppointmentStatus.CANCELADO
+                              ? "text-red-600 hover:text-red-900"
+                              : "text-green-600 hover:text-green-900"
+                          }`}
                           title="Cancelar Turno"
                         >
-                          {
-                            apt.status !== AppointmentStatus.CANCELADO ?
-                              <CircleX className="w-4 h-4 " /> :
-                              <CircleCheckBig className="w-4 h-4" />
-                          }
+                          {apt.status !== AppointmentStatus.CANCELADO ? (
+                            <CircleX className="w-4 h-4 " />
+                          ) : (
+                            <CircleCheckBig className="w-4 h-4" />
+                          )}
                         </button>
                       )}
 
@@ -665,7 +703,11 @@ const AppointmentsManagement: React.FC = () => {
                         <input
                           type="text"
                           disabled
-                          value={formData.startTime ? formatDateTime(formData.startTime) : "-"}
+                          value={
+                            formData.startTime
+                              ? formatDateTime(formData.startTime)
+                              : "-"
+                          }
                           className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
                         />
                       ) : (
@@ -689,7 +731,7 @@ const AppointmentsManagement: React.FC = () => {
                             <CalendarInput
                               initialValue={formData.startTime}
                               minDate={new Date().toISOString().slice(0, 10)}
-                              onChange={() => { }}
+                              onChange={() => {}}
                               onApply={(iso) => {
                                 setFormData((prev) => ({
                                   ...prev,
@@ -703,7 +745,9 @@ const AppointmentsManagement: React.FC = () => {
                             />
                           )}
                           {!formData.startTime && !isStylist && (
-                            <p className="text-xs text-red-500 mt-1">Confirme la fecha y hora.</p>
+                            <p className="text-xs text-red-500 mt-1">
+                              Confirme la fecha y hora.
+                            </p>
                           )}
                         </>
                       )}
@@ -719,7 +763,10 @@ const AppointmentsManagement: React.FC = () => {
                           <input
                             type="text"
                             disabled
-                            value={editingAppointment?.client?.name || "Cliente no especificado"}
+                            value={
+                              editingAppointment?.client?.name ||
+                              "Cliente no especificado"
+                            }
                             className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
                           />
                         </>
@@ -737,7 +784,10 @@ const AppointmentsManagement: React.FC = () => {
                                 }
                                 onChange={setSearchClient}
                                 onSelect={(c) => {
-                                  setFormData({ ...formData, clientId: c.id ?? 0 });
+                                  setFormData({
+                                    ...formData,
+                                    clientId: c.id ?? 0,
+                                  });
                                   setSearchClient("");
                                   setSelectedClient(c);
                                 }}
@@ -759,17 +809,24 @@ const AppointmentsManagement: React.FC = () => {
                                 {selectedClient.name}
                               </p>
                               <p className="text-xs">
-                                {selectedClient.mobile ? `Móvil: ${selectedClient.mobile}` : ""}
-                                {selectedClient.mobile && selectedClient.email ? " | " : ""}
-                                {selectedClient.email ? `Email: ${selectedClient.email}` : ""}
+                                {selectedClient.mobile
+                                  ? `Móvil: ${selectedClient.mobile}`
+                                  : ""}
+                                {selectedClient.mobile && selectedClient.email
+                                  ? " | "
+                                  : ""}
+                                {selectedClient.email
+                                  ? `Email: ${selectedClient.email}`
+                                  : ""}
                               </p>
                             </div>
                           )}
                           {!selectedClient && !isStylist && (
-                            <p className="text-xs text-red-500 mt-1">Seleccione un cliente.</p>
+                            <p className="text-xs text-red-500 mt-1">
+                              Seleccione un cliente.
+                            </p>
                           )}
                         </>
-
                       )}
                     </div>
 
@@ -786,12 +843,21 @@ const AppointmentsManagement: React.FC = () => {
                       </div>
 
                       <div className="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto bg-white">
-                        {services.length === 0 && <p className="text-sm text-gray-400">No hay servicios disponibles</p>}
+                        {services.length === 0 && (
+                          <p className="text-sm text-gray-400">
+                            No hay servicios disponibles
+                          </p>
+                        )}
 
                         {services.map((service) => {
-                          const isSelected = formData.serviceIds.includes(service.id);
+                          const isSelected = formData.serviceIds.includes(
+                            service.id
+                          );
                           return (
-                            <div key={service.id} className="flex items-start py-2 border-b border-gray-100 last:border-0">
+                            <div
+                              key={service.id}
+                              className="flex items-start py-2 border-b border-gray-100 last:border-0"
+                            >
                               <div className="flex items-center h-5">
                                 <input
                                   id={`service-${service.id}`}
@@ -800,13 +866,23 @@ const AppointmentsManagement: React.FC = () => {
                                   // Si es estilista, disabled (solo lectura)
                                   disabled={isStylist || !service.isActive}
                                   checked={isSelected}
-                                  onChange={() => handleServiceToggle(service.id)}
+                                  onChange={() =>
+                                    handleServiceToggle(service.id)
+                                  }
                                   className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded disabled:opacity-50"
                                 />
                               </div>
                               <div className="ml-3 text-sm w-full">
-                                <label htmlFor={`service-${service.id}`} className={`font-medium block cursor-pointer ${isStylist || !service.isActive ? 'text-gray-500' : 'text-gray-700'}`}>
-                                  {service.name} {!service.isActive && inActiveText}
+                                <label
+                                  htmlFor={`service-${service.id}`}
+                                  className={`font-medium block cursor-pointer ${
+                                    isStylist || !service.isActive
+                                      ? "text-gray-500"
+                                      : "text-gray-700"
+                                  }`}
+                                >
+                                  {service.name}{" "}
+                                  {!service.isActive && inActiveText}
                                 </label>
                                 <div className="flex justify-between w-full text-gray-500 text-xs mt-0.5">
                                   <span>{service.durationMin} min</span>
@@ -818,7 +894,9 @@ const AppointmentsManagement: React.FC = () => {
                         })}
                       </div>
                       {formData.serviceIds.length === 0 && !isStylist && (
-                        <p className="text-xs text-red-500 mt-1">Seleccione al menos uno.</p>
+                        <p className="text-xs text-red-500 mt-1">
+                          Seleccione al menos uno.
+                        </p>
                       )}
                     </div>
 
@@ -849,8 +927,13 @@ const AppointmentsManagement: React.FC = () => {
                             Selecciona un Empleado
                           </option>
                           {employees.map((employee) => (
-                            <option key={employee.id} disabled={!employee.isActive} value={employee.id}>
-                              {employee.name} {!employee.isActive && inActiveText}
+                            <option
+                              key={employee.id}
+                              disabled={!employee.isActive}
+                              value={employee.id}
+                            >
+                              {employee.name}{" "}
+                              {!employee.isActive && inActiveText}
                             </option>
                           ))}
                         </select>
@@ -872,7 +955,9 @@ const AppointmentsManagement: React.FC = () => {
                         }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         defaultValue={
-                          editingAppointment ? editingAppointment.status : AppointmentStatus.PENDIENTE
+                          editingAppointment
+                            ? editingAppointment.status
+                            : AppointmentStatus.PENDIENTE
                         }
                       >
                         <option disabled value="">
@@ -912,8 +997,8 @@ const AppointmentsManagement: React.FC = () => {
                       {isSubmitting
                         ? "Guardando..."
                         : editingAppointment
-                          ? "Actualizar"
-                          : "Crear"}
+                        ? "Actualizar"
+                        : "Crear"}
                     </button>
                     <button
                       onClick={() => {
@@ -931,90 +1016,116 @@ const AppointmentsManagement: React.FC = () => {
               </form>
             </div>
           </div>
-        </div >
+        </div>
       )}
 
       {/* Modal Creación Rápida de Cliente */}
-      {
-        isClientModalOpen && (
-          <div className="fixed inset-0 z-[60] overflow-y-auto">
-            <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-              <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
-              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-200">
-                <form onSubmit={handleQuickClientCreate}>
-                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div className="sm:flex sm:items-start">
-                      <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                        <UserPlus className="h-6 w-6 text-green-600" />
-                      </div>
-                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                        <h3 className="text-lg leading-6 font-medium text-gray-900">
-                          Registrar Nuevo Cliente
-                        </h3>
-                        <div className="mt-4 space-y-4">
-                          <div>
-                            <label className="block text-xs font-medium text-gray-700">Nombre *</label>
-                            <input
-                              type="text"
-                              required
-                              placeholder="Nombre del cliente"
-                              className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                              value={newClientData.name}
-                              onChange={(e) => setNewClientData({ ...newClientData, name: e.target.value })}
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-700">Email</label>
-                            <input
-                              type="email"
-                              placeholder="email@ejemplo.com"
-                              className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                              value={newClientData.email}
-                              onChange={(e) => setNewClientData({ ...newClientData, email: e.target.value })}
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-700">Teléfono</label>
-                            <input
-                              type="tel"
-                              inputMode="tel"
-                              placeholder="Número de móvil"
-                              className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                              value={newClientData.mobile}
-                              onChange={(e) => setNewClientData({ ...newClientData, mobile: e.target.value })}
-                            />
-                          </div>
+      {isClientModalOpen && (
+        <div className="fixed inset-0 z-[60] overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-200">
+              <form onSubmit={handleQuickClientCreate}>
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                      <UserPlus className="h-6 w-6 text-green-600" />
+                    </div>
+                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                      <h3 className="text-lg leading-6 font-medium text-gray-900">
+                        Registrar Nuevo Cliente
+                      </h3>
+                      <div className="mt-4 space-y-4">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700">
+                            Nombre *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="Nombre del cliente"
+                            className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            value={newClientData.name}
+                            onChange={(e) =>
+                              setNewClientData({
+                                ...newClientData,
+                                name: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700">
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            placeholder="email@ejemplo.com"
+                            className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            value={newClientData.email}
+                            onChange={(e) =>
+                              setNewClientData({
+                                ...newClientData,
+                                email: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700">
+                            Teléfono
+                          </label>
+                          <input
+                            type="tel"
+                            inputMode="tel"
+                            placeholder="Número de móvil"
+                            className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            value={newClientData.mobile}
+                            onChange={(e) =>
+                              setNewClientData({
+                                ...newClientData,
+                                mobile: e.target.value,
+                              })
+                            }
+                          />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button
-                      type="submit"
-                      disabled={isCreatingClient}
-                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
-                    >
-                      {isCreatingClient ? "Guardando..." : "Guardar y Seleccionar"}
-                    </button>
-                    <button
-                      type="button"
-                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                      onClick={() => {
-                        setIsClientModalOpen(false);
-                        setNewClientData({ name: "", email: "", mobile: "" });
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </form>
-              </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="submit"
+                    disabled={isCreatingClient}
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                  >
+                    {isCreatingClient
+                      ? "Guardando..."
+                      : "Guardar y Seleccionar"}
+                  </button>
+                  <button
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    onClick={() => {
+                      setIsClientModalOpen(false);
+                      setNewClientData({ name: "", email: "", mobile: "" });
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
-        )
-      }
-    </div >
+        </div>
+      )}
+    </div>
   );
 };
 
