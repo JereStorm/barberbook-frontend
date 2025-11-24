@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 import { Appointment, Client } from "../../types";
 
 interface Props {
+  disabled: boolean;
   options: Client[];
   value: string;
   editingAppointment: Appointment | null;
@@ -15,6 +16,7 @@ interface Props {
 const normalize = (s: string) => s?.toLowerCase().trim() ?? "";
 
 const ClientAutocomplete: React.FC<Props> = ({
+  disabled = false,
   options,
   editingAppointment,
   value,
@@ -88,6 +90,7 @@ const ClientAutocomplete: React.FC<Props> = ({
     <div className={`relative ${className}`} ref={ref}>
       <label className="block text-sm font-medium text-gray-700">Cliente</label>
       <input
+        disabled={disabled}
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}

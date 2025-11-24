@@ -769,8 +769,9 @@ const AppointmentsManagement: React.FC = () => {
                       ) : (
                         <>
                           <div className="flex gap-2 items-end">
-                            <div className="flex-grow">
+                            <div className={`flex-grow ${editingAppointment ? 'text-gray-500' : ''}`}>
                               <ClientAutocomplete
+                                disabled={editingAppointment ? true : false}
                                 editingAppointment={editingAppointment ?? null}
                                 options={clients}
                                 value={
@@ -791,9 +792,10 @@ const AppointmentsManagement: React.FC = () => {
                               />
                             </div>
                             <button
+                              disabled={editingAppointment ? true : false}
                               type="button"
                               onClick={() => setIsClientModalOpen(true)}
-                              className="px-3 py-2.5 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm flex-shrink-0 mb-px"
+                              className={`px-3 py-2.5 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm flex-shrink-0 mb-px ${editingAppointment ? "cursor-not-allowed bg-green-700" : ""}`}
                               title="Crear nuevo cliente"
                             >
                               <UserPlus className="w-5 h-5" />
@@ -917,7 +919,6 @@ const AppointmentsManagement: React.FC = () => {
                           }
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                           value={formData.employeeId ?? 0}
-                          defaultValue={0}
                         >
                           <option value="0">
                             Sin asignar
