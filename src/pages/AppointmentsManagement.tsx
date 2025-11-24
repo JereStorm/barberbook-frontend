@@ -264,8 +264,7 @@ const AppointmentsManagement: React.FC = () => {
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -357,7 +356,7 @@ const AppointmentsManagement: React.FC = () => {
         clientId: formData.clientId,
         serviceIds: formData.serviceIds,
         status: formData.status,
-        employeeId: formData.employeeId!,
+        employeeId: formData.employeeId === 0 ? null : formData.employeeId, //Si es 0 (sin asignar) = null
         notes: formData.notes,
         createdBy: formData.createdBy,
       };
@@ -379,8 +378,7 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -584,14 +582,13 @@ const AppointmentsManagement: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${
-                        apt.status === AppointmentStatus.CONFIRMADO ||
+                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${apt.status === AppointmentStatus.CONFIRMADO ||
                         apt.status === AppointmentStatus.COMPLETADO
-                          ? "text-green-800 bg-green-100"
-                          : apt.status === AppointmentStatus.CANCELADO
+                        ? "text-green-800 bg-green-100"
+                        : apt.status === AppointmentStatus.CANCELADO
                           ? "text-red-800 bg-red-100"
                           : "text-yellow-800 bg-yellow-100"
-                      }`}
+                        }`}
                     >
                       {apt.status}
                     </div>
@@ -631,11 +628,10 @@ const AppointmentsManagement: React.FC = () => {
                       {!isStylist && (
                         <button
                           onClick={handleCancelAppointment(apt)}
-                          className={`${
-                            apt.status !== AppointmentStatus.CANCELADO
-                              ? "text-red-600 hover:text-red-900"
-                              : "text-green-600 hover:text-green-900"
-                          }`}
+                          className={`${apt.status !== AppointmentStatus.CANCELADO
+                            ? "text-red-600 hover:text-red-900"
+                            : "text-green-600 hover:text-green-900"
+                            }`}
                           title="Cancelar Turno"
                         >
                           {apt.status !== AppointmentStatus.CANCELADO ? (
@@ -731,7 +727,7 @@ const AppointmentsManagement: React.FC = () => {
                             <CalendarInput
                               initialValue={formData.startTime}
                               minDate={new Date().toISOString().slice(0, 10)}
-                              onChange={() => {}}
+                              onChange={() => { }}
                               onApply={(iso) => {
                                 setFormData((prev) => ({
                                   ...prev,
@@ -875,11 +871,10 @@ const AppointmentsManagement: React.FC = () => {
                               <div className="ml-3 text-sm w-full">
                                 <label
                                   htmlFor={`service-${service.id}`}
-                                  className={`font-medium block cursor-pointer ${
-                                    isStylist || !service.isActive
-                                      ? "text-gray-500"
-                                      : "text-gray-700"
-                                  }`}
+                                  className={`font-medium block cursor-pointer ${isStylist || !service.isActive
+                                    ? "text-gray-500"
+                                    : "text-gray-700"
+                                    }`}
                                 >
                                   {service.name}{" "}
                                   {!service.isActive && inActiveText}
@@ -922,9 +917,10 @@ const AppointmentsManagement: React.FC = () => {
                           }
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                           value={formData.employeeId ?? 0}
+                          defaultValue={0}
                         >
-                          <option disabled value="0">
-                            Selecciona un Empleado
+                          <option value="0">
+                            Sin asignar
                           </option>
                           {employees.map((employee) => (
                             <option
@@ -997,8 +993,8 @@ const AppointmentsManagement: React.FC = () => {
                       {isSubmitting
                         ? "Guardando..."
                         : editingAppointment
-                        ? "Actualizar"
-                        : "Crear"}
+                          ? "Actualizar"
+                          : "Crear"}
                     </button>
                     <button
                       onClick={() => {
