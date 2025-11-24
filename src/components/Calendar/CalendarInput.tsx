@@ -466,11 +466,11 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                                       setTimeOpen(false);
                                     }
                                   }}
-                                  className={`px-3 py-2 rounded cursor-pointer text-sm ${
+                                  className={`px-3 py-2 rounded text-sm ${
                                     disabledHour
                                       ? "text-gray-300 cursor-not-allowed opacity-60"
                                       : active
-                                      ? "bg-blue-600 text-white font-semibold"
+                                      ? "bg-blue-600 text-white cursor-pointer font-semibold"
                                       : "hover:bg-gray-100"
                                   }`}
                                 >
@@ -515,11 +515,11 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
                                       setTimeOpen(false);
                                     }
                                   }}
-                                  className={`px-3 py-2 rounded cursor-pointer text-sm ${
+                                  className={`px-3 py-2 rounded text-sm ${
                                     disabledMinute
                                       ? "text-gray-300 cursor-not-allowed opacity-60"
                                       : active
-                                      ? "bg-blue-600 text-white font-semibold"
+                                      ? "bg-blue-600 text-white cursor-pointer font-semibold"
                                       : "hover:bg-gray-100"
                                   }`}
                                 >
