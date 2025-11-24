@@ -148,3 +148,78 @@ export interface UpdateServiceRequest {
   durationMin?: number | null;
   isActive?: boolean;
 }
+
+export enum AppointmentStatus {
+  ACTIVO = 'activo',
+  PENDIENTE = 'pendiente',
+  CONFIRMADO = 'confirmado',
+  CANCELADO = 'cancelado',
+  COMPLETADO = 'completado',
+}
+
+export interface CreateAppointmentRequest {
+  salonId: number;
+  startTime: string;
+  clientId: number;
+  serviceIds: number[]; // <--- Ahora es un array
+  status: AppointmentStatus;
+  employeeId?: number | null;
+  notes?: string | null;
+  createdBy: number;
+}
+
+export interface Appointment {
+  id: number;
+  salonId: number;
+  startTime: string;
+  finishTime: string;
+  duration: number;
+  totalPrice?: number; // <--- Precio total 
+  clientId: number;
+  client: ClientAppointmentData;
+  employeeId: number;
+  employee?: EmployeeAppointmentData | null;
+  status: string;
+  notes: string;
+  createdBy: number;
+  services: ServiceAppointmentData[]; // <--- Ahora es un array
+}
+
+export interface ServiceAppointmentData {
+  id: number
+  name: string
+  price: string
+  salonId: number
+  durationMin: number,
+  isActive: boolean
+}
+
+export interface ClientAppointmentData {
+  id: number
+  name: string
+  mobile: string
+  email: string
+  salonId: number
+}
+
+export interface EmployeeAppointmentData {
+  id: number
+  name: string
+  email: string
+  mobile?: string
+  salonId: number
+  isActive: boolean
+}
+
+export interface UpdateAppointmentRequest {
+  salonId?: number;
+  startTime?: string;
+  finishTime?: string;
+  duration?: number;
+  clientId?: number;
+  employeeId?: number | null;
+  serviceIds?: number[]; // <--- Ahora es un array
+  status?: AppointmentStatus;
+  notes?: string | null;
+  createdBy?: number;
+}

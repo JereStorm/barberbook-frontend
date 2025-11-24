@@ -21,6 +21,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import AlertService from "../helpers/sweetAlert/AlertService";
+import { normalizeMobileVerySimple } from "../components/Utils";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -31,8 +32,6 @@ const UsersManagement: React.FC = () => {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
-
-  const DEFAULT_COUNTRY_CODE = "+54"; // cambia si lo necesitás
 
   const [formData, setFormData] = useState<CreateUserRequest>({
     name: "",
@@ -76,28 +75,6 @@ const UsersManagement: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Normalización muy simple: quita todo excepto + y dígitos, convierte 00... -> +..., si no empieza con + antepone DEFAULT_COUNTRY_CODE.
-  // Devuelve undefined si está vacío; devuelve undefined también si la cantidad de dígitos no está en rango razonable (8-15).
-
-  const normalizeMobileVerySimple = (value?: string): string | undefined => {
-    if (!value) return undefined;
-    const v = value.trim();
-    if (!v) return undefined;
-
-    let cleaned = v.replace(/[^+\d]/g, ""); // queda + y dígitos
-    cleaned = cleaned.replace(/^00/, "+"); // 00 -> +
-    if (!cleaned.startsWith("+")) {
-      // quitar ceros iniciales locales
-      const digits = cleaned.replace(/^0+/, "");
-      cleaned = `${DEFAULT_COUNTRY_CODE}${digits}`;
-    }
-
-    const digitsOnly = cleaned.replace(/\D/g, "");
-    if (digitsOnly.length < 8 || digitsOnly.length > 15) return undefined;
-
-    return cleaned;
   };
 
   // Función para obtener el nombre del salón (igual que en dashboard)
@@ -181,10 +158,13 @@ const UsersManagement: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      const normalizedMobile = normalizeMobileVerySimple(formData.mobile);
+
+
       const updateData: UpdateUserRequest = {
         name: formData.name,
         email: formData.email,
-        mobile: formData.mobile,
+        mobile: normalizedMobile,
         role: formData.role,
       };
 
@@ -426,9 +406,8 @@ const UsersManagement: React.FC = () => {
                         <UserX className="w-5 h-5 text-red-500 mr-2" />
                       )}
                       <span
-                        className={`text-sm ${
-                          user.isActive ? "text-green-600" : "text-red-600"
-                        }`}
+                        className={`text-sm ${user.isActive ? "text-green-600" : "text-red-600"
+                          }`}
                       >
                         {user.isActive ? "Activo" : "Inactivo"}
                       </span>
@@ -455,11 +434,10 @@ const UsersManagement: React.FC = () => {
                             currentUser?.id !== user.id && (
                               <button
                                 onClick={() => handleToggleUserStatus(user)}
-                                className={`${
-                                  user.isActive
-                                    ? "text-red-600 hover:text-red-900"
-                                    : "text-green-600 hover:text-green-900"
-                                }`}
+                                className={`${user.isActive
+                                  ? "text-red-600 hover:text-red-900"
+                                  : "text-green-600 hover:text-green-900"
+                                  }`}
                               >
                                 {user.isActive ? (
                                   <UserX className="w-4 h-4" />
@@ -629,7 +607,7 @@ const UsersManagement: React.FC = () => {
                           })
                         }
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        defaultValue={""}
+                        defaultValue={editingUser ? editingUser.role : ""}
                       >
                         <option disabled value="">
                           Selecciona un Rol
@@ -654,8 +632,8 @@ const UsersManagement: React.FC = () => {
                     {isSubmitting
                       ? "Guardando..."
                       : editingUser
-                      ? "Actualizar"
-                      : "Crear"}
+                        ? "Actualizar"
+                        : "Crear"}
                   </button>
                   <button
                     type="button"

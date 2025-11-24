@@ -6,6 +6,8 @@ import { apiService } from '../services/api';
 import { User, Salon, UserRole } from '../types';
 import toast from 'react-hot-toast';
 import SummaryCard from '../components/UI/SummaryCard';
+import { Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -211,8 +213,8 @@ const Dashboard: React.FC = () => {
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
-              <a
-                href="/users"
+              <Link
+                to={"/users"}
                 className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center space-x-3">
@@ -222,12 +224,12 @@ const Dashboard: React.FC = () => {
                     <p className="text-sm text-gray-500">Crear, editar y administrar usuarios</p>
                   </div>
                 </div>
-              </a>
+              </Link>
             )}
 
             {user!.role === UserRole.SUPER_ADMIN && (
-              <a
-                href="/salons"
+              <Link
+                to={"/salons"}
                 className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center space-x-3">
@@ -237,7 +239,7 @@ const Dashboard: React.FC = () => {
                     <p className="text-sm text-gray-500">Crear y administrar salones</p>
                   </div>
                 </div>
-              </a>
+              </Link>
             )}
           </div>
         </div>
