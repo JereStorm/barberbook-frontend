@@ -62,9 +62,11 @@ export function useServices(currentUser: any) {
       await createService(payload);
       toast.success("Servicio creado correctamente");
       loadServices();
+      return true;  // << OK
     } catch (error) {
       const apiError = apiService.handleError(error);
       toast.error(apiError.message || "Error creando servicio");
+      return false; // << ERROR
     } finally {
       setIsSubmitting(false);
     }
@@ -84,9 +86,11 @@ export function useServices(currentUser: any) {
       await updateService(id, updateData);
       toast.success("Servicio actualizado correctamente");
       loadServices();
+      return true;  // << OK
     } catch (error) {
       const apiError = apiService.handleError(error);
       toast.error(apiError.message || "Error actualizando servicio");
+      return false;  // << ERROR
     } finally {
       setIsSubmitting(false);
     }
