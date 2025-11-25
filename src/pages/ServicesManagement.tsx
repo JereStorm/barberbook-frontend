@@ -37,14 +37,14 @@ const ServicesManagement: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
 
-    if (editingService) {
-      await editService(editingService.id, formData);
-    } else {
-      await createNewService(formData);
-    }
+    const success = editingService
+      ? await editService(editingService.id, formData)
+      : await createNewService(formData);
 
-    setIsModalOpen(false);
-  };
+    if (success) {
+      setIsModalOpen(false);
+    }
+  }
 
   const resetForm = () => {
     setFormData({
@@ -122,7 +122,7 @@ const ServicesManagement: React.FC = () => {
 
       {isModalOpen && (
         <ServiceModal
-          durationMin={ DURATION_MIN}
+          durationMin={DURATION_MIN}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSubmit={handleSubmit}
