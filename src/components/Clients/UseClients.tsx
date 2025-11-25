@@ -35,42 +35,44 @@ export function useClients(currentUser: any) {
     }
   };
 
-  const createNewClient = async (formData: CreateClientRequest) => {
+  const createNewClient = async (formData: CreateClientRequest): Promise<boolean> => {
     setIsSubmitting(true);
     try {
-      
-
       await createClient({ ...formData });
       toast.success("Cliente creado correctamente");
       await loadClients();
+      return true; // << OK
     } catch (error) {
       const apiError = apiService.handleError(error);
       toast.error(apiError.message);
+      return false; // << ERROR
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const editClient = async (id: number, formData: UpdateClientRequest) => {
+  const editClient = async (id: number, formData: UpdateClientRequest): Promise<boolean> => {
     setIsSubmitting(true);
     try {
       const mobile = normalizeMobileVerySimple(formData.mobile || "");
       if (formData.mobile && !mobile) {
         toast.error("Número de teléfono inválido.");
-        setIsSubmitting(false);
-        return;
+        return false;
       }
 
       await updateClient(id, { ...formData, mobile });
       toast.success("Cliente actualizado correctamente");
       await loadClients();
+      return true;
     } catch (error) {
       const apiError = apiService.handleError(error);
       toast.error(apiError.message);
+      return false;
     } finally {
       setIsSubmitting(false);
     }
   };
+
 
   const removeClient = async (client: Client) => {
     const confirmed = await AlertService.confirm(
