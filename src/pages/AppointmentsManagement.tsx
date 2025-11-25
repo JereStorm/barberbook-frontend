@@ -8,6 +8,7 @@ import {
   Timer,
   MessageCircle,
   CircleCheckBig,
+  MessageCircleMore,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
@@ -202,9 +203,20 @@ const AppointmentsManagement: React.FC = () => {
   );
 
   // --- FUNCIÓN PARA ENVIAR RECIBO POR WHATSAPP ---
-  const handleSendReceipt = (apt: Appointment) => {
+  const handleSendReceipt = async (apt: Appointment) => {
+
+
     if (!apt.client.mobile) {
       toast.error("El cliente no tiene un número de teléfono registrado.");
+      return;
+    }
+
+    const confirmed = await AlertService.confirm(
+      `¿Está seguro que desea enviar un mensaje a "${apt.client.name ?? "cliente"
+      }", con turno el ${formatDateTime(apt.startTime)}?`
+    );
+    if (!confirmed) {
+      toast.success("Cancelación cancelada");
       return;
     }
 
@@ -615,16 +627,18 @@ const AppointmentsManagement: React.FC = () => {
                         className="text-green-600 hover:text-green-800"
                         title="Enviar comprobante por WhatsApp"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <MessageCircleMore className="w-4 h-4" />
                       </button>
 
-                      <button
-                        onClick={() => openEditModal(apt)}
-                        className="text-blue-600 hover:text-blue-900"
-                        title="Editar turno"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
+                      {!isStylist && (
+                        <button
+                          onClick={() => handleDeleteAppointment(apt)}
+                          className="text-red-600 hover:text-red-900"
+                          title="Eliminar turno"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
 
                       {!isStylist && (
                         <button
@@ -643,15 +657,13 @@ const AppointmentsManagement: React.FC = () => {
                         </button>
                       )}
 
-                      {!isStylist && (
-                        <button
-                          onClick={() => handleDeleteAppointment(apt)}
-                          className="text-red-600 hover:text-red-900"
-                          title="Eliminar turno"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => openEditModal(apt)}
+                        className="text-blue-600 hover:text-blue-900"
+                        title="Editar turno"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>
