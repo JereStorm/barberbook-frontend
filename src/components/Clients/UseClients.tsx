@@ -4,7 +4,12 @@ import { Client, CreateClientRequest, UpdateClientRequest } from "../../types";
 import { apiService } from "../../services/api";
 import { normalizeMobileVerySimple } from "../Utils";
 import AlertService from "../../helpers/sweetAlert/AlertService";
-import { createClient, deleteClient, getClients, updateClient } from "../../services/api-clients";
+import {
+  createClient,
+  deleteClient,
+  getClients,
+  updateClient,
+} from "../../services/api-clients";
 
 export function useClients(currentUser: any) {
   const [clients, setClients] = useState<Client[]>([]);
@@ -33,14 +38,9 @@ export function useClients(currentUser: any) {
   const createNewClient = async (formData: CreateClientRequest) => {
     setIsSubmitting(true);
     try {
-      const mobile = normalizeMobileVerySimple(formData.mobile || "");
-      if (formData.mobile && !mobile) {
-        toast.error("Número de teléfono inválido.");
-        setIsSubmitting(false);
-        return;
-      }
+      
 
-      await createClient({ ...formData, mobile });
+      await createClient({ ...formData });
       toast.success("Cliente creado correctamente");
       await loadClients();
     } catch (error) {
@@ -96,6 +96,7 @@ export function useClients(currentUser: any) {
     clients,
     isLoading,
     isSubmitting,
+    loadClients,
     createNewClient,
     editClient,
     removeClient,

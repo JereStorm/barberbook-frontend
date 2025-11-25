@@ -38,6 +38,7 @@ import { getServices } from "../services/api-services";
 //Los agregue para el formulario de creacion de cliente
 import { normalizeMobileVerySimple } from "../components/Utils";
 import { createClient } from "../services/api-clients";
+import { useClients } from "../components/Clients/UseClients";
 
 const AppointmentsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -45,7 +46,7 @@ const AppointmentsManagement: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [clients, setClients] = useState<Client[]>([]);
+  const { clients, loadClients } = useClients(currentUser);
   const [services, setServices] = useState<Service[]>([]);
   const [employees, setEmployees] = useState<User[]>([]);
   const [searchClient, setSearchClient] = useState("");
@@ -111,10 +112,10 @@ const AppointmentsManagement: React.FC = () => {
     }
   };
 
-  const loadClients = async () => {
+  /*const loadClients = async () => {
     const data = await getClients();
     setClients(data);
-  };
+  };*/
 
   const loadEmployees = async () => {
     const data = await apiService.getUsers();
@@ -467,7 +468,7 @@ const AppointmentsManagement: React.FC = () => {
 
       const createdClient = await createClient(payload);
 
-      setClients((prev) => [...prev, createdClient]);
+      loadClients();
       setFormData((prev) => ({ ...prev, clientId: createdClient.id }));
       setSelectedClient(createdClient);
       setSearchClient("");
