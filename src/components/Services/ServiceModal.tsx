@@ -1,41 +1,50 @@
-import React from "react";
-import { CreateClientRequest } from "../../types";
-import { FormActionButton } from "../UI/FormActionButton";
-import { normalizeMobileVerySimple } from "../Utils";
 import toast from "react-hot-toast";
+import { CreateServiceRequest, UpdateServiceRequest } from "../../types";
+import { FormActionButton } from "../UI/FormActionButton";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (e: React.FormEvent) => void;
-  formData: CreateClientRequest;
-  setFormData: (d: CreateClientRequest) => void;
+  formData: CreateServiceRequest;
+  setFormData: (d: CreateServiceRequest) => void;
   isSubmitting: boolean;
-  editingClient: boolean;
+  editingService: boolean;
+  durationMin: number;
 };
 
-const ClientModal: React.FC<Props> = ({
+export const ServiceModal: React.FC<Props> = ({
   isOpen,
+  formData,
+  isSubmitting,
+  editingService,
+  durationMin,
   onClose,
   onSubmit,
-  formData,
   setFormData,
-  isSubmitting,
-  editingClient,
 }) => {
-
   if (!isOpen) return null;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const mobile = normalizeMobileVerySimple(formData.mobile!);
-    console.log(mobile)
-    
-    if (formData.mobile && mobile) {
-      formData.mobile = mobile;
+    if (validateService()) {
       onSubmit(e)
-    } else {
-      toast.error("Número de teléfono inválido.");
+    } 
+  };
+
+  const validateService = (): boolean => {
+    let isValid: boolean = true;
+    if (formData.price && Number(formData.price) <= 0) {
+      toast.error("El precio debe ser mayor a 0");
+      isValid = false;
     }
+
+    if (formData.durationMin && formData.durationMin < durationMin) {
+      toast.error(`La duracion del turno debe ser al menos de ${durationMin}`);
+      isValid = false;
+    }
+
+    return isValid;
   };
 
   return (
@@ -47,16 +56,16 @@ const ClientModal: React.FC<Props> = ({
           <form onSubmit={handleSubmit}>
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                {editingClient ? "Editar Cliente" : "Crear Cliente"}
+                {editingService ? "Editar Servicio" : "Crear Servicio"}
               </h3>
 
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Nombre
+                    Nombre del servicio
                   </label>
                   <input
-                    placeholder="Manuel"
+                    placeholder="Corte Basico"
                     type="text"
                     required
                     value={formData.name}
@@ -69,15 +78,15 @@ const ClientModal: React.FC<Props> = ({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Email
+                    Precio
                   </label>
                   <input
                     required
-                    placeholder="manuel@email.com"
-                    type="email"
-                    value={formData.email ?? ""}
+                    placeholder="16.000"
+                    type="number"
+                    value={formData.price ?? ""}
                     onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
+                      setFormData({ ...formData, price: e.target.value })
                     }
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -85,16 +94,17 @@ const ClientModal: React.FC<Props> = ({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Teléfono
+                    Duración (min)
                   </label>
                   <input
-                    required
-                    type="tel"
-                    inputMode="tel"
-                    placeholder="2284557890"
-                    value={formData.mobile ?? ""}
+                    type="number"
+                    placeholder={durationMin.toString()}
+                    value={formData.durationMin ?? ""}
                     onChange={(e) =>
-                      setFormData({ ...formData, mobile: e.target.value })                     
+                      setFormData({
+                        ...formData,
+                        durationMin: Number(e.target.value),
+                      })
                     }
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -110,7 +120,7 @@ const ClientModal: React.FC<Props> = ({
                 action={
                   isSubmitting
                     ? "Guardando..."
-                    : editingClient
+                    : editingService
                     ? "Actualizar"
                     : "Crear"
                 }
@@ -128,5 +138,3 @@ const ClientModal: React.FC<Props> = ({
     </div>
   );
 };
-
-export default ClientModal;

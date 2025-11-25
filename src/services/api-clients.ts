@@ -3,38 +3,32 @@ import { Client, CreateClientRequest, UpdateClientRequest } from '../types';
 
 // Usamos la instancia axios interna del apiService (propiedad privada -> access vía any)
 const axiosInstance = (apiService as any).api as import('axios').AxiosInstance;
+const BASE = "/clients";
 
 // Métodos para clientes
 async function getClients(): Promise<Client[]> {
-    const response = await axiosInstance.get<Client[]>('/clients');
+    const response = await axiosInstance.get<Client[]>(BASE);
     return response.data;
 }
 
 async function getClient(id: number): Promise<Client> {
-    const response = await axiosInstance.get<Client>(`/clients/${id}`);
+    const response = await axiosInstance.get<Client>(`${BASE}/${id}`);
     return response.data;
 }
 
 async function createClient(clientData: CreateClientRequest): Promise<Client> {
-    const response = await axiosInstance.post<Client>('/clients', clientData);
+    const response = await axiosInstance.post<Client>(BASE, clientData);
     return response.data;
 }
 
 async function updateClient(id: number, clientData: UpdateClientRequest): Promise<Client> {
-    const response = await axiosInstance.patch<Client>(`/clients/${id}`, clientData);
+    const response = await axiosInstance.patch<Client>(`${BASE}/${id}`, clientData);
     return response.data;
 }
 
 async function deleteClient(id: number): Promise<void> {
-    await axiosInstance.delete(`/clients/${id}`);
+    await axiosInstance.delete(`${BASE}/${id}`);
 }
-
-// Adjuntamos los métodos al apiService para compatibilidad con llamadas como apiService.getClients()
-(apiService as any).getClients = getClients;
-(apiService as any).getClient = getClient;
-(apiService as any).createClient = createClient;
-(apiService as any).updateClient = updateClient;
-(apiService as any).deleteClient = deleteClient;
 
 export {
     getClients,

@@ -54,13 +54,13 @@ const ClientsManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (editingClient) {
-      await editClient(editingClient.id, formData);
-    } else {
-      await createNewClient(formData);
-    }
+    const success = editingClient
+      ? await editClient(editingClient.id, formData)
+      : await createNewClient(formData);
 
-    setIsModalOpen(false);
+    if (success) {
+      setIsModalOpen(false);
+    }
   };
 
   return (
