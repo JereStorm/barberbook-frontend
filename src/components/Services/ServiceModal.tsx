@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { CreateServiceRequest, UpdateServiceRequest } from "../../types";
+import { CreateServiceRequest } from "../../types";
 import { FormActionButton } from "../UI/FormActionButton";
 
 type Props = {

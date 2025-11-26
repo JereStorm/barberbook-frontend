@@ -200,7 +200,7 @@ export const UserModal: React.FC<Props> = ({
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Contraseña{" "}
-                    {editingUser && "(dejar vacío para mantener actual)"}
+                    {editingUser && "(dejar vacío para mantener la actual)"}
                   </label>
                   <div className="mt-1 relative">
                     <input

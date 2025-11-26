@@ -7,7 +7,6 @@ const axiosInstance = (apiService as any).api as import('axios').AxiosInstance;
 // Métodos para turnos
 async function getAppointments(): Promise<Appointment[]> {
     const response = await axiosInstance.get<Appointment[]>('/appointments');
-    console.log('desde api', response.data);
     return response.data;
 }
 

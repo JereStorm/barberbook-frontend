@@ -158,7 +158,7 @@ const UsersManagement: React.FC = () => {
               <option value="all">Todos los roles</option>
 
               {Object.values(UserRole)
-                .filter((r) => r != UserRole.SUPER_ADMIN)
+                .filter((r) => r !== UserRole.SUPER_ADMIN)
                 .map((role) => (
                   <option key={role} value={role}>
                     {getRoleDisplayName(role)}
@@ -179,7 +179,7 @@ const UsersManagement: React.FC = () => {
 
       {/* Modal */}
       {isModalOpen && (
-        <UserModal
+        <UserModal 
           isOpen={isModalOpen}
           formData={formData}
           isSubmitting={isSubmitting}

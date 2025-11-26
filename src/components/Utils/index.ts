@@ -20,7 +20,6 @@ export const normalizeMobileVerySimple = (
   }
 
   const digitsOnly = cleaned.replace(/\D/g, "");
-  //TODO: ARREGLAR NUMERO DE TELEFONO NORMALIZE AL CREAR Y EDITAR CLIENTE. CREAR Y EDITAR USUARIO ANDA
   console.log(digitsOnly);
   if (digitsOnly.length < 10 || digitsOnly.length > 15) return undefined;
 

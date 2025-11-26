@@ -29,8 +29,8 @@ export const UsersTable: React.FC<Props> = ({
       return false;
     }
 
-    if (currentUser.role === UserRole.ADMIN) {
-      return [UserRole.RECEPCIONISTA, UserRole.ESTILISTA].includes(user.role);
+    if (currentUser.role === UserRole.ADMIN || currentUser.id === user.id){
+      return [UserRole.ADMIN, UserRole.RECEPCIONISTA, UserRole.ESTILISTA].includes(user.role);
     }
 
     if (currentUser.role === UserRole.RECEPCIONISTA) {

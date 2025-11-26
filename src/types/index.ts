@@ -151,8 +151,7 @@ export interface UpdateServiceRequest {
 
 export enum AppointmentStatus {
   ACTIVO = 'activo',
-  PENDIENTE = 'pendiente',
-  CONFIRMADO = 'confirmado',
+  CADUCADO = 'caducado',
   CANCELADO = 'cancelado',
   COMPLETADO = 'completado',
 }

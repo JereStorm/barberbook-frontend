@@ -6,7 +6,6 @@ import {
   Trash2,
   CircleX,
   Timer,
-  MessageCircle,
   CircleCheckBig,
   MessageCircleMore,
 } from "lucide-react";
@@ -31,7 +30,6 @@ import {
 } from "../apisServices/api-appointments";
 import { apiService } from "../apisServices/api";
 import AlertService from "../helpers/sweetAlert/AlertService";
-import { getClients } from "../apisServices/api-clients";
 import ClientAutocomplete from "../components/Autocomplete/ClientAutocomplete";
 import { CalendarInput } from "../components/Calendar/CalendarInput";
 import { getServices } from "../apisServices/api-services";
@@ -77,7 +75,7 @@ const AppointmentsManagement: React.FC = () => {
     clientId: 0,
     employeeId: null,
     serviceIds: [],
-    status: AppointmentStatus.PENDIENTE,
+    status: AppointmentStatus.ACTIVO,
     notes: null,
     createdBy: currentUser?.id ?? 0,
   });
@@ -103,7 +101,6 @@ const AppointmentsManagement: React.FC = () => {
     try {
       setIsLoading(true);
       const data = await getAppointments();
-      console.log("desde componente", data);
       setAppointments(data);
     } catch (error) {
       const apiError = apiService.handleError(error);
@@ -112,11 +109,6 @@ const AppointmentsManagement: React.FC = () => {
       setIsLoading(false);
     }
   };
-
-  /*const loadClients = async () => {
-    const data = await getClients();
-    setClients(data);
-  };*/
 
   const loadEmployees = async () => {
     const data = await apiService.getUsers();
@@ -163,7 +155,7 @@ const AppointmentsManagement: React.FC = () => {
       clientId: 0,
       employeeId: null,
       serviceIds: [], // Resetear array
-      status: AppointmentStatus.PENDIENTE,
+      status: AppointmentStatus.ACTIVO,
       notes: null,
       createdBy: currentUser?.id ?? 0,
     });
@@ -171,6 +163,21 @@ const AppointmentsManagement: React.FC = () => {
     setSelectedClient(null);
     setSearchClient("");
   };
+
+  const getStatusBadgeColor = (status: AppointmentStatus) => {
+      switch (status) {
+        case AppointmentStatus.ACTIVO:
+          return 'bg-purple-100 text-purple-800 border border-purple-200';
+        case AppointmentStatus.CADUCADO:
+          return 'bg-blue-100 text-blue-800 border border-blue-200';
+        case AppointmentStatus.COMPLETADO:
+          return 'bg-green-100 text-green-800 border border-green-200';
+        case AppointmentStatus.CANCELADO:
+          return 'bg-red-100 text-red-800 border border-red-200';
+        default:
+          return 'bg-purple-100 text-purple-800 border border-purple-200';
+      }
+    };
 
   // --- NUEVA FUNCION: Manejar Checkboxes de Servicios --- (Ahora un turno, puede tener varios servicios)
   const handleServiceToggle = (serviceId: number) => {
@@ -204,15 +211,14 @@ const AppointmentsManagement: React.FC = () => {
 
   // --- FUNCIÓN PARA ENVIAR RECIBO POR WHATSAPP ---
   const handleSendReceipt = async (apt: Appointment) => {
-
-
     if (!apt.client.mobile) {
       toast.error("El cliente no tiene un número de teléfono registrado.");
       return;
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea enviar un mensaje a "${apt.client.name ?? "cliente"
+      `¿Está seguro que desea enviar un mensaje a "${
+        apt.client.name ?? "cliente"
       }", con turno el ${formatDateTime(apt.startTime)}?`
     );
     if (!confirmed) {
@@ -260,7 +266,7 @@ const AppointmentsManagement: React.FC = () => {
           startTime: appointment.startTime,
           clientId: appointment.clientId,
           serviceIds: appointment.services.map((item) => item.id),
-          status: AppointmentStatus.PENDIENTE,
+          status: AppointmentStatus.ACTIVO,
           employeeId: appointment.employeeId || null,
           notes: appointment.notes,
           createdBy: appointment.createdBy,
@@ -277,7 +283,8 @@ const AppointmentsManagement: React.FC = () => {
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${
+        appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -333,7 +340,7 @@ const AppointmentsManagement: React.FC = () => {
         clientId: formData.clientId,
         serviceIds: formData.serviceIds,
         status: formData.status,
-        employeeId: formData.employeeId == 0 ? null : formData.employeeId,
+        employeeId: formData.employeeId === 0 ? null : formData.employeeId,
         notes: formData.notes,
         createdBy: formData.createdBy,
       };
@@ -391,7 +398,8 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${
+        appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -445,11 +453,11 @@ const AppointmentsManagement: React.FC = () => {
   }
 
   const statusDisplayName: AppointmentStatus[] = [
-    AppointmentStatus.PENDIENTE,
     AppointmentStatus.ACTIVO,
-    AppointmentStatus.CONFIRMADO,
+
     AppointmentStatus.CANCELADO,
     AppointmentStatus.COMPLETADO,
+    AppointmentStatus.CADUCADO,
   ];
 
   // Creación rapida de cliente------>se puede crear un cliente desde el formulario de turnos
@@ -595,15 +603,11 @@ const AppointmentsManagement: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${apt.status === AppointmentStatus.CONFIRMADO ||
-                        apt.status === AppointmentStatus.COMPLETADO
-                        ? "text-green-800 bg-green-100"
-                        : apt.status === AppointmentStatus.CANCELADO
-                          ? "text-red-800 bg-red-100"
-                          : "text-yellow-800 bg-yellow-100"
-                        }`}
+                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${
+                        getStatusBadgeColor(apt.status as AppointmentStatus)
+                      }`}
                     >
-                      {apt.status}
+                      {apt.status.charAt(0).toUpperCase() + apt.status.slice(1)}
                     </div>
                   </td>
                   {/* Nueva celda->duracion total del turno */}
@@ -643,10 +647,11 @@ const AppointmentsManagement: React.FC = () => {
                       {!isStylist && (
                         <button
                           onClick={handleCancelAppointment(apt)}
-                          className={`${apt.status !== AppointmentStatus.CANCELADO
-                            ? "text-red-600 hover:text-red-900"
-                            : "text-green-600 hover:text-green-900"
-                            }`}
+                          className={`${
+                            apt.status !== AppointmentStatus.CANCELADO
+                              ? "text-red-600 hover:text-red-900"
+                              : "text-green-600 hover:text-green-900"
+                          }`}
                           title="Cancelar Turno"
                         >
                           {apt.status !== AppointmentStatus.CANCELADO ? (
@@ -740,7 +745,7 @@ const AppointmentsManagement: React.FC = () => {
                             <CalendarInput
                               initialValue={formData.startTime}
                               minDate={new Date().toISOString().slice(0, 10)}
-                              onChange={() => { }}
+                              onChange={() => {}}
                               onApply={(iso) => {
                                 setFormData((prev) => ({
                                   ...prev,
@@ -782,7 +787,11 @@ const AppointmentsManagement: React.FC = () => {
                       ) : (
                         <>
                           <div className="flex gap-2 items-end">
-                            <div className={`flex-grow ${editingAppointment ? 'text-gray-500' : ''}`}>
+                            <div
+                              className={`flex-grow ${
+                                editingAppointment ? "text-gray-500" : ""
+                              }`}
+                            >
                               <ClientAutocomplete
                                 disabled={editingAppointment ? true : false}
                                 editingAppointment={editingAppointment ?? null}
@@ -808,7 +817,11 @@ const AppointmentsManagement: React.FC = () => {
                               disabled={editingAppointment ? true : false}
                               type="button"
                               onClick={() => setIsClientModalOpen(true)}
-                              className={`px-3 py-2.5 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm flex-shrink-0 mb-px ${editingAppointment ? "cursor-not-allowed bg-green-700" : ""}`}
+                              className={`px-3 py-2.5 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm flex-shrink-0 mb-px ${
+                                editingAppointment
+                                  ? "cursor-not-allowed bg-green-700"
+                                  : ""
+                              }`}
                               title="Crear nuevo cliente"
                             >
                               <UserPlus className="w-5 h-5" />
@@ -886,10 +899,11 @@ const AppointmentsManagement: React.FC = () => {
                               <div className="ml-3 text-sm w-full">
                                 <label
                                   htmlFor={`service-${service.id}`}
-                                  className={`font-medium block cursor-pointer ${isStylist || !service.isActive
-                                    ? "text-gray-500"
-                                    : "text-gray-700"
-                                    }`}
+                                  className={`font-medium block cursor-pointer ${
+                                    isStylist || !service.isActive
+                                      ? "text-gray-500"
+                                      : "text-gray-700"
+                                  }`}
                                 >
                                   {service.name}{" "}
                                   {!service.isActive && inActiveText}
@@ -933,9 +947,7 @@ const AppointmentsManagement: React.FC = () => {
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                           value={formData.employeeId ?? 0}
                         >
-                          <option value="0">
-                            Sin asignar
-                          </option>
+                          <option value="0">Sin asignar</option>
                           {employees.map((employee) => (
                             <option
                               key={employee.id}
@@ -967,7 +979,7 @@ const AppointmentsManagement: React.FC = () => {
                         defaultValue={
                           editingAppointment
                             ? editingAppointment.status
-                            : AppointmentStatus.PENDIENTE
+                            : AppointmentStatus.ACTIVO
                         }
                       >
                         <option disabled value="">
@@ -975,7 +987,7 @@ const AppointmentsManagement: React.FC = () => {
                         </option>
                         {statusDisplayName.map((status) => (
                           <option key={status} value={status}>
-                            {status[0].toUpperCase() + status.slice(1)}
+                            {status.charAt(0).toUpperCase() + status.slice(1)}
                           </option>
                         ))}
                       </select>
@@ -1007,8 +1019,8 @@ const AppointmentsManagement: React.FC = () => {
                       {isSubmitting
                         ? "Guardando..."
                         : editingAppointment
-                          ? "Actualizar"
-                          : "Crear"}
+                        ? "Actualizar"
+                        : "Crear"}
                     </button>
                     <button
                       onClick={() => {
