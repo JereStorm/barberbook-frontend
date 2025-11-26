@@ -71,9 +71,8 @@ export const ServicesTable: React.FC<Props> = ({
                       <SquareScissors className="w-5 h-5 text-red-500 mr-2" />
                     )}
                     <span
-                      className={`text-sm ${
-                        svc.isActive ? "text-green-600" : "text-red-600"
-                      }`}
+                      className={`text-sm ${svc.isActive ? "text-green-600" : "text-red-600"
+                        }`}
                     >
                       {svc.isActive ? "Activo" : "Inactivo"}
                     </span>
@@ -91,11 +90,11 @@ export const ServicesTable: React.FC<Props> = ({
 
                     <button
                       onClick={() => onToggleStatus(svc)}
-                      className={`${
-                        svc.isActive
-                          ? "text-red-600 hover:text-red-900"
-                          : "text-green-600 hover:text-green-900"
-                      }`}
+                      title={svc.isActive ? "Desactivar servicio" : "Activar servicio"}
+                      className={`${svc.isActive
+                        ? "text-red-600 hover:text-red-900"
+                        : "text-green-600 hover:text-green-900"
+                        }`}
                     >
                       {svc.isActive ? (
                         <CircleX className="w-4 h-4" />

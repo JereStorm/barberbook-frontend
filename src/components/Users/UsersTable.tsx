@@ -29,7 +29,7 @@ export const UsersTable: React.FC<Props> = ({
       return false;
     }
 
-    if (currentUser.role === UserRole.ADMIN || currentUser.id === user.id){
+    if (currentUser.role === UserRole.ADMIN || currentUser.id === user.id) {
       return [UserRole.ADMIN, UserRole.RECEPCIONISTA, UserRole.ESTILISTA].includes(user.role);
     }
 
@@ -115,9 +115,8 @@ export const UsersTable: React.FC<Props> = ({
                       <UserX className="w-5 h-5 text-red-500 mr-2" />
                     )}
                     <span
-                      className={`text-sm ${
-                        user.isActive ? "text-green-600" : "text-red-600"
-                      }`}
+                      className={`text-sm ${user.isActive ? "text-green-600" : "text-red-600"
+                        }`}
                     >
                       {user.isActive ? "Activo" : "Inactivo"}
                     </span>
@@ -135,6 +134,7 @@ export const UsersTable: React.FC<Props> = ({
                             <button
                               onClick={() => onDelete(user)}
                               className="text-red-600 hover:text-red-900"
+                              title="Eliminar usuario"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -144,11 +144,11 @@ export const UsersTable: React.FC<Props> = ({
                           currentUser?.id !== user.id && (
                             <button
                               onClick={() => onToggle(user)}
-                              className={`${
-                                user.isActive
-                                  ? "text-red-600 hover:text-red-900"
-                                  : "text-green-600 hover:text-green-900"
-                              }`}
+                              title={user.isActive ? "Desactivar usuario" : "Activar usuario"}
+                              className={`${user.isActive
+                                ? "text-red-600 hover:text-red-900"
+                                : "text-green-600 hover:text-green-900"
+                                }`}
                             >
                               {user.isActive ? (
                                 <UserX className="w-4 h-4" />
@@ -161,6 +161,8 @@ export const UsersTable: React.FC<Props> = ({
                         <button
                           onClick={() => onEdit(user)}
                           className="text-blue-600 hover:text-blue-900"
+                          title="Editar usuario"
+
                         >
                           <Edit className="w-4 h-4" />
                         </button>

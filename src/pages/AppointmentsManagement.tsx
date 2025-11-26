@@ -165,19 +165,19 @@ const AppointmentsManagement: React.FC = () => {
   };
 
   const getStatusBadgeColor = (status: AppointmentStatus) => {
-      switch (status) {
-        case AppointmentStatus.ACTIVO:
-          return 'bg-purple-100 text-purple-800 border border-purple-200';
-        case AppointmentStatus.CADUCADO:
-          return 'bg-blue-100 text-blue-800 border border-blue-200';
-        case AppointmentStatus.COMPLETADO:
-          return 'bg-green-100 text-green-800 border border-green-200';
-        case AppointmentStatus.CANCELADO:
-          return 'bg-red-100 text-red-800 border border-red-200';
-        default:
-          return 'bg-purple-100 text-purple-800 border border-purple-200';
-      }
-    };
+    switch (status) {
+      case AppointmentStatus.ACTIVO:
+        return 'text-sm bg-purple-100 text-purple-800 border border-purple-200';
+      case AppointmentStatus.CADUCADO:
+        return 'text-sm bg-blue-100 text-blue-800 border border-blue-200';
+      case AppointmentStatus.COMPLETADO:
+        return 'text-sm bg-green-100 text-green-800 border border-green-200';
+      case AppointmentStatus.CANCELADO:
+        return 'text-sm bg-red-100 text-red-800 border border-red-200';
+      default:
+        return 'text-sm bg-purple-100 text-purple-800 border border-purple-200';
+    }
+  };
 
   // --- NUEVA FUNCION: Manejar Checkboxes de Servicios --- (Ahora un turno, puede tener varios servicios)
   const handleServiceToggle = (serviceId: number) => {
@@ -217,8 +217,7 @@ const AppointmentsManagement: React.FC = () => {
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea enviar un mensaje a "${
-        apt.client.name ?? "cliente"
+      `¿Está seguro que desea enviar un mensaje a "${apt.client.name ?? "cliente"
       }", con turno el ${formatDateTime(apt.startTime)}?`
     );
     if (!confirmed) {
@@ -283,8 +282,7 @@ const AppointmentsManagement: React.FC = () => {
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -398,8 +396,7 @@ const AppointmentsManagement: React.FC = () => {
 
   const handleDeleteAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -603,9 +600,8 @@ const AppointmentsManagement: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div
-                      className={`px-3 py-1 text-sm font-medium w-fit rounded-full ${
-                        getStatusBadgeColor(apt.status as AppointmentStatus)
-                      }`}
+                      className={`px-3 py-1 font-medium w-fit rounded-full ${getStatusBadgeColor(apt.status as AppointmentStatus)
+                        }`}
                     >
                       {apt.status.charAt(0).toUpperCase() + apt.status.slice(1)}
                     </div>
@@ -647,11 +643,10 @@ const AppointmentsManagement: React.FC = () => {
                       {!isStylist && (
                         <button
                           onClick={handleCancelAppointment(apt)}
-                          className={`${
-                            apt.status !== AppointmentStatus.CANCELADO
-                              ? "text-red-600 hover:text-red-900"
-                              : "text-green-600 hover:text-green-900"
-                          }`}
+                          className={`${apt.status !== AppointmentStatus.CANCELADO
+                            ? "text-red-600 hover:text-red-900"
+                            : "text-green-600 hover:text-green-900"
+                            }`}
                           title="Cancelar Turno"
                         >
                           {apt.status !== AppointmentStatus.CANCELADO ? (
@@ -745,7 +740,7 @@ const AppointmentsManagement: React.FC = () => {
                             <CalendarInput
                               initialValue={formData.startTime}
                               minDate={new Date().toISOString().slice(0, 10)}
-                              onChange={() => {}}
+                              onChange={() => { }}
                               onApply={(iso) => {
                                 setFormData((prev) => ({
                                   ...prev,
@@ -788,9 +783,8 @@ const AppointmentsManagement: React.FC = () => {
                         <>
                           <div className="flex gap-2 items-end">
                             <div
-                              className={`flex-grow ${
-                                editingAppointment ? "text-gray-500" : ""
-                              }`}
+                              className={`flex-grow ${editingAppointment ? "text-gray-500" : ""
+                                }`}
                             >
                               <ClientAutocomplete
                                 disabled={editingAppointment ? true : false}
@@ -817,11 +811,10 @@ const AppointmentsManagement: React.FC = () => {
                               disabled={editingAppointment ? true : false}
                               type="button"
                               onClick={() => setIsClientModalOpen(true)}
-                              className={`px-3 py-2.5 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm flex-shrink-0 mb-px ${
-                                editingAppointment
-                                  ? "cursor-not-allowed bg-green-700"
-                                  : ""
-                              }`}
+                              className={`px-3 py-2.5 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm flex-shrink-0 mb-px ${editingAppointment
+                                ? "cursor-not-allowed bg-green-700"
+                                : ""
+                                }`}
                               title="Crear nuevo cliente"
                             >
                               <UserPlus className="w-5 h-5" />
@@ -899,11 +892,10 @@ const AppointmentsManagement: React.FC = () => {
                               <div className="ml-3 text-sm w-full">
                                 <label
                                   htmlFor={`service-${service.id}`}
-                                  className={`font-medium block cursor-pointer ${
-                                    isStylist || !service.isActive
-                                      ? "text-gray-500"
-                                      : "text-gray-700"
-                                  }`}
+                                  className={`font-medium block cursor-pointer ${isStylist || !service.isActive
+                                    ? "text-gray-500"
+                                    : "text-gray-700"
+                                    }`}
                                 >
                                   {service.name}{" "}
                                   {!service.isActive && inActiveText}
@@ -1019,8 +1011,8 @@ const AppointmentsManagement: React.FC = () => {
                       {isSubmitting
                         ? "Guardando..."
                         : editingAppointment
-                        ? "Actualizar"
-                        : "Crear"}
+                          ? "Actualizar"
+                          : "Crear"}
                     </button>
                     <button
                       onClick={() => {
