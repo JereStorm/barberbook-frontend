@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Client, CreateClientRequest, UpdateClientRequest } from "../../types";
-import { apiService } from "../../services/api";
+import { apiService } from "../../apisServices/api";
 import { normalizeMobileVerySimple } from "../Utils";
 import AlertService from "../../helpers/sweetAlert/AlertService";
 import {
@@ -9,7 +9,7 @@ import {
   deleteClient,
   getClients,
   updateClient,
-} from "../../services/api-clients";
+} from "../../apisServices/api-clients";
 
 export function useClients(currentUser: any) {
   const [clients, setClients] = useState<Client[]>([]);

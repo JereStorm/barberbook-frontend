@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Building2, UserCheck, UserX, Phone, Calendar } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { apiService } from '../services/api';
+import { apiService } from '../apisServices/api';
 import { User, Salon, UserRole } from '../types';
 import toast from 'react-hot-toast';
 import SummaryCard from '../components/UI/SummaryCard';

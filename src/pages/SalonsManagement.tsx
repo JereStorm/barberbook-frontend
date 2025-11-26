@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Building2, Users, Eye, EyeOff, Search, MapPin, Phone } from 'lucide-react';
-import { apiService } from '../services/api';
+import { apiService } from '../apisServices/api';
 import { CreateSalonRequest, Salon, UpdateSalonRequest } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';

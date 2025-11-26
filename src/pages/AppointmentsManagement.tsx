@@ -28,17 +28,17 @@ import {
   deleteAppointment,
   editAppointment,
   getAppointments,
-} from "../services/api-appointments";
-import { apiService } from "../services/api";
+} from "../apisServices/api-appointments";
+import { apiService } from "../apisServices/api";
 import AlertService from "../helpers/sweetAlert/AlertService";
-import { getClients } from "../services/api-clients";
+import { getClients } from "../apisServices/api-clients";
 import ClientAutocomplete from "../components/Autocomplete/ClientAutocomplete";
 import { CalendarInput } from "../components/Calendar/CalendarInput";
-import { getServices } from "../services/api-services";
+import { getServices } from "../apisServices/api-services";
 
 //Los agregue para el formulario de creacion de cliente
 import { normalizeMobileVerySimple } from "../components/Utils";
-import { createClient } from "../services/api-clients";
+import { createClient } from "../apisServices/api-clients";
 import { useClients } from "../components/Clients/UseClients";
 
 const AppointmentsManagement: React.FC = () => {

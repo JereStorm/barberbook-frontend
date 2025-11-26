@@ -6,7 +6,7 @@ import {
   User,
   UserRole,
 } from "../../types";
-import { apiService } from "../../services/api";
+import { apiService } from "../../apisServices/api";
 import { normalizeMobileVerySimple } from "../Utils";
 import AlertService from "../../helpers/sweetAlert/AlertService";
 
@@ -34,7 +34,7 @@ export function useUsers(currentUser: any) {
     }
   };
 
-  const createNewClient = async (formData: CreateUserRequest) => {
+  const createNewUser = async (formData: CreateUserRequest) => {
     setIsSubmitting(true);
     try {
       const normalizedMobile = normalizeMobileVerySimple(formData.mobile || "");
@@ -52,9 +52,11 @@ export function useUsers(currentUser: any) {
 
       toast.success("Usuario creado correctamente");
       await loadUsers();
+      return true;
     } catch (error) {
       const apiError = apiService.handleError(error);
       toast.error(apiError.message);
+      return false;
     } finally {
       setIsSubmitting(false);
     }
@@ -80,9 +82,11 @@ export function useUsers(currentUser: any) {
       await apiService.updateUser(id, updateData);
       toast.success("Usuario actualizado correctamente");
       loadUsers();
+      return true;
     } catch (error) {
       const apiError = apiService.handleError(error);
       toast.error(apiError.message);
+      return false;
     } finally {
       setIsSubmitting(false);
     }
@@ -148,7 +152,8 @@ export function useUsers(currentUser: any) {
     users,
     isLoading,
     isSubmitting,
-    createNewClient,
+    loadUsers,
+    createNewUser,
     editUser,
     removeUser,
     canEditUser,
