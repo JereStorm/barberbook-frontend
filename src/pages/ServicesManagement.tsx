@@ -73,11 +73,11 @@ const ServicesManagement: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  // Filtrar clientes
+  // Filtrar services
   const filteredServices = services.filter((service) => {
     const matchesSearch =
       service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.price.toLowerCase().includes(searchTerm.toLowerCase());
+      service.price.toString().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
 

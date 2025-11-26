@@ -67,7 +67,8 @@ const ClientsManagement: React.FC = () => {
   const filteredClients = clients.filter((client) => {
     const matchesSearch =
       client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      client.email!.toLowerCase().includes(searchTerm.toLowerCase());
+      client.email!.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.mobile!.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
 
