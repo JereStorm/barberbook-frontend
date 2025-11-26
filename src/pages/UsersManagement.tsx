@@ -85,7 +85,7 @@ const UsersManagement: React.FC = () => {
     }
   };
 
-  const emailsFromUsers = users.map( e => e.email);
+  const emailsFromUsers = users.map((e) => e.email);
 
   const resetForm = () => {
     setFormData({
@@ -156,18 +156,21 @@ const UsersManagement: React.FC = () => {
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">Todos los roles</option>
-              {Object.values(UserRole).map((role) => (
-                <option key={role} value={role}>
-                  {getRoleDisplayName(role)}
-                </option>
-              ))}
+
+              {Object.values(UserRole)
+                .filter((r) => r != UserRole.SUPER_ADMIN)
+                .map((role) => (
+                  <option key={role} value={role}>
+                    {getRoleDisplayName(role)}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
       </div>
 
       <UsersTable
-        users={users}
+        users={filteredUsers}
         onEdit={openEditModal}
         onDelete={removeUser}
         onToggle={toggleUserStatus}
