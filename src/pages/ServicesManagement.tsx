@@ -73,9 +73,13 @@ const ServicesManagement: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const filteredServices = services.filter((s) =>
-    s.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filtrar clientes
+  const filteredServices = services.filter((service) => {
+    const matchesSearch =
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.price.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
+  });
 
   if (isLoading) {
     return (
@@ -114,7 +118,7 @@ const ServicesManagement: React.FC = () => {
       </div>
 
       <ServicesTable
-        services={services}
+        services={filteredServices}
         onEdit={openEditModal}
         onDelete={removeService}
         onToggleStatus={toggleServiceStatus}

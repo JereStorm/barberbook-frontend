@@ -63,6 +63,14 @@ const ClientsManagement: React.FC = () => {
     }
   };
 
+  // Filtrar clientes
+  const filteredClients = clients.filter((client) => {
+    const matchesSearch =
+      client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.email!.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center bg-white rounded-lg shadow p-6 py-8">
@@ -99,7 +107,7 @@ const ClientsManagement: React.FC = () => {
       ) : (
         <div className="overflow-x-auto bg-white rounded-xl shadow border">
           <ClientsTable
-            clients={clients}
+            clients={filteredClients}
             onEdit={openEditModal}
             onDelete={removeClient}
           />
