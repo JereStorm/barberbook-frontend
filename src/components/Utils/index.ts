@@ -64,3 +64,11 @@ export function normalize(value: any): string {
     .trim();
 }
 
+export function formatDateTime(dt?: string) {
+  if (!dt) return "-";
+  try {
+    return new Date(dt).toLocaleString();
+  } catch {
+    return dt;
+  }
+}
