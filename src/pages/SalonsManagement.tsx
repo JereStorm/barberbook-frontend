@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import { SalonsCard } from "../components/Salons/SalonsCard";
 import { useSalons } from "../components/Salons/UseSalons";
 import SalonModal from "../components/Salons/SalonModal";
+import { useSearchFilter } from "../hooks/useSearchFilters";
 
 const SalonsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -85,12 +86,11 @@ const SalonsManagement: React.FC = () => {
     }
   };
 
-  // Filtrar salones
-  const filteredSalons = salons.filter(
-    (salon) =>
-      salon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      salon.address?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  //NUEVA IMPLEMENTACION CON CUSTOM HOOK + USEMEMO
+  const filteredSalons = useSearchFilter(salons, searchTerm, [
+    s => s.name,
+    s => s.address,
+  ]);
 
   return (
     <div className="space-y-6">

@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useServices } from "../components/Services/UseServices";
 import { ServicesTable } from "../components/Services/ServicesTable";
 import { ServiceModal } from "../components/Services/ServiceModal";
+import { useSearchFilter } from "../hooks/useSearchFilters";
 
 const ServicesManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -73,13 +74,12 @@ const ServicesManagement: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  // Filtrar services
-  const filteredServices = services.filter((service) => {
-    const matchesSearch =
-      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.price.toString().includes(searchTerm.toLowerCase());
-    return matchesSearch;
-  });
+  //NUEVA IMPLEMENTACION CON CUSTOM HOOK + USEMEMO
+  const filteredServices = useSearchFilter(services, searchTerm, [
+    s => s.name,
+    s => s.price,
+    s => s.durationMin,
+  ]);
 
   if (isLoading) {
     return (

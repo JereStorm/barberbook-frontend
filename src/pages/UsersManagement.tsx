@@ -8,6 +8,7 @@ import { getRoleDisplayName } from "../components/Utils";
 import { UsersTable } from "../components/Users/UsersTable";
 import { useUsers } from "../components/Users/UseUsers";
 import { UserModal } from "../components/Users/UserModal";
+import { useSearchFilter } from "../hooks/useSearchFilters";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -99,14 +100,11 @@ const UsersManagement: React.FC = () => {
     setShowPassword(false);
   };
 
-  // Filtrar usuarios
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === "all" || user.role === roleFilter;
-    return matchesSearch && matchesRole;
-  });
+  //NUEVA IMPLEMENTACION CON CUSTOM HOOK + USEMEMO
+  const filteredUsers = useSearchFilter(users, searchTerm, [
+    s => s.name,
+    s => s.email,
+  ]);
 
   if (isLoading) {
     return (
@@ -179,7 +177,7 @@ const UsersManagement: React.FC = () => {
 
       {/* Modal */}
       {isModalOpen && (
-        <UserModal 
+        <UserModal
           isOpen={isModalOpen}
           formData={formData}
           isSubmitting={isSubmitting}
