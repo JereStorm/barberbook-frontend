@@ -236,8 +236,9 @@ export const UserModal: React.FC<Props> = ({
                   </div>
                 </div>
 
-                {currentUser?.role === UserRole.SUPER_ADMIN &&
-                formData.role === UserRole.SUPER_ADMIN ? (
+                {(currentUser?.role === UserRole.SUPER_ADMIN &&
+                  formData.role === UserRole.SUPER_ADMIN) || (currentUser?.role === UserRole.ADMIN &&
+                    formData.role === UserRole.ADMIN) ? (
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Rol
@@ -246,7 +247,7 @@ export const UserModal: React.FC<Props> = ({
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       disabled
                     >
-                      <option value="">Super Administrador</option>
+                      <option value="">{getRoleDisplayName(currentUser.role)}</option>
                     </select>
                   </div>
                 ) : (
@@ -289,8 +290,8 @@ export const UserModal: React.FC<Props> = ({
                   isSubmitting
                     ? "Guardando..."
                     : editingUser
-                    ? "Actualizar"
-                    : "Crear"
+                      ? "Actualizar"
+                      : "Crear"
                 }
               />
 
