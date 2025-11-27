@@ -100,7 +100,10 @@ export function useServices(currentUser: any) {
     const confirmed = await AlertService.confirm(
       `¿Está seguro que desea eliminar el servicio "${service.name}"?`
     );
-    if (!confirmed) return;
+    if (!confirmed) {
+      toast.success("Eliminación cancelada");
+      return;
+    }
 
     try {
       await deleteService(service.id);

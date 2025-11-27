@@ -96,7 +96,10 @@ export function useUsers(currentUser: any) {
     const confirmed = await AlertService.confirm(
       `¿Eliminar al cliente "${user.name}"?`
     );
-    if (!confirmed) return;
+    if (!confirmed) {
+      toast.success("Eliminación cancelada");
+      return;
+    }
 
     try {
       await apiService.deleteUser(user.id);

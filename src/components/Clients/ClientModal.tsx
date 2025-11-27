@@ -28,7 +28,6 @@ const ClientModal: React.FC<Props> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const mobile = normalizeMobileVerySimple(formData.mobile!);
-    console.log(mobile)
     
     if (formData.mobile && mobile) {
       formData.mobile = mobile;
