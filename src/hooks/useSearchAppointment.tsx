@@ -11,13 +11,13 @@ export function useAppointmentSearch(
 
     return useSearchFilter(
         appointments,
-        searchTerm,
+        normalizedTerm,
         [
             (a) => a.client.name,
             (a) => a.client.email,
             (a) => a.employee?.name ?? "",
 
-            // 🔥 Campo adicional: nombres de servicios concatenados
+            // campo adicional: nombres de servicios concatenados
             (a) => a.services?.map((s) => s.name).join(" ") ?? "",
         ],
         extraFilters

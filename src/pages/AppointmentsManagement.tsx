@@ -16,8 +16,8 @@ import {
 } from "../types";
 import toast from "react-hot-toast";
 import { apiService } from "../apisServices/api";
-import ClientAutocomplete from "../components/Autocomplete/ClientAutocomplete";
-import { CalendarInput } from "../components/Calendar/CalendarInput";
+import ClientAutocomplete from "../components/UI/ClientAutocomplete";
+import { CalendarInput } from "../components/UI/CalendarInput";
 
 //Los agregue para el formulario de creacion de cliente
 import { formatDateTime, normalize, normalizeMobileVerySimple } from "../components/Utils";

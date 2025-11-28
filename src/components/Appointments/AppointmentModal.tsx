@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Appointment, AppointmentStatus, Client, CreateAppointmentRequest, Service, UpdateAppointmentRequest, User } from "../../types";
 import { formatDateTime } from "../Utils";
 import { Timer, UserPlus } from "lucide-react";
-import CalendarInput from "../Calendar/CalendarInput";
-import ClientAutocomplete from "../Autocomplete/ClientAutocomplete";
+import CalendarInput from "../UI/CalendarInput";
+import ClientAutocomplete from "../UI/ClientAutocomplete";
 import { FormActionButton } from "../UI/FormActionButton";
 import toast from "react-hot-toast";
 
@@ -61,6 +61,7 @@ export const AppointmentModal: React.FC<Props> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         //TODO: AQUI REALIZAR VALIDACIONES
+
         if (validateFields()) {
             onSubmit(e);
         }
