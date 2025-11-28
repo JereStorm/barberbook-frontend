@@ -2,34 +2,38 @@ import { useMemo } from "react";
 import { normalize } from "../components/Utils";
 
 type FieldSelector<T> = (item: T) => any;
+type ExtraFilter<T> = (item: T) => boolean;
 
 /**
- * @param data Arreglo original de datos a filtrar.
- * @param searchTerm Cadena de búsqueda ingresada por el usuario.
- * @param fields Lista de selectores que indican qué campos se usarán para filtrar.
- *               Cada selector recibe un ítem de tipo T y devuelve el valor a comparar.
- *
- * @returns Un arreglo con los datos filtrados según el término de búsqueda.
+ * Hook reutilizable para filtrar datos usando:
+ * - término de búsqueda (texto)
+ * - múltiples campos (selectores)
+ * - filtros adicionales opcionales (como roles, estados, etc.)
  */
 export function useSearchFilter<T>(
     data: T[],
     searchTerm: string,
-    fields: FieldSelector<T>[]
+    fields: FieldSelector<T>[],
+    extraFilters: ExtraFilter<T>[] = []      // <-- nuevo
 ) {
-    // Normalizamos el término de búsqueda
     const term = normalize(searchTerm);
 
     const filteredData = useMemo(() => {
-        // Si no hay búsqueda, devolver la lista completa
-        if (!term) return data;
+        return data.filter(item => {
 
-        // Filtrar usando los selectores provistos
-        return data.filter((item) =>
-            fields.some((selector) =>
+            // 1) Validar filtros extra (como roles)
+            const passesExtraFilters = extraFilters.every(filterFn => filterFn(item));
+            if (!passesExtraFilters) return false;
+
+            // 2) Si no hay search → devolver igual (pero ya pasó extraFilters)
+            if (!term) return true;
+
+            // 3) Validar coincidencias por texto
+            return fields.some(selector =>
                 normalize(selector(item)).includes(term)
-            )
-        );
-    }, [data, term, fields]);
+            );
+        });
+    }, [data, term, fields, extraFilters]);
 
     return filteredData;
 }

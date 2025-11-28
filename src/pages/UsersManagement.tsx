@@ -26,7 +26,7 @@ const UsersManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
+  const [roleFilter, setRoleFilter] = useState<UserRole | "all">(currentUser?.role === UserRole.SUPER_ADMIN ? UserRole.ADMIN : "all");
 
   const [formData, setFormData] = useState<CreateUserRequest>({
     name: "",
@@ -101,10 +101,20 @@ const UsersManagement: React.FC = () => {
   };
 
   //NUEVA IMPLEMENTACION CON CUSTOM HOOK + USEMEMO
-  const filteredUsers = useSearchFilter(users, searchTerm, [
-    s => s.name,
-    s => s.email,
-  ]);
+  const filteredUsers = useSearchFilter(
+    users,
+    searchTerm,
+    [
+      (u) => !currentUser?.salonId ? u.salon?.name : "",
+      (u) => u.name,
+      (u) => u.email,
+      (u) => u.mobile,
+    ],
+    [
+      // extraFilters
+      (u) => roleFilter === "all" || u.role === roleFilter,
+    ]
+  );
 
   if (isLoading) {
     return (
