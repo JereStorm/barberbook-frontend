@@ -22,6 +22,12 @@ export function useUsers(currentUser: any) {
       return;
     }
 
+    //Si es estilista no cargamos los usuarios!
+    if (currentUser.role === UserRole.ESTILISTA) {
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const usersData = await apiService.getUsers();

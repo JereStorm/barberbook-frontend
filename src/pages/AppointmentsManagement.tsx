@@ -12,6 +12,7 @@ import {
   AppointmentStatus,
   Client,
   CreateAppointmentRequest,
+  UserRole,
 } from "../types";
 import toast from "react-hot-toast";
 import { apiService } from "../apisServices/api";
@@ -44,6 +45,7 @@ const AppointmentsManagement: React.FC = () => {
     handleSendReceipt,
   } = useAppointments(currentUser);
   const { services } = useServices(currentUser);
+
   const { users } = useUsers(currentUser);
   const { clients } = useClients(currentUser);
   const { loadClients } = useClients(currentUser);

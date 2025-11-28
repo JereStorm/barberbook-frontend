@@ -42,6 +42,7 @@ export const ServiceModal: React.FC<Props> = ({
     if (formData.durationMin && formData.durationMin < durationMin) {
       toast.error(`La duracion del turno debe ser al menos de ${durationMin}`);
       isValid = false;
+      formData.durationMin = durationMin;
     }
 
     return isValid;
@@ -97,19 +98,19 @@ export const ServiceModal: React.FC<Props> = ({
                     Duración (min)
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     placeholder={durationMin.toString()}
                     value={formData.durationMin ?? ""}
                     onChange={(e) => {
-                      formData.durationMin <= durationMin
-                        ? setFormData({
-                            ...formData,
-                            durationMin: durationMin,
-                          })
-                        : setFormData({
-                            ...formData,
-                            durationMin: Number(e.target.value),
-                          });
+                      Number.isNaN(Number(e.target.value)) ?
+                        setFormData({
+                          ...formData,
+                          durationMin: durationMin
+                        }) :
+                        setFormData({
+                          ...formData,
+                          durationMin: Number(e.target.value),
+                        });
                     }}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -126,8 +127,8 @@ export const ServiceModal: React.FC<Props> = ({
                   isSubmitting
                     ? "Guardando..."
                     : editingService
-                    ? "Actualizar"
-                    : "Crear"
+                      ? "Actualizar"
+                      : "Crear"
                 }
               />
 
