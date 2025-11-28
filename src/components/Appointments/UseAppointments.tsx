@@ -40,30 +40,6 @@ export function useAppointments(currentUser: any) {
     };
 
     const createNewAppointment = async (formData: CreateAppointmentRequest): Promise<boolean> => {
-        // if (!currentUser) {
-        //     toast.error("Usuario no autenticado");
-        //     return false;
-        // }
-
-        // if (!formData.salonId) {
-        //     toast.error("El salón es obligatorio");
-        //     return false;
-        // }
-
-        // if (!formData.startTime) {
-        //     toast.error("Debe confirmar la fecha");
-        //     return false;
-        // }
-
-        // if (!formData.clientId) {
-        //     toast.error("Debe seleccionar un cliente");
-        //     return false;
-        // }
-
-        // if (formData.serviceIds.length === 0) {
-        //     toast.error("Debe seleccionar al menos un servicio");
-        //     return false;
-        // }
 
         setIsSubmitting(true);
         try {

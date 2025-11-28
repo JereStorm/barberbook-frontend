@@ -5,6 +5,7 @@ import { Timer, UserPlus } from "lucide-react";
 import CalendarInput from "../Calendar/CalendarInput";
 import ClientAutocomplete from "../Autocomplete/ClientAutocomplete";
 import { FormActionButton } from "../UI/FormActionButton";
+import toast from "react-hot-toast";
 
 type Props = {
     isOpen: boolean;
@@ -60,8 +61,39 @@ export const AppointmentModal: React.FC<Props> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         //TODO: AQUI REALIZAR VALIDACIONES
-        onSubmit(e);
+        if (validateFields()) {
+            onSubmit(e);
+        }
     };
+
+    const validateFields = (): boolean => {
+        if (!currentUser) {
+            toast.error("Usuario no autenticado");
+            return false;
+        }
+
+        if (!formData.salonId) {
+            toast.error("El salón es obligatorio");
+            return false;
+        }
+
+        if (!formData.startTime) {
+            toast.error("Debe confirmar la fecha");
+            return false;
+        }
+
+        if (!formData.clientId) {
+            toast.error("Debe seleccionar un cliente");
+            return false;
+        }
+
+        if (formData.serviceIds.length === 0) {
+            toast.error("Debe seleccionar al menos un servicio");
+            return false;
+        }
+
+        return true;
+    }
 
     // --- CALCULO DE TOTALES EN VIVO (Para mostrar en el modal) ---
     const selectedServicesObjects = services.filter((s) =>

@@ -143,20 +143,6 @@ const AppointmentsManagement: React.FC = () => {
     });
   };
 
-  // //A REFACTORIZAR CON LA NUEVA IMPLEMENTACION DEL SEARCHFILTER (HOOKS)
-  // const filteredAppointments = appointments.filter((a) => {
-  //   const term = searchTerm.toLowerCase();
-  //   // Logica de busqueda por servicio
-  //   const hasServiceMatch = a.services?.some((s) =>
-  //     s.name.toLowerCase().includes(term)
-  //   );
-  //   return (
-  //     hasServiceMatch ||
-  //     (a.startTime ?? "").toLowerCase().includes(term) ||
-  //     (a.client?.name ?? "").toLowerCase().includes(term)
-  //   );
-  // });
-
   const filteredAppointments = useAppointmentSearch(
     appointments,
     searchTerm,
