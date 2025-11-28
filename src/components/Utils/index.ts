@@ -21,7 +21,7 @@ export const normalizeMobileVerySimple = (
 
   const digitsOnly = cleaned.replace(/\D/g, "");
   console.log(digitsOnly);
-  if (digitsOnly.length < 10 || digitsOnly.length > 15) return undefined;
+  if (digitsOnly.length < 12 || digitsOnly.length > 15) return undefined;
 
   return cleaned;
 };
