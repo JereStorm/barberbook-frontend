@@ -112,8 +112,7 @@ export function useAppointments(currentUser: any) {
 
   const removeAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -160,8 +159,7 @@ export function useAppointments(currentUser: any) {
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -190,8 +188,7 @@ export function useAppointments(currentUser: any) {
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea enviar un mensaje a "${
-        apt.client.name ?? "cliente"
+      `¿Está seguro que desea enviar un mensaje a "${apt.client.name ?? "cliente"
       }", con turno el ${formatDateTime(apt.startTime)}?`
     );
     if (!confirmed) {
