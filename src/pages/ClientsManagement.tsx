@@ -6,6 +6,7 @@ import { useClients } from "../components/Clients/UseClients";
 import ClientModal from "../components/Clients/ClientModal";
 import { ClientsTable } from "../components/Clients/ClientsTable";
 import { useAuth } from "../hooks/useAuth";
+import { useSearchFilter } from "../hooks/useSearchFilters";
 
 const ClientsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -63,6 +64,13 @@ const ClientsManagement: React.FC = () => {
     }
   };
 
+  //NUEVA IMPLEMENTACION CON CUSTOM HOOK + USEMEMO
+  const filteredClients = useSearchFilter(clients, searchTerm, [
+    s => s.name,
+    s => s.email,
+    s => s.mobile,
+  ]);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center bg-white rounded-lg shadow p-6 py-8">
@@ -77,29 +85,32 @@ const ClientsManagement: React.FC = () => {
           Crear Cliente
         </button>
       </div>
-
-      <div className="bg-white rounded-lg shadow p-4">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <input
-            type="text"
-            placeholder="Buscar clientes..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-      </div>
+      {
+        !isLoading && (
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Buscar clientes..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+          </div>
+        )
+      }
 
       {/* Tabla o estado de carga */}
       {isLoading ? (
-        <div className="text-center py-10 text-gray-500">
-          Cargando clientes...
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       ) : (
         <div className="overflow-x-auto bg-white rounded-xl shadow border">
           <ClientsTable
-            clients={clients}
+            clients={filteredClients}
             onEdit={openEditModal}
             onDelete={removeClient}
           />

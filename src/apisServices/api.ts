@@ -106,6 +106,14 @@ class ApiService {
     await this.api.delete(`/salons/${id}`);
   }
 
+  async disableSalon(id: number): Promise<void> {
+    await this.api.patch(`/salons/${id}/disable-users`);
+  }
+
+  async enableSalon(id: number): Promise<void> {
+    await this.api.patch(`/salons/${id}/enable-users`);
+  }
+
   // === MANEJO DE ERRORES ESTANDARIZADO ===
   handleError(error: any): ApiError {
     if (error.response?.data) {

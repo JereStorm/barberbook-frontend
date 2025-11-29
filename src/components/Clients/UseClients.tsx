@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Client, CreateClientRequest, UpdateClientRequest } from "../../types";
-import { apiService } from "../../services/api";
+import { apiService } from "../../apisServices/api";
 import { normalizeMobileVerySimple } from "../Utils";
 import AlertService from "../../helpers/sweetAlert/AlertService";
 import {
@@ -9,7 +9,7 @@ import {
   deleteClient,
   getClients,
   updateClient,
-} from "../../services/api-clients";
+} from "../../apisServices/api-clients";
 
 export function useClients(currentUser: any) {
   const [clients, setClients] = useState<Client[]>([]);
@@ -35,7 +35,9 @@ export function useClients(currentUser: any) {
     }
   };
 
-  const createNewClient = async (formData: CreateClientRequest): Promise<boolean> => {
+  const createNewClient = async (
+    formData: CreateClientRequest
+  ): Promise<boolean> => {
     setIsSubmitting(true);
     try {
       await createClient({ ...formData });
@@ -51,7 +53,10 @@ export function useClients(currentUser: any) {
     }
   };
 
-  const editClient = async (id: number, formData: UpdateClientRequest): Promise<boolean> => {
+  const editClient = async (
+    id: number,
+    formData: UpdateClientRequest
+  ): Promise<boolean> => {
     setIsSubmitting(true);
     try {
       const mobile = normalizeMobileVerySimple(formData.mobile || "");
@@ -73,12 +78,14 @@ export function useClients(currentUser: any) {
     }
   };
 
-
   const removeClient = async (client: Client) => {
     const confirmed = await AlertService.confirm(
       `¿Eliminar al cliente "${client.name}"?`
     );
-    if (!confirmed) return;
+    if (!confirmed) {
+      toast.success("Eliminación cancelada");
+      return;
+    }
 
     try {
       await deleteClient(client.id);

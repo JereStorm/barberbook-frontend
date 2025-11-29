@@ -5,14 +5,14 @@ import {
   CreateServiceRequest,
   UpdateServiceRequest,
 } from "../../types";
-import { apiService } from "../../services/api";
+import { apiService } from "../../apisServices/api";
 import AlertService from "../../helpers/sweetAlert/AlertService";
 import {
   createService,
   deleteService,
   getServices,
   updateService,
-} from "../../services/api-services";
+} from "../../apisServices/api-services";
 
 export function useServices(currentUser: any) {
   const [services, setServices] = useState<Service[]>([]);
@@ -100,7 +100,10 @@ export function useServices(currentUser: any) {
     const confirmed = await AlertService.confirm(
       `¿Está seguro que desea eliminar el servicio "${service.name}"?`
     );
-    if (!confirmed) return;
+    if (!confirmed) {
+      toast.success("Eliminación cancelada");
+      return;
+    }
 
     try {
       await deleteService(service.id);

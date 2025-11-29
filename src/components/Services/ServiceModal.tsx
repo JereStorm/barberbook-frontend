@@ -1,16 +1,16 @@
 import toast from "react-hot-toast";
-import { CreateServiceRequest, UpdateServiceRequest } from "../../types";
+import { CreateServiceRequest } from "../../types";
 import { FormActionButton } from "../UI/FormActionButton";
 
 type Props = {
   isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (e: React.FormEvent) => void;
   formData: CreateServiceRequest;
-  setFormData: (d: CreateServiceRequest) => void;
   isSubmitting: boolean;
   editingService: boolean;
   durationMin: number;
+  onClose: () => void;
+  onSubmit: (e: React.FormEvent) => void;
+  setFormData: (d: CreateServiceRequest) => void;
 };
 
 export const ServiceModal: React.FC<Props> = ({
@@ -28,8 +28,8 @@ export const ServiceModal: React.FC<Props> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateService()) {
-      onSubmit(e)
-    } 
+      onSubmit(e);
+    }
   };
 
   const validateService = (): boolean => {
@@ -42,6 +42,7 @@ export const ServiceModal: React.FC<Props> = ({
     if (formData.durationMin && formData.durationMin < durationMin) {
       toast.error(`La duracion del turno debe ser al menos de ${durationMin}`);
       isValid = false;
+      formData.durationMin = durationMin;
     }
 
     return isValid;
@@ -97,15 +98,20 @@ export const ServiceModal: React.FC<Props> = ({
                     Duración (min)
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     placeholder={durationMin.toString()}
                     value={formData.durationMin ?? ""}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        durationMin: Number(e.target.value),
-                      })
-                    }
+                    onChange={(e) => {
+                      Number.isNaN(Number(e.target.value)) ?
+                        setFormData({
+                          ...formData,
+                          durationMin: durationMin
+                        }) :
+                        setFormData({
+                          ...formData,
+                          durationMin: Number(e.target.value),
+                        });
+                    }}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -121,8 +127,8 @@ export const ServiceModal: React.FC<Props> = ({
                   isSubmitting
                     ? "Guardando..."
                     : editingService
-                    ? "Actualizar"
-                    : "Crear"
+                      ? "Actualizar"
+                      : "Crear"
                 }
               />
 

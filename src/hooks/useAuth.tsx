@@ -2,7 +2,7 @@
 
 
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { apiService } from '../services/api';
+import { apiService } from '../apisServices/api';
 import { AuthResponse, LoginRequest, UserRole } from '../types';
 import toast from 'react-hot-toast';
 
