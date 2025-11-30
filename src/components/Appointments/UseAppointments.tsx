@@ -13,6 +13,7 @@ import {
   deleteAppointment,
   editAppointment,
   getAppointments,
+  getAppointmentsToday,
 } from "../../apisServices/api-appointments";
 import { apiService } from "../../apisServices/api";
 import AlertService from "../../helpers/sweetAlert/AlertService";
@@ -50,6 +51,26 @@ export function useAppointments(currentUser: any) {
       setIsLoading(false);
     }
   };
+
+  const loadAppointmentsToday = async () => {
+    if (!currentUser) {
+      toast.error("Usuario no autenticado");
+      setIsLoading(false);
+      return [];
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await getAppointmentsToday();
+      return response;
+    } catch (error) {
+      const apiError = apiService.handleError(error);
+      toast.error(apiError.message || "Error cargando turnos");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   const createNewAppointment = async (
     formData: CreateAppointmentRequest
@@ -112,8 +133,7 @@ export function useAppointments(currentUser: any) {
 
   const removeAppointment = async (appointment: Appointment) => {
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea eliminar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea eliminar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -160,8 +180,7 @@ export function useAppointments(currentUser: any) {
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea cancelar el turno para "${
-        appointment.client.name ?? "sin nombre"
+      `¿Está seguro que desea cancelar el turno para "${appointment.client.name ?? "sin nombre"
       }" el ${formatDateTime(appointment.startTime)}?`
     );
     if (!confirmed) {
@@ -190,8 +209,7 @@ export function useAppointments(currentUser: any) {
     }
 
     const confirmed = await AlertService.confirm(
-      `¿Está seguro que desea enviar un mensaje a "${
-        apt.client.name ?? "cliente"
+      `¿Está seguro que desea enviar un mensaje a "${apt.client.name ?? "cliente"
       }", con turno el ${formatDateTime(apt.startTime)}?`
     );
     if (!confirmed) {
@@ -283,6 +301,7 @@ export function useAppointments(currentUser: any) {
     isLoading,
     isSubmitting,
     loadAppointments,
+    loadAppointmentsToday,
     createNewAppointment,
     updateAppointment,
     removeAppointment,

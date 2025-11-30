@@ -6,6 +6,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { Service } from "../../types";
+import { formatPrice } from "../Utils";
 
 type Props = {
   services: Service[];
@@ -20,11 +21,6 @@ export const ServicesTable: React.FC<Props> = ({
   onDelete,
   onToggleStatus,
 }) => {
-  const formatPrice = (p: number) =>
-    new Intl.NumberFormat("es-AR", {
-      style: "currency",
-      currency: "ARS",
-    }).format(p ?? 0);
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">

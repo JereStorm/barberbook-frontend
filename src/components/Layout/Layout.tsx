@@ -4,6 +4,7 @@ import { Users, Building2, LogOut, Home, Menu, X, Contact, SquareScissors, Calen
 import { useAuth } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
 import SidebarLink from '../UI/SidebarLink';
+import { getRoleBadgeColor } from '../Utils';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -85,20 +86,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const navigationItems = getNavigationItems();
 
-  const getRoleBadgeColor = (role: UserRole) => {
-    switch (role) {
-      case UserRole.SUPER_ADMIN:
-        return 'bg-purple-100 text-purple-800 border border-purple-200';
-      case UserRole.ADMIN:
-        return 'bg-blue-100 text-blue-800 border border-blue-200';
-      case UserRole.RECEPCIONISTA:
-        return 'bg-green-100 text-green-800 border border-green-200';
-      case UserRole.ESTILISTA:
-        return 'bg-amber-100 text-amber-800 border border-amber-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border border-gray-200';
-    }
-  };
 
   const getRoleDisplayName = (role: UserRole) => {
     switch (role) {
@@ -198,7 +185,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 flex-shrink-0 shadow-sm">
+        <div className="h-16 flex bg-white border-b border-gray-200 md:hidden items-center justify-end px-6 flex-shrink-0 shadow-sm">
           <div className="flex items-center space-x-4">
             <button
               className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
@@ -206,29 +193,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             >
               <Menu className="w-6 h-6" />
             </button>
-
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">
-                {navigationItems.find(item => item.href === location.pathname)?.name || 'Dashboard'}
-              </h1>
-              <p className="text-sm text-gray-500 hidden sm:block">
-                Gestiona tu negocio de manera eficiente
-              </p>
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center space-x-3">
-            <div className="text-right">
-              <p className="text-sm font-medium text-gray-900">
-                {user.name}
-              </p>
-              <p className="text-xs text-gray-500">
-                {getRoleDisplayName(user.role)}
-              </p>
-            </div>
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-              {user.name.charAt(0).toUpperCase()}
-            </div>
           </div>
         </div>
 

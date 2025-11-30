@@ -24,6 +24,7 @@ code {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -54,4 +55,74 @@ code {
 
 .swal2-actions {
   flex-direction: row-reverse;
+}
+
+/* FONDO PARA DIVS */
+.bg-principal {
+  background-color: #0E1F3D;
+}
+
+/* FONDOS PARA BUTTONS */
+.principal-button {
+  background-color: #0E1F3D;
+  transition: 0.3s all ease;
+}
+
+/* HOVER AL BUTTON*/
+.principal-button:hover {
+  background-color: #0E3780;
+
+}
+
+.fuente-principal {
+  color: #0E1F3D;
+}
+
+.fuente-clara {
+  color: #f5f5f5;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 16px;
+}
+
+/* --- Desktop layout (default) --- */
+.db-item-1 {
+  grid-column: span 3;
+  grid-row: span 3;
+}
+
+.db-item-2 {
+  grid-column: span 2;
+  grid-row: span 2;
+  grid-column-start: 4;
+}
+
+.db-item-3 {
+  grid-column: span 2;
+  grid-row: span 3;
+  grid-column-start: 4;
+  grid-row-start: 3;
+}
+
+.db-item-4 {
+  grid-column: span 3;
+  grid-row: span 2;
+  grid-row-start: 4;
+}
+
+/* --- Mobile layout (stacked) --- */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .dashboard-grid>div {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
 }

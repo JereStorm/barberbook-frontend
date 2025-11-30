@@ -11,6 +11,11 @@ async function getAppointments(): Promise<Appointment[]> {
     return response.data;
 }
 
+async function getAppointmentsToday(): Promise<Appointment[]> {
+    const response = await axiosInstance.get<Appointment[]>(`${BASE}/today?cant=3`);
+    return response.data;
+}
+
 async function deleteAppointment(appointmentId: number): Promise<void> {
     await axiosInstance.delete(`${BASE}/${appointmentId}`);
 }
@@ -31,6 +36,7 @@ async function editAppointment(appointmentId: number, appointmentData: UpdateApp
 
 export {
     getAppointments,
+    getAppointmentsToday,
     createAppointment,
     editAppointment,
     deleteAppointment,
