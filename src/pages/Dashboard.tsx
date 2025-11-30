@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { AppointmentsTable } from '../components/Appointments/AppointmentsTable';
 import { useAppointments } from '../components/Appointments/UseAppointments';
 import { TodaysAppointment } from '../components/Dashboard/TodaysAppointment';
+import ServicesShowTable from '../components/Dashboard/ServicesShowTable';
+import { useServices } from '../components/Services/UseServices';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -21,6 +23,7 @@ const Dashboard: React.FC = () => {
     mySalon: null as Salon | null,
   });
   const { appointments } = useAppointments(user);
+  const { services } = useServices(user);
   const [isLoading, setIsLoading] = useState(true);
   const [recentUsers, setRecentUsers] = useState<User[]>([]);
 
@@ -124,7 +127,7 @@ const Dashboard: React.FC = () => {
         </p>
       </div>
 
-      <div className="dashboard-grid">
+      <div className="dashboard-grid mx-3">
         {
           [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
             <div className="db-item-1">
@@ -150,11 +153,8 @@ const Dashboard: React.FC = () => {
 
 
         {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
-          <div className="db-item-3">
-
-            <SummaryCard title='Usuarios activos' total={stats.activeUsers}>
-              <UserCheck className="h-8 w-8 text-green-600" />
-            </SummaryCard>
+          <div className="db-item-4">
+            <ServicesShowTable services={services} />
           </div>
 
         )}

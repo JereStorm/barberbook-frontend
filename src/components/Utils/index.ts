@@ -76,3 +76,9 @@ export function formatDateTime(dt?: string) {
 export function formatHour(dt?: string) {
   return dt ? dt.slice(11, 16) : "-";
 }
+
+export const formatPrice = (p: number) =>
+  new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+  }).format(p ?? 0);

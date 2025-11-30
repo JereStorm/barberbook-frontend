@@ -41,7 +41,7 @@ export const TodaysAppointment: React.FC<TodaysAppointmentProps> = ({ appointmen
                                                 {apt.services.map((s) => (
                                                     <span
                                                         key={s.id}
-                                                        className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 w-fit"
+                                                        className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-principal fuente-clara w-fit"
                                                     >
                                                         {s.name}
                                                     </span>
