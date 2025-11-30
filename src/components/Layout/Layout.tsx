@@ -120,10 +120,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Sidebar header */}
-        <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+        <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r bg-principal text-white">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <img src="/peluqueria-blanco.png" alt="logoBB" />
             </div>
             <h1 className="text-lg font-bold">BarberBook</h1>
           </div>
@@ -137,7 +137,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         <div className="p-4 bg-gray-50 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-medium">
+            <div className="w-10 h-10 bg-gradient-to-br bg-principal rounded-full flex items-center justify-center text-white font-medium">
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
@@ -201,8 +201,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="h-full p-2">
             {children}
           </div>
+          <Footer />
         </main>
-        <Footer/>
       </div>
     </div>
   );
