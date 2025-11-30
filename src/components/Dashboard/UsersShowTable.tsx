@@ -14,10 +14,11 @@ export default function UsersShowTable({ users }: UsersShowTableProps) {
     return (
         <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
-                <div className="px-6 py-2 text-start bg-principal w-full fuente-clara">
-                    <h1 className="flex gap-2"><Users /> Usuarios</h1>
-                </div>
-                <table className="min-w-full divide-y divide-gray-200">
+
+                <table className="min-w-full bg-principal divide-y divide-gray-200">
+                    <div className="px-6 py-2 text-start bg-principal fuente-clara">
+                        <h1 className="flex gap-2"><Users /> Usuarios</h1>
+                    </div>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {users.map((user) => (
                             <tr key={user.id} className="hover:bg-gray-50">
