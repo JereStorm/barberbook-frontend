@@ -1,6 +1,6 @@
 import { Edit, Trash2, UserCheck, UserX } from "lucide-react";
 import { User, UserRole } from "../../types";
-import { getRoleDisplayName } from "../Utils";
+import { getRoleBadgeColor, getRoleDisplayName } from "../Utils";
 
 type Props = {
   users: User[];
@@ -46,20 +46,7 @@ export const UsersTable: React.FC<Props> = ({
     return user.salon ? user.salon.name : "Sin salón";
   };
 
-  const getRoleBadgeColor = (role: UserRole) => {
-    switch (role) {
-      case UserRole.SUPER_ADMIN:
-        return "bg-purple-100 text-purple-800";
-      case UserRole.ADMIN:
-        return "bg-blue-100 text-blue-800";
-      case UserRole.RECEPCIONISTA:
-        return "bg-green-100 text-green-800";
-      case UserRole.ESTILISTA:
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
+
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">

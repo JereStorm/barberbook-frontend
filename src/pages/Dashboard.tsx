@@ -13,6 +13,7 @@ import { useAppointments } from '../components/Appointments/UseAppointments';
 import { TodaysAppointment } from '../components/Dashboard/TodaysAppointment';
 import ServicesShowTable from '../components/Dashboard/ServicesShowTable';
 import { useServices } from '../components/Services/UseServices';
+import UsersShowTable from '../components/Dashboard/UsersShowTable';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -131,12 +132,13 @@ const Dashboard: React.FC = () => {
         {
           [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
             <div className="db-item-1">
+              {/* PRIMERO LOS TURNOS DEL DIA */}
               <TodaysAppointment appointments={appointments} />
             </div>
           )
         }
 
-
+        {/* SEGUNDO LA INFO DEL SALON (EDITABLE PARA LOS ADMIN ONLY) */}
         <div className="db-item-2">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
@@ -151,7 +153,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-
+        {/* TERCERO LA VISTA DE LOS SERVICIOS ACTIVOS */}
         {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
           <div className="db-item-4">
             <ServicesShowTable services={services} />
@@ -159,6 +161,14 @@ const Dashboard: React.FC = () => {
 
         )}
 
+        {/* CUARTO LA VISTA DE USUARIOS PARA TODOS MENOS LOS ESTILISTAS */}
+        {![UserRole.ESTILISTA].includes(user!.role) && (
+          <div className='db-item-3'>
+            <UsersShowTable users={recentUsers} />
+
+          </div>
+
+        )}
 
 
 
