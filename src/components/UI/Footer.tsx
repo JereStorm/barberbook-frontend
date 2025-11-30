@@ -1,8 +1,8 @@
-import { Mail } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#0F1F3A] text-gray-300 py-6 px-6">
+    <footer className="bg-principal fuente-clara pb-6 pt-2 mt-2 px-6">
       <div className="max-w-7xl mx-auto flex items-center justify-between border-t border-gray-600/30 pt-4">
         {/* Logo + Texto */}
         <div className="flex items-center space-x-3">
@@ -13,10 +13,15 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Íconos */}
-        <div className="flex items-center space-x-5 text-gray-200">
-          <Mail className="h-5 w-5 cursor-pointer hover:text-white transition" />
-          <img src="/fbIcon.png" className="h-5 w-5 cursor-pointer hover:text-white transition" />
-          <img src="/igIcon.png" className="h-5 w-5 cursor-pointer hover:text-white transition" />
+        <div className="flex text-sm items-center space-x-5 text-gray-200">
+          <span className="flex items-center gap-2">
+            <Mail className="h-5 w-5 cursor-pointer hover:text-white transition" />
+            devstudio@barberbook.com
+          </span>
+          <span className="flex items-center gap-2">
+            <Phone className="h-5 w-5 cursor-pointer hover:text-white transition" />
+            22844-556677
+          </span>
         </div>
       </div>
     </footer>

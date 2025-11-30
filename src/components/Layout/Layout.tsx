@@ -122,8 +122,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Sidebar header */}
         <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r bg-principal text-white">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-              <img src="/peluqueria.png" alt="logoBB" />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <img src="/peluqueria-blanco.png" alt="logoBB" />
             </div>
             <h1 className="text-lg font-bold">BarberBook</h1>
           </div>
@@ -201,8 +201,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="h-full p-2">
             {children}
           </div>
+          <Footer />
         </main>
-        <Footer/>
       </div>
     </div>
   );
