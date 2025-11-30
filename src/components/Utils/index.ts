@@ -72,3 +72,7 @@ export function formatDateTime(dt?: string) {
     return dt;
   }
 }
+
+export function formatHour(dt?: string) {
+  return dt ? dt.slice(11, 16) : "-";
+}

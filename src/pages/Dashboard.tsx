@@ -8,6 +8,9 @@ import toast from 'react-hot-toast';
 import SummaryCard from '../components/UI/SummaryCard';
 import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { AppointmentsTable } from '../components/Appointments/AppointmentsTable';
+import { useAppointments } from '../components/Appointments/UseAppointments';
+import { TodaysAppointment } from '../components/Dashboard/TodaysAppointment';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -17,6 +20,7 @@ const Dashboard: React.FC = () => {
     totalSalons: 0,
     mySalon: null as Salon | null,
   });
+  const { appointments } = useAppointments(user);
   const [isLoading, setIsLoading] = useState(true);
   const [recentUsers, setRecentUsers] = useState<User[]>([]);
 
@@ -111,31 +115,26 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <h1 className="text-2xl font-bold text-gray-900">
+      <div className="bg-principal fuente-clara rounded-lg shadow p-6">
+        <h1 className="text-2xl font-bold">
           Bienvenido, {user!.name}!
         </h1>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-300">
           {getRoleDisplayName(user!.role)} - {user!.salon ? user!.salon.name : 'Sistema General'}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="dashboard-grid">
         {
           [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
-            <SummaryCard title='Usuarios totales' total={stats.totalUsers}>
-              <Users className="h-8 w-8 text-blue-600" />
-            </SummaryCard>
+            <div className="db-item-1">
+              <TodaysAppointment appointments={appointments} />
+            </div>
           )
         }
 
-        {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
-          <SummaryCard title='Usuarios activos' total={stats.activeUsers}>
-            <UserCheck className="h-8 w-8 text-green-600" />
-          </SummaryCard>
-        )}
 
-        {user!.role === UserRole.SUPER_ADMIN && (
+        <div className="db-item-2">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -147,24 +146,22 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+
+
+        {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && (
+          <div className="db-item-3">
+
+            <SummaryCard title='Usuarios activos' total={stats.activeUsers}>
+              <UserCheck className="h-8 w-8 text-green-600" />
+            </SummaryCard>
+          </div>
+
         )}
 
-        {stats.mySalon && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Building2 className="h-8 w-8 text-orange-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Mi Salón</h3>
-                <p className="text-lg font-medium text-orange-600">{stats.mySalon.name}</p>
-                <p className="text-sm text-gray-500">
-                  {stats.mySalon.activeUsersCount || 0} usuarios activos
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+
+
+
       </div>
 
       {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user!.role) && recentUsers.length > 0 && (

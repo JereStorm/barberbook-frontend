@@ -79,10 +79,10 @@ const ClientsManagement: React.FC = () => {
         </h1>
         <button
           onClick={openCreateModal}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center px-4 py-2 principal-button text-white rounded-lg"
         >
           <Plus className="w-4 h-4 mr-2" />
-          Crear Cliente
+          Crear
         </button>
       </div>
       {
