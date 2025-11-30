@@ -52,9 +52,10 @@ export const AppointmentModal: React.FC<Props> = ({
     setIsClientModalOpen,
     setFormData,
 }) => {
-    if (!isOpen) return null;
 
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    
+    if (!isOpen) return null;
 
     const inActiveText = "(Desactivado)";
 
