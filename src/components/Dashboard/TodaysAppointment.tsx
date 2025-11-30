@@ -12,9 +12,19 @@ export const TodaysAppointment: React.FC<TodaysAppointmentProps> = ({ appointmen
         <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="bg-principal min-w-full divide-y divide-gray-200">
-                <div className="px-6 py-2 text-start bg-principal w-full fuente-clara">
-                    <h1 className="flex gap-2"><CalendarCog /> Turnos de hoy</h1>
-                </div>
+                    <thead>
+                        <tr>
+                            <th
+                                colSpan={6}
+                                className="px-6 py-2 text-start bg-principal w-full fuente-clara"
+                            >
+                                <h1 className="flex gap-2 items-center">
+                                    <CalendarCog /> Turnos de hoy
+                                </h1>
+                            </th>
+                        </tr>
+                    </thead>
+
                     <tbody className="bg-white divide-y divide-gray-200">
                         {appointments.map((apt) => (
                             <tr key={apt.id} className="hover:bg-gray-50">

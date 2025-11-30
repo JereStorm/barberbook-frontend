@@ -20,6 +20,7 @@ import { useAppointments } from "../components/Appointments/UseAppointments";
 import { TodaysAppointment } from "../components/Dashboard/TodaysAppointment";
 import ServicesShowTable from "../components/Dashboard/ServicesShowTable";
 import { useServices } from "../components/Services/UseServices";
+import UsersShowTable from "../components/Dashboard/UsersShowTable";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -115,21 +116,6 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const getRoleBadgeColor = (role: UserRole) => {
-    switch (role) {
-      case UserRole.SUPER_ADMIN:
-        return "bg-purple-100 text-purple-800";
-      case UserRole.ADMIN:
-        return "bg-blue-100 text-blue-800";
-      case UserRole.RECEPCIONISTA:
-        return "bg-green-100 text-green-800";
-      case UserRole.ESTILISTA:
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -148,17 +134,13 @@ const Dashboard: React.FC = () => {
         </p>
       </div>
 
-      <div className="dashboard-grid mx-3">
-        {[
-          UserRole.SUPER_ADMIN,
-          UserRole.ADMIN,
-          UserRole.RECEPCIONISTA,
-        ].includes(user!.role) && (
-          <div className="db-item-1">
-            <TodaysAppointment appointments={appointmentsToday!} />
-          </div>
-        )}
+      <div className="dashboard-grid mx-1 md:mx-3">
+        {/* TODOS VEN LOS TURNOS */}
+        <div className="db-item-1">
+          <TodaysAppointment appointments={appointmentsToday!} />
+        </div>
 
+        {/* TODOS VEN LOS DATOS DEL SALON PERO SOLO LOS ADMIN TIENEN EL BOTON DE EDIT */}
         <div className="db-item-2">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
@@ -177,121 +159,22 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {[
-          UserRole.SUPER_ADMIN,
-          UserRole.ADMIN,
-          UserRole.RECEPCIONISTA,
-        ].includes(user!.role) && (
-          <div className="db-item-4">
-            <ServicesShowTable services={services} />
-          </div>
-        )}
+        {/* TODOS VEN LOS SERVICIOS */}
+        <div className="db-item-4">
+          <ServicesShowTable services={services} />
+        </div>
+
       </div>
 
-      {[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(
-        user!.role
-      ) &&
-        recentUsers.length > 0 && (
-          <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">
-                Usuarios Recientes
-              </h3>
-            </div>
-            <div className="divide-y divide-gray-200">
-              {recentUsers.map((recentUser) => (
-                <div key={recentUser.id} className="px-6 py-4 hover:bg-gray-50">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0">
-                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                          <Users className="w-4 h-4 text-gray-600" />
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {recentUser.name}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {recentUser.email}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span
-                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getRoleBadgeColor(
-                          recentUser.role
-                        )}`}
-                      >
-                        {getRoleDisplayName(recentUser.role)}
-                      </span>
-                      <div className="flex items-center">
-                        {recentUser.isActive ? (
-                          <UserCheck className="w-4 h-4 text-green-500" />
-                        ) : (
-                          <UserX className="w-4 h-4 text-red-500" />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+      {/* LOS ESTILISTAS NO VEN A LOS DEMAS EMPLEADOS */}
+      {user?.role && user.role !== UserRole.ESTILISTA &&
+        (
+          <div className="db-item-3">
+            <UsersShowTable users={recentUsers}
+            />
           </div>
-        )}
-
-      <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">
-            Acciones Rápidas
-          </h3>
-        </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              UserRole.SUPER_ADMIN,
-              UserRole.ADMIN,
-              UserRole.RECEPCIONISTA,
-            ].includes(user!.role) && (
-              <Link
-                to={"/users"}
-                className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-center space-x-3">
-                  <Users className="w-6 h-6 text-blue-600" />
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      Gestionar Usuarios
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Crear, editar y administrar usuarios
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            )}
-
-            {user!.role === UserRole.SUPER_ADMIN && (
-              <Link
-                to={"/salons"}
-                className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-center space-x-3">
-                  <Building2 className="w-6 h-6 text-indigo-600" />
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      Gestionar Salones
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Crear y administrar salones
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
+        )
+      }
     </div>
   );
 };
