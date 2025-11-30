@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { UserRole } from '../../types';
 import SidebarLink from '../UI/SidebarLink';
 import { getRoleBadgeColor } from '../Utils';
+import Footer from '../UI/Footer';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -201,6 +202,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {children}
           </div>
         </main>
+        <Footer/>
       </div>
     </div>
   );
