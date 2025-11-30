@@ -125,6 +125,25 @@ const Dashboard: React.FC = () => {
     );
   }
 
+  const getGridByRol = (role: UserRole) => {
+    switch (role) {
+      case UserRole.SUPER_ADMIN:
+        return "dashboard-grid-superadmin";
+
+      case UserRole.ADMIN:
+        return "dashboard-grid-admin";
+
+      case UserRole.RECEPCIONISTA:
+        return "dashboard-grid-admin";
+
+      case UserRole.ESTILISTA:
+        return "dashboard-grid-estilista";
+
+      default:
+        return "flex flex-col";
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-principal fuente-clara rounded-lg shadow p-6">
@@ -135,16 +154,16 @@ const Dashboard: React.FC = () => {
         </p>
       </div>
 
-      <div className="dashboard-grid mx-1 md:mx-3">
-        {/* TODOS VEN LOS TURNOS EXCEPTO EL SUPER ADMIN*/}
+      <div
+        className={`dashboard-grid mx-1 md:mx-3 ${getGridByRol(user!.role)}`}
+      >
         {!isSuperAdmin && (
-          <div className="db-item-1">
+          <div className="area-A">
             <TodaysAppointment appointments={appointmentsToday!} />
           </div>
         )}
 
-        {/* TODOS VEN LOS DATOS DEL SALON PERO SOLO LOS ADMIN TIENEN EL BOTON DE EDIT */}
-        <div className="db-item-2">
+        <div className="area-B">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -162,16 +181,14 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* LOS ESTILISTAS NO VEN A LOS DEMAS EMPLEADOS */}
-        {user?.role && user.role !== UserRole.ESTILISTA && (
-          <div className="db-item-3">
-            <UsersShowTable users={recentUsers} />
+        {user?.role !== UserRole.ESTILISTA && (
+          <div className="area-C">
+            <UsersShowTable users={recentUsers} isSuperAdmin={isSuperAdmin} />
           </div>
         )}
 
-        {/* TODOS VEN LOS SERVICIOS EXCEPTO EL SUPER ADMIN */}
         {!isSuperAdmin && (
-          <div className="db-item-4">
+          <div className="area-D">
             <ServicesShowTable services={services} />
           </div>
         )}

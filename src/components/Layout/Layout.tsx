@@ -185,7 +185,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="h-16 flex bg-white border-b border-gray-200 md:hidden items-center justify-end px-6 flex-shrink-0 shadow-sm">
+        <div className="h-16 flex bg-white border-b border-gray-200 lg:hidden items-center justify-start px-6 flex-shrink-0 shadow-sm">
           <div className="flex items-center space-x-4">
             <button
               className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
