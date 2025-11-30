@@ -30,10 +30,11 @@ const Dashboard: React.FC = () => {
     totalSalons: 0,
     mySalon: null as Salon | null,
   });
-  const { appointments, loadAppointmentsToday } = useAppointments(user);
+  const { loadAppointmentsToday } = useAppointments(user);
   const { services } = useServices(user);
   const [isLoading, setIsLoading] = useState(true);
   const [recentUsers, setRecentUsers] = useState<User[]>([]);
+  const isSuperAdmin = user?.role === UserRole.SUPER_ADMIN;
 
   const [appointmentsToday, setAppointmentsToday] = useState<Appointment[]>();
 
@@ -46,7 +47,7 @@ const Dashboard: React.FC = () => {
       setIsLoading(true);
 
       //Carga turnos de hoy
-      if (user!.role != UserRole.SUPER_ADMIN) {
+      if (!isSuperAdmin) {
         const apsT = await loadAppointmentsToday();
         if (apsT) {
           setAppointmentsToday(apsT);
@@ -70,7 +71,7 @@ const Dashboard: React.FC = () => {
       }
 
       // Cargar salones (solo super admin)
-      if (user!.role === UserRole.SUPER_ADMIN) {
+      if (isSuperAdmin) {
         const salons = await apiService.getSalons();
         setStats((prev) => ({
           ...prev,
@@ -135,10 +136,12 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="dashboard-grid mx-1 md:mx-3">
-        {/* TODOS VEN LOS TURNOS */}
-        <div className="db-item-1">
-          <TodaysAppointment appointments={appointmentsToday!} />
-        </div>
+        {/* TODOS VEN LOS TURNOS EXCEPTO EL SUPER ADMIN*/}
+        {!isSuperAdmin && (
+          <div className="db-item-1">
+            <TodaysAppointment appointments={appointmentsToday!} />
+          </div>
+        )}
 
         {/* TODOS VEN LOS DATOS DEL SALON PERO SOLO LOS ADMIN TIENEN EL BOTON DE EDIT */}
         <div className="db-item-2">
@@ -159,22 +162,20 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* TODOS VEN LOS SERVICIOS */}
-        <div className="db-item-4">
-          <ServicesShowTable services={services} />
-        </div>
-
-      </div>
-
-      {/* LOS ESTILISTAS NO VEN A LOS DEMAS EMPLEADOS */}
-      {user?.role && user.role !== UserRole.ESTILISTA &&
-        (
+        {/* LOS ESTILISTAS NO VEN A LOS DEMAS EMPLEADOS */}
+        {user?.role && user.role !== UserRole.ESTILISTA && (
           <div className="db-item-3">
-            <UsersShowTable users={recentUsers}
-            />
+            <UsersShowTable users={recentUsers} />
           </div>
-        )
-      }
+        )}
+
+        {/* TODOS VEN LOS SERVICIOS EXCEPTO EL SUPER ADMIN */}
+        {!isSuperAdmin && (
+          <div className="db-item-4">
+            <ServicesShowTable services={services} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

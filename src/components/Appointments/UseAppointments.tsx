@@ -5,6 +5,7 @@ import {
   CreateAppointmentRequest,
   CreateClientRequest,
   UpdateAppointmentRequest,
+  UserRole,
 } from "../../types";
 import toast from "react-hot-toast";
 import {
@@ -40,6 +41,11 @@ export function useAppointments(currentUser: any) {
       return;
     }
 
+    if(currentUser.role === UserRole.SUPER_ADMIN){
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const data = await getAppointments();
@@ -55,6 +61,11 @@ export function useAppointments(currentUser: any) {
   const loadAppointmentsToday = async () => {
     if (!currentUser) {
       toast.error("Usuario no autenticado");
+      setIsLoading(false);
+      return [];
+    }
+
+    if(currentUser.role === UserRole.SUPER_ADMIN){
       setIsLoading(false);
       return [];
     }

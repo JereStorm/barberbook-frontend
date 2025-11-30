@@ -71,11 +71,18 @@ code {
 /* HOVER AL BUTTON*/
 .principal-button:hover {
   background-color: #0E3780;
-
 }
 
 .fuente-principal {
   color: #0E1F3D;
+}
+
+.icono-principal {
+  width: 80px;
+  height: 80px;
+  background-image: url("/public/peluqueria.png");
+  background-position: center center;
+  background-size: cover;
 }
 
 .fuente-clara {

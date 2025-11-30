@@ -4,6 +4,7 @@ import {
   Service,
   CreateServiceRequest,
   UpdateServiceRequest,
+  UserRole,
 } from "../../types";
 import { apiService } from "../../apisServices/api";
 import AlertService from "../../helpers/sweetAlert/AlertService";
@@ -23,6 +24,11 @@ export function useServices(currentUser: any) {
   const loadServices = async () => {
     if (!currentUser) {
       toast.error("Usuario no autenticado");
+      setIsLoading(false);
+      return;
+    }
+
+    if(currentUser.role === UserRole.SUPER_ADMIN){
       setIsLoading(false);
       return;
     }
