@@ -1,11 +1,21 @@
-import React, { ReactNode, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Users, Building2, LogOut, Home, Menu, X, Contact, SquareScissors, CalendarCog } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
-import { UserRole } from '../../types';
-import SidebarLink from '../UI/SidebarLink';
-import { getRoleBadgeColor } from '../Utils';
-import Footer from '../UI/Footer';
+import React, { ReactNode, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Users,
+  Building2,
+  LogOut,
+  Home,
+  Menu,
+  X,
+  Contact,
+  SquareScissors,
+  CalendarCog,
+} from "lucide-react";
+import { useAuth } from "../../hooks/useAuth";
+import { UserRole } from "../../types";
+import SidebarLink from "../UI/SidebarLink";
+import { getRoleBadgeColor } from "../Utils";
+import Footer from "../UI/Footer";
 interface LayoutProps {
   children: ReactNode;
 }
@@ -17,7 +27,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (!user) {
-    navigate('/login');
+    navigate("/login");
     return null;
   }
 
@@ -29,24 +39,32 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Navegación según rol
   const getNavigationItems = () => {
     const items = [
-      { name: 'Dashboard', href: '/dashboard', icon: Home, show: true },
+      { name: "Dashboard", href: "/dashboard", icon: Home, show: true },
     ];
 
     // Usuarios - según permisos
-    if ([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user.role)) {
+    if (
+      [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(
+        user.role
+      )
+    ) {
       items.push({
-        name: 'Usuarios',
-        href: '/users',
+        name: "Usuarios",
+        href: "/users",
         icon: Users,
         show: true,
       });
     }
 
     // Turnos - según permisos
-    if ([UserRole.ADMIN, UserRole.RECEPCIONISTA, UserRole.ESTILISTA].includes(user.role)) {
+    if (
+      [UserRole.ADMIN, UserRole.RECEPCIONISTA, UserRole.ESTILISTA].includes(
+        user.role
+      )
+    ) {
       items.push({
-        name: 'Turnos',
-        href: '/appointments',
+        name: "Turnos",
+        href: "/appointments",
         icon: CalendarCog,
         show: true,
       });
@@ -55,8 +73,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     // Servicios - según permisos
     if ([UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user.role)) {
       items.push({
-        name: 'Servicios',
-        href: '/services',
+        name: "Servicios",
+        href: "/services",
         icon: SquareScissors,
         show: true,
       });
@@ -65,8 +83,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     // Clientes - según permisos
     if ([UserRole.ADMIN, UserRole.RECEPCIONISTA].includes(user.role)) {
       items.push({
-        name: 'Clientes',
-        href: '/clients',
+        name: "Clientes",
+        href: "/clients",
         icon: Contact,
         show: true,
       });
@@ -75,29 +93,28 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     // Salones - solo super admin
     if (user.role === UserRole.SUPER_ADMIN) {
       items.push({
-        name: 'Salones',
-        href: '/salons',
+        name: "Salones",
+        href: "/salons",
         icon: Building2,
         show: true,
       });
     }
 
-    return items.filter(item => item.show);
+    return items.filter((item) => item.show);
   };
 
   const navigationItems = getNavigationItems();
 
-
   const getRoleDisplayName = (role: UserRole) => {
     switch (role) {
       case UserRole.SUPER_ADMIN:
-        return 'Super Admin';
+        return "Super Admin";
       case UserRole.ADMIN:
-        return 'Administrador';
+        return "Administrador";
       case UserRole.RECEPCIONISTA:
-        return 'Recepcionista';
+        return "Recepcionista";
       case UserRole.ESTILISTA:
-        return 'Estilista';
+        return "Estilista";
       default:
         return role;
     }
@@ -114,11 +131,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
 
       {/* Sidebar */}
-      <div className={`
+      <div
+        className={`
         fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl border-r border-gray-200
         transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+      >
         {/* Sidebar header */}
         <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r bg-principal text-white">
           <div className="flex items-center space-x-2">
@@ -144,14 +163,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <p className="text-sm font-medium text-gray-900 truncate">
                 {user.name}
               </p>
-              <p className="text-xs text-gray-500 truncate">
-                {user.email}
-              </p>
+              <p className="text-xs text-gray-500 truncate">{user.email}</p>
             </div>
           </div>
 
           <div className="mt-3 flex items-center justify-between">
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(user.role)}`}>
+            <span
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(
+                user.role
+              )}`}
+            >
               {getRoleDisplayName(user.role)}
             </span>
           </div>
@@ -169,7 +190,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {navigationItems.map((item) => {
             const isActive = location.pathname === item.href;
             return (
-              <SidebarLink key={item.name} sidebarStatus={setSidebarOpen} item={item} isActive={isActive}></SidebarLink>
+              <SidebarLink
+                key={item.name}
+                sidebarStatus={setSidebarOpen}
+                item={item}
+                isActive={isActive}
+              ></SidebarLink>
             );
           })}
         </nav>
@@ -198,11 +224,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         <main className="flex-1 overflow-auto">
-          <div className="h-full p-2">
-            {children}
+          <div className="h-full">
+            <div className="p-2 md:p-4">{children}</div>
           </div>
-          <Footer />
         </main>
+            <Footer />
       </div>
     </div>
   );

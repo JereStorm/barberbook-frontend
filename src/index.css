@@ -94,14 +94,26 @@ code {
   gap: 10px;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, auto);
-  grid-auto-flow: dense; /* ⚡ Reacomoda todo sin dejar huecos */
+  grid-auto-flow: dense;
+  /* ⚡ Reacomoda todo sin dejar huecos */
 }
 
 /* Definimos una clase por área */
-.area-A { grid-area: A; }
-.area-B { grid-area: B; }
-.area-C { grid-area: C; }
-.area-D { grid-area: D; }
+.area-A {
+  grid-area: A;
+}
+
+.area-B {
+  grid-area: B;
+}
+
+.area-C {
+  grid-area: C;
+}
+
+.area-D {
+  grid-area: D;
+}
 
 /* Layout para roles con TODOS los paneles */
 .dashboard-grid-admin {
@@ -139,10 +151,12 @@ code {
     grid-template-areas: none;
     grid-template-columns: 1fr;
     gap: 27px;
+
   }
 
-  .dashboard-grid > div {
+  .dashboard-grid>div {
     grid-area: unset;
   }
-}
 
+
+}
