@@ -88,8 +88,8 @@ const SalonsManagement: React.FC = () => {
 
   //NUEVA IMPLEMENTACION CON CUSTOM HOOK + USEMEMO
   const filteredSalons = useSearchFilter(salons, searchTerm, [
-    s => s.name,
-    s => s.address,
+    (s) => s.name,
+    (s) => s.address,
   ]);
 
   return (

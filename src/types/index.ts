@@ -38,6 +38,7 @@ export interface Salon {
   usersCount?: number;
   activeUsersCount?: number;
   users?: User[];
+  owner?: string;
 }
 
 export interface LoginRequest {
