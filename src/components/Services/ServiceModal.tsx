@@ -102,15 +102,15 @@ export const ServiceModal: React.FC<Props> = ({
                     placeholder={durationMin.toString()}
                     value={formData.durationMin ?? ""}
                     onChange={(e) => {
-                      Number.isNaN(Number(e.target.value)) ?
-                        setFormData({
-                          ...formData,
-                          durationMin: durationMin
-                        }) :
-                        setFormData({
-                          ...formData,
-                          durationMin: Number(e.target.value),
-                        });
+                      Number.isNaN(Number(e.target.value))
+                        ? setFormData({
+                            ...formData,
+                            durationMin: durationMin,
+                          })
+                        : setFormData({
+                            ...formData,
+                            durationMin: Number(e.target.value),
+                          });
                     }}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -127,8 +127,8 @@ export const ServiceModal: React.FC<Props> = ({
                   isSubmitting
                     ? "Guardando..."
                     : editingService
-                      ? "Actualizar"
-                      : "Crear"
+                    ? "Actualizar"
+                    : "Crear"
                 }
               />
 

@@ -26,7 +26,7 @@ export const ServicesCards: React.FC<Props> = ({
           <h2 className="text-xl font-bold mb-4">{service.name}</h2>
 
           {/* Datos del servicio */}
-          <div className="space-y-2 text-gray-200">
+          <div className="space-y-2 text-gray-200 mb-4">
             <p>
               <span className="font-semibold">Duración:</span>{" "}
               {service.durationMin} min
@@ -42,33 +42,33 @@ export const ServicesCards: React.FC<Props> = ({
           </div>
 
           {/* Acciones */}
-          <div className="flex justify-end space-x-4 mt-6">
+
+          <div className="flex justify-end gap-4 pt-4 border-t border-white/20">
             <button
-              onClick={() => onEdit(service)}
-              className="p-2 rounded-lg hover:bg-white/10 transition"
-              title="Editar"
+              onClick={() => onDelete(service)}
+              className="hover:text-red-300 transition"
+              title="Eliminar"
             >
-              <Edit className="w-5 h-5" />
+              <Trash2 className="w-5 h-5" />
             </button>
 
             <button
               onClick={() => onToggleStatus(service)}
-              className="p-2 rounded-lg hover:bg-white/10 transition"
+              className="hover:text-red-300 transition"
               title={service.isActive ? "Desactivar" : "Activar"}
             >
               {service.isActive ? (
-                <CircleX className="w-5 h-5 text-red-300" />
+                <CircleX className="w-5 h-5" />
               ) : (
                 <CircleCheckBig className="w-5 h-5 text-green-300" />
               )}
             </button>
-
             <button
-              onClick={() => onDelete(service)}
-              className="p-2 rounded-lg hover:bg-white/10 transition"
-              title="Eliminar"
+              onClick={() => onEdit(service)}
+              className="hover:text-blue-300 transition"
+              title="Editar"
             >
-              <Trash2 className="w-5 h-5 text-red-300" />
+              <Edit className="w-5 h-5" />
             </button>
           </div>
         </div>

@@ -108,6 +108,17 @@ export const AppointmentCards = (props: Props) => {
               <MessageCircleMore className="w-5 h-5" />
             </button>
 
+            {/* Eliminar */}
+            {!isStylist && (
+              <button
+                onClick={() => onDelete(apt)}
+                className="hover:text-red-300 transition"
+                title="Eliminar turno"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            )}
+
             {/* Cancelar / Activar */}
             {!isStylist && (
               <button
@@ -124,17 +135,6 @@ export const AppointmentCards = (props: Props) => {
                 ) : (
                   <CircleCheckBig className="w-5 h-5 text-green-300" />
                 )}
-              </button>
-            )}
-
-            {/* Eliminar */}
-            {!isStylist && (
-              <button
-                onClick={() => onDelete(apt)}
-                className="hover:text-red-300 transition"
-                title="Eliminar turno"
-              >
-                <Trash2 className="w-5 h-5" />
               </button>
             )}
 
