@@ -10,6 +10,8 @@ import { useUsers } from "../components/Users/UseUsers";
 import { UserModal } from "../components/Users/UserModal";
 import { useSearchFilter } from "../hooks/useSearchFilters";
 import { CreateButton } from "../components/UI/CreateButton";
+import { ToggleDataView } from "../components/UI/ToggleDataView";
+import { UsersCards } from "../components/Users/UsersCards";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -40,6 +42,10 @@ const UsersManagement: React.FC = () => {
     salonId: null,
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  const [viewMode, setViewMode] = useState<"table" | "cards">(
+    window.innerWidth < 700 ? "cards" : "table"
+  );
 
   useEffect(() => {
     loadUsers();
@@ -151,6 +157,9 @@ const UsersManagement: React.FC = () => {
               />
             </div>
           </div>
+
+          <ToggleDataView setViewMode={setViewMode} viewMode={viewMode} />
+
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-gray-400" />
             <select
@@ -174,13 +183,23 @@ const UsersManagement: React.FC = () => {
         </div>
       </div>
 
-      <UsersTable
-        users={filteredUsers}
-        onEdit={openEditModal}
-        onDelete={removeUser}
-        onToggle={toggleUserStatus}
-        currentUser={currentUser}
-      />
+      {viewMode === "cards" ? (
+        <UsersCards
+          users={filteredUsers}
+          onEdit={openEditModal}
+          onDelete={removeUser}
+          onToggle={toggleUserStatus}
+          currentUser={currentUser}
+        />
+      ) : (
+        <UsersTable
+          users={filteredUsers}
+          onEdit={openEditModal}
+          onDelete={removeUser}
+          onToggle={toggleUserStatus}
+          currentUser={currentUser}
+        />
+      )}
 
       {/* Modal */}
       {isModalOpen && (
