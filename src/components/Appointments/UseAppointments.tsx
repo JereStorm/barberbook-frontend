@@ -302,6 +302,7 @@ export function useAppointments(currentUser: any) {
 
   useEffect(() => {
     loadAppointments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

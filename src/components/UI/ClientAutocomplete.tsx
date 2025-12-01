@@ -54,6 +54,7 @@ const ClientAutocomplete: React.FC<Props> = ({
       setOpen(false);
     }
     setHighlight(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtered.length]);
 
   useEffect(() => {
@@ -86,12 +87,16 @@ const ClientAutocomplete: React.FC<Props> = ({
     }
   };
 
-  return (
+return (
     <div className={`relative ${className}`} ref={ref}>
       <label className="block text-sm font-medium text-gray-700">Cliente</label>
       <input
         disabled={disabled}
         type="text"
+        // un textbox normal no es compatible con aria-expanded, defini el rol combobox, y lo vinculo a la lista con un id
+        role="combobox" 
+        aria-controls="client-options-list"
+        aria-expanded={open}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => filtered.length > 0 && setOpen(true)}
@@ -99,11 +104,13 @@ const ClientAutocomplete: React.FC<Props> = ({
         placeholder={placeholder}
         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
         aria-autocomplete="list"
-        aria-expanded={open}
       />
 
       {open && filtered.length > 0 && (
-        <ul className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-52 overflow-auto">
+        <ul 
+          id="client-options-list"
+          className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-52 overflow-auto"
+        >
           {filtered.map((c, idx) => (
             <li
               key={c.id}

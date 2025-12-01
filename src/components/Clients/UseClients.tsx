@@ -99,6 +99,7 @@ export function useClients(currentUser: any) {
 
   useEffect(() => {
     loadClients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

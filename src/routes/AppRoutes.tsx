@@ -1,16 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from '../hooks/useAuth';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 import { UserRole } from '../types';
 
 // Components / Pages
-import Layout from '../components/Layout/Layout';
 import Login from '../components/Auth/Login';
-import Dashboard from '../pages/Dashboard';
-import UsersManagement from '../pages/UsersManagement';
-import SalonsManagement from '../pages/SalonsManagement';
+import Layout from '../components/Layout/Layout';
 import ClientsManagement from '../pages/ClientsManagement';
+import Dashboard from '../pages/Dashboard';
+import SalonsManagement from '../pages/SalonsManagement';
 import ServicesManagement from '../pages/ServicesManagement';
+import UsersManagement from '../pages/UsersManagement';
 
 // Toast
 import { ToastNotifications } from '../helpers/toastNotifications/ToastService';

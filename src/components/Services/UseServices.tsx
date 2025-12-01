@@ -117,7 +117,7 @@ export function useServices(currentUser: any) {
       loadServices();
     } catch (error) {
       const apiError = apiService.handleError(error);
-      toast.error("Error eliminando servicio. Verifique que no pertenezca a un turno.");
+      toast.error(apiError.message || "Error eliminando servicio. Verifique que no pertenezca a un turno.");
     }
   };
 
@@ -142,6 +142,7 @@ export function useServices(currentUser: any) {
 
   useEffect(() => {
     loadServices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

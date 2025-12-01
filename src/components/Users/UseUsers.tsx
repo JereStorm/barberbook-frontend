@@ -155,6 +155,7 @@ export function useUsers(currentUser: any) {
 
   useEffect(() => {
     loadUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

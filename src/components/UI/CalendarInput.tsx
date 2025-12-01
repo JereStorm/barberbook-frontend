@@ -135,6 +135,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   useEffect(() => {
     const iso = combineLocalDateTimeToISO(date, time);
     if (onChange) onChange(iso);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, time]);
 
   const handleApply = () => {

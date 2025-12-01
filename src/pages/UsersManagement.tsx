@@ -52,6 +52,7 @@ const UsersManagement: React.FC = () => {
     if (currentUser?.role === UserRole.SUPER_ADMIN) {
       loadSalons();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadSalons = async () => {
