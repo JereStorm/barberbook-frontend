@@ -6,6 +6,7 @@ import { SalonsCard } from "../components/Salons/SalonsCard";
 import { useSalons } from "../components/Salons/UseSalons";
 import SalonModal from "../components/Salons/SalonModal";
 import { useSearchFilter } from "../hooks/useSearchFilters";
+import { CreateButton } from "../components/UI/CreateButton";
 
 const SalonsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -97,13 +98,7 @@ const SalonsManagement: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center bg-white rounded-lg shadow p-6 py-8">
         <h1 className="text-2xl font-bold text-gray-900">Gestión de Salones</h1>
-        <button
-          onClick={openCreateModal}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Crear Salón
-        </button>
+        <CreateButton openCreateModal={openCreateModal} />
       </div>
 
       <div className="bg-white rounded-lg shadow p-4">

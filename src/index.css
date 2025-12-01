@@ -62,6 +62,16 @@ code {
   background-color: #0E1F3D;
 }
 
+.bg-secundario {
+  background-color: #0E3780;
+}
+
+/* FONDO card TURNOS */
+.card-gradiante {
+  background: radial-gradient(circle, #0E3780 0%, #0E1F3D 70%);
+}
+
+
 /* FONDOS PARA BUTTONS */
 .principal-button {
   background-color: #0E1F3D;

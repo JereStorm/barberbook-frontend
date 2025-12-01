@@ -36,9 +36,6 @@ export const AppointmentsTable: React.FC<Props> = ({
         }
     };
 
-    const handleCancel = (apt: Appointment) => {
-
-    }
     return (
         <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">

@@ -6,6 +6,7 @@ import { useServices } from "../components/Services/UseServices";
 import { ServicesTable } from "../components/Services/ServicesTable";
 import { ServiceModal } from "../components/Services/ServiceModal";
 import { useSearchFilter } from "../hooks/useSearchFilters";
+import { CreateButton } from "../components/UI/CreateButton";
 
 const ServicesManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -95,13 +96,7 @@ const ServicesManagement: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-900">
           Gestión de Servicios
         </h1>
-        <button
-          onClick={openCreateModal}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Crear Servicio
-        </button>
+        <CreateButton openCreateModal={openCreateModal} />
       </div>
 
       <div className="bg-white rounded-lg shadow p-4">

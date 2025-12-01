@@ -23,7 +23,7 @@ export const FormActionButton: React.FC<Props> = ({
   //colores disponibles para el boton
   const variants = {
     primary:
-      "bg-blue-600 text-white hover:bg-blue-700 border border-transparent focus:ring-blue-500",
+      "principal-button text-white border border-transparent focus:ring-blue-500",
     secondary:
       "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 focus:ring-indigo-500",
   };

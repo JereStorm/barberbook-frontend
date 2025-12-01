@@ -19,7 +19,7 @@ export default function SidebarLink(props: Props) {
             to={item.href}
             className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 
                   ${isActive
-                    ? 'bg-principal fuente-clara border border-blue-200 shadow-sm'
+                    ? 'bg-secundario fuente-clara border border-blue-200 shadow-sm'
                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
                 }`}
         >

@@ -9,6 +9,7 @@ import { UsersTable } from "../components/Users/UsersTable";
 import { useUsers } from "../components/Users/UseUsers";
 import { UserModal } from "../components/Users/UserModal";
 import { useSearchFilter } from "../hooks/useSearchFilters";
+import { CreateButton } from "../components/UI/CreateButton";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -26,7 +27,9 @@ const UsersManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] = useState<UserRole | "all">(currentUser?.role === UserRole.SUPER_ADMIN ? UserRole.ADMIN : "all");
+  const [roleFilter, setRoleFilter] = useState<UserRole | "all">(
+    currentUser?.role === UserRole.SUPER_ADMIN ? UserRole.ADMIN : "all"
+  );
 
   const [formData, setFormData] = useState<CreateUserRequest>({
     name: "",
@@ -105,7 +108,7 @@ const UsersManagement: React.FC = () => {
     users,
     searchTerm,
     [
-      (u) => !currentUser?.salonId ? u.salon?.name : "",
+      (u) => (!currentUser?.salonId ? u.salon?.name : ""),
       (u) => u.name,
       (u) => u.email,
       (u) => u.mobile,
@@ -131,13 +134,7 @@ const UsersManagement: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-900">
           Gestión de Usuarios
         </h1>
-        <button
-          onClick={openCreateModal}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Crear Usuario
-        </button>
+        <CreateButton openCreateModal={openCreateModal} />
       </div>
 
       <div className="bg-white rounded-lg shadow p-4">

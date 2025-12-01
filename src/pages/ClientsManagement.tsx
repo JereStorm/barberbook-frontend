@@ -7,6 +7,7 @@ import ClientModal from "../components/Clients/ClientModal";
 import { ClientsTable } from "../components/Clients/ClientsTable";
 import { useAuth } from "../hooks/useAuth";
 import { useSearchFilter } from "../hooks/useSearchFilters";
+import { CreateButton } from "../components/UI/CreateButton";
 
 const ClientsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -77,13 +78,7 @@ const ClientsManagement: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-900">
           Gestión de Clientes
         </h1>
-        <button
-          onClick={openCreateModal}
-          className="flex items-center px-4 py-2 principal-button text-white rounded-lg"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Crear
-        </button>
+        <CreateButton openCreateModal={openCreateModal} />
       </div>
       {
         !isLoading && (
