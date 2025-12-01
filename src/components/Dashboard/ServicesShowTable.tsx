@@ -17,17 +17,17 @@ export default function ServicesShowTable({ services }: ServicesShowTableProps) 
                                 colSpan={6}
                                 className="px-6 py-2 text-start bg-principal w-full fuente-clara"
                             >
-                                <h1 className="flex gap-2 items-center"><SquareScissors /> Servicios activos</h1>
+                                <h1 className="flex gap-2 items-center"><SquareScissors /> Servicios</h1>
                             </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {services.map((svc) => (
-                            svc.isActive &&
+                            
                             <tr key={svc.id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm font-medium text-gray-900">
-                                        {svc.name}
+                                        {svc.isActive ? svc.name : svc.name + ' (Inactivo)'}
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -39,6 +39,7 @@ export default function ServicesShowTable({ services }: ServicesShowTableProps) 
                                     </span>
                                 </td>
                             </tr>
+                            
                         ))}
                         {services.length === 0 && (
                             <tr>

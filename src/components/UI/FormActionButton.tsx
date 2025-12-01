@@ -30,6 +30,8 @@ export const FormActionButton: React.FC<Props> = ({
 
   return (
     <button
+      aria-label={variant === 'primary' ? "Boton de crear" : "Boton de cancelar"}
+      title={variant === 'primary' ? "Boton de crear" : "Boton de cancelar"}
       type={type}
       onClick={onClick}
       disabled={disabled}

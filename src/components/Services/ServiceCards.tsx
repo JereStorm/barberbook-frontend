@@ -19,6 +19,7 @@ export const ServicesCards: React.FC<Props> = ({
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {services.map((service) => (
         <div
+          key={service.id}
           className="rounded-xl p-5 shadow-lg text-white
       bg-gradient-to-br from-[#0E1F3D] via-[#0E2A60] to-[#0E3780]"
         >

@@ -117,7 +117,7 @@ export function useServices(currentUser: any) {
       loadServices();
     } catch (error) {
       const apiError = apiService.handleError(error);
-      toast.error(apiError.message || "Error eliminando servicio");
+      toast.error("Error eliminando servicio. Verifique que no pertenezca a un turno.");
     }
   };
 

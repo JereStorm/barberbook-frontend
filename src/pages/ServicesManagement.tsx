@@ -38,10 +38,6 @@ const ServicesManagement: React.FC = () => {
     window.innerWidth < 700 ? "cards" : "table"
   );
 
-  const toggleView = (mode: "table" | "cards") => {
-    setViewMode(mode);
-  };
-
   useEffect(() => {
     loadServices();
     // eslint-disable-next-line react-hooks/exhaustive-deps
