@@ -16,7 +16,7 @@ export const ClientsTable: React.FC<Props> = ({
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="md:min-w-full w-50 divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -24,9 +24,6 @@ export const ClientsTable: React.FC<Props> = ({
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Contacto
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Creado
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Acciones
@@ -44,13 +41,6 @@ export const ClientsTable: React.FC<Props> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <div>{client.email}</div>
                   {client.mobile && <div>{client.mobile}</div>}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div>
-                    {client.createdAt
-                      ? new Date(client.createdAt).toLocaleString()
-                      : "-"}
-                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center justify-end space-x-2">
