@@ -74,7 +74,15 @@ export function formatDateTime(dt?: string) {
 }
 
 export function formatHour(dt?: string) {
-  return dt ? dt.slice(11, 16) : "-";
+  if (!dt) return "-";
+
+  const date = new Date(dt); // convierte el ISO a fecha en tu timezone
+  return date.toLocaleTimeString("es-AR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "America/Argentina/Buenos_Aires",
+  });
 }
 
 export const formatPrice = (p: number) =>

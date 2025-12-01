@@ -71,7 +71,7 @@ export const UsersCards: React.FC<Props> = ({
 
           {/* Acciones */}
 
-          <div className="flex justify-end gap-4 pt-4 border-t border-white/20">
+          <div className="flex justify-center gap-4 pt-4 border-t border-white/20">
             {canEditUser(user) && (
               <>
                 {user.role !== UserRole.SUPER_ADMIN &&
@@ -81,7 +81,7 @@ export const UsersCards: React.FC<Props> = ({
                       className="hover:text-red-300 transition"
                       title="Eliminar usuario"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   )}
 
@@ -92,16 +92,15 @@ export const UsersCards: React.FC<Props> = ({
                       title={
                         user.isActive ? "Desactivar usuario" : "Activar usuario"
                       }
-                      className={`${
-                        user.isActive
-                          ? "hover:text-red-300 transition"
-                          : "text-green-600 hover:text-green-900"
-                      }`}
+                      className={`${user.isActive
+                        ? "hover:text-red-300 transition"
+                        : "text-green-600 hover:text-green-900"
+                        }`}
                     >
                       {user.isActive ? (
-                        <UserX className="w-4 h-4" />
+                        <UserX className="w-5 h-5" />
                       ) : (
-                        <UserCheck className="w-4 h-4" />
+                        <UserCheck className="w-5 h-5" />
                       )}
                     </button>
                   )}
@@ -111,7 +110,7 @@ export const UsersCards: React.FC<Props> = ({
                   className="hover:text-blue-300 transition"
                   title="Editar usuario"
                 >
-                  <Edit className="w-4 h-4" />
+                  <Edit className="w-5 h-5" />
                 </button>
               </>
             )}

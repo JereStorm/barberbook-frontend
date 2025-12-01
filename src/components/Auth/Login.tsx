@@ -77,9 +77,9 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
       {/* Header */}
-      <div className="text-center my-auto flex flex-col md:flex-row items-center md:justify-center  md:space-x-4">
+      <div className="text-center my-auto flex gap-2 items-center md:justify-center  md:space-x-4">
         <div className="icono-principal"></div>
-        <h1 className="text-7xl font-bold fuente-principal">BarberBook</h1>
+        <h1 className="md:text-7xl text-5xl font-bold fuente-principal">BarberBook</h1>
       </div>
       <div className="max-w-md w-full space-y-8 mb-auto">
         {/* Form */}

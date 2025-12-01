@@ -12,7 +12,7 @@ async function getAppointments(): Promise<Appointment[]> {
 }
 
 async function getAppointmentsToday(): Promise<Appointment[]> {
-    const response = await axiosInstance.get<Appointment[]>(`${BASE}/today?cant=3`);
+    const response = await axiosInstance.get<Appointment[]>(`${BASE}/today?cant=5`);
     return response.data;
 }
 

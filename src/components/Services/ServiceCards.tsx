@@ -44,7 +44,7 @@ export const ServicesCards: React.FC<Props> = ({
 
           {/* Acciones */}
 
-          <div className="flex justify-end gap-4 pt-4 border-t border-white/20">
+          <div className="flex justify-center gap-4 pt-4 border-t border-white/20">
             <button
               onClick={() => onDelete(service)}
               className="hover:text-red-300 transition"

@@ -22,7 +22,7 @@ export const SalonsCard = (props: Props) => {
   return (
     <div
       key={salon.id}
-      className="rounded-xl shadow-md hover:shadow-lg transition-all bg-gradient-to-br from-[#062b54] to-[#0a3c7a] text-white"
+      className="rounded-xl shadow-md hover:shadow-lg transition-all bg-gradient-to-br from-[#0E1F3D] via-[#0E2A60] to-[#0E3780] text-white"
     >
       <div className="p-6">
         {/* TÍTULO */}
@@ -69,11 +69,11 @@ export const SalonsCard = (props: Props) => {
         </div>
 
         {/* BOTONES INFERIORES */}
-        <div className="flex justify-end gap-4 mt-6 pt-4 border-t border-white/20">
+        <div className="flex justify-center flex-row-reverse gap-4 mt-6 pt-4 border-t border-white/20">
           {/* Editar */}
           <button
             onClick={() => openEditModal(salon)}
-            className="p-2 rounded hover:bg-white/10 transition"
+            className="hover:text-blue-300 transition"
             title="Editar salón"
           >
             <Edit className="w-5 h-5" />
@@ -82,25 +82,30 @@ export const SalonsCard = (props: Props) => {
           {/* Desactivar */}
           <button
             onClick={() => handleDisableSalon(salon)}
-            className="p-2 rounded hover:bg-white/10 transition"
             title="Desactivar salón"
+            className={
+              salon.activeUsersCount !== 0
+                ? "hover:text-red-300 transition"
+                : "text-green-600 hover:text-green-900"
+            }
           >
             {salon.activeUsersCount !== 0 ? (
-              <CircleX className="w-6 h-6 text-red-300" />
+              <CircleX className="w-5 h-5" />
             ) : (
-              <CircleCheckBig className="w-6 h-6 text-green-300" />
+              <CircleCheckBig className="w-5 h-5" />
             )}
           </button>
 
           {/* Eliminar */}
           <button
             onClick={() => handleDeleteSalon(salon)}
-            className="p-2 rounded hover:bg-white/10 transition"
+            className="hover:text-red-300 transition"
             title="Eliminar salón"
           >
-            <Trash2 className="w-5 h-5 text-red-200" />
+            <Trash2 className="w-5 h-5" />
           </button>
         </div>
+
       </div>
     </div>
   );

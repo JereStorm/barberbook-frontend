@@ -1,7 +1,5 @@
 //Dashboard.tsx
-import {
-  Building2
-} from "lucide-react";
+import { Building2, Home, Phone } from 'lucide-react';
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { apiService } from "../apisServices/api";
@@ -156,18 +154,33 @@ const Dashboard: React.FC = () => {
         )}
 
         <div className="area-B">
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow">
+            <div
+              className="px-6 py-2 text-start bg-principal rounded-t-lg w-full fuente-clara"
+            >
+              <h1 className="flex gap-2 items-center font-bold">
+                <Building2 className="h-8 w-8 text-white-600" />
+                {stats.mySalon ? "Mi salon" : "Salones del sistema"}
+              </h1>
+
+            </div>
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Building2 className="h-8 w-8 text-indigo-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Salones Totales
-                </h3>
-                <p className="text-2xl font-bold text-indigo-600">
-                  {stats.totalSalons}
-                </p>
+              <div className="ml-4 py-4 flex gap-2 items-center">
+                {stats.mySalon ? (
+                  <div className='flex flex-wrap gap-2'>
+                    <h3 className='text-sm flex gap-2 items-center'><Home className='w-4 h-4' />{stats.mySalon.address}</h3>
+                    <h3 className='text-sm flex gap-2 items-center'><Phone className='w-4 h-4' /> {stats.mySalon.mobile}</h3>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="text-lg font-medium text-gray-900">
+                      Total de Salones
+                    </h3>
+                    <span className="text-2xl font-bold text-indigo-600">
+                      {stats.totalSalons}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>

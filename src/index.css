@@ -105,7 +105,7 @@ code {
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, auto);
   grid-auto-flow: dense;
-  /* ⚡ Reacomoda todo sin dejar huecos */
+  /* Reacomoda todo sin dejar huecos */
 }
 
 /* Definimos una clase por área */
@@ -148,8 +148,8 @@ code {
 /* Super admin NO ve Turnos ni Servicios */
 .dashboard-grid-superadmin {
   grid-template-areas:
-    "C C C C B"
-    "C C C C B"
+    "C C C B B"
+    "C C C B B"
     ". . . . ."
     ". . . . ."
     ". . . . .";

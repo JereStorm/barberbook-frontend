@@ -18,7 +18,7 @@ export const FormActionButton: React.FC<Props> = ({
 }) => {
   //propiedades base que todos los botones deben poseer en comun
   const baseClasses =
-    "w-full inline-flex justify-center rounded-md shadow-sm px-4 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50";
+    "w-full my-1 inline-flex justify-center rounded-md shadow-sm px-4 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50";
 
   //colores disponibles para el boton
   const variants = {
