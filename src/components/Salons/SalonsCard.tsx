@@ -1,14 +1,13 @@
-import { Salon } from "../../types";
 import {
-  Building2,
   CircleCheckBig,
   CircleX,
   Edit,
   MapPin,
   Phone,
   Trash2,
-  Users,
+  Users
 } from "lucide-react";
+import { Salon } from "../../types";
 
 interface Props {
   salon: Salon;

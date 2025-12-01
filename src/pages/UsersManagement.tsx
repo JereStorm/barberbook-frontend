@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Plus, Search, Filter } from "lucide-react";
-import { apiService } from "../apisServices/api";
-import { User, CreateUserRequest, UserRole, Salon } from "../types";
-import { useAuth } from "../hooks/useAuth";
+import { Filter, Search } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { getRoleDisplayName } from "../components/Utils";
-import { UsersTable } from "../components/Users/UsersTable";
-import { useUsers } from "../components/Users/UseUsers";
-import { UserModal } from "../components/Users/UserModal";
-import { useSearchFilter } from "../hooks/useSearchFilters";
+import { apiService } from "../apisServices/api";
 import { CreateButton } from "../components/UI/CreateButton";
 import { ToggleDataView } from "../components/UI/ToggleDataView";
+import { UserModal } from "../components/Users/UserModal";
 import { UsersCards } from "../components/Users/UsersCards";
+import { UsersTable } from "../components/Users/UsersTable";
+import { useUsers } from "../components/Users/UseUsers";
+import { getRoleDisplayName } from "../components/Utils";
+import { useAuth } from "../hooks/useAuth";
+import { useSearchFilter } from "../hooks/useSearchFilters";
+import { CreateUserRequest, Salon, User, UserRole } from "../types";
 
 const UsersManagement: React.FC = () => {
   const { user: currentUser } = useAuth();

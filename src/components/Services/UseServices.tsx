@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import {
-  Service,
-  CreateServiceRequest,
-  UpdateServiceRequest,
-  UserRole,
-} from "../../types";
 import { apiService } from "../../apisServices/api";
-import AlertService from "../../helpers/sweetAlert/AlertService";
 import {
   createService,
   deleteService,
   getServices,
   updateService,
 } from "../../apisServices/api-services";
+import AlertService from "../../helpers/sweetAlert/AlertService";
+import {
+  CreateServiceRequest,
+  Service,
+  UpdateServiceRequest,
+  UserRole,
+} from "../../types";
 
 export function useServices(currentUser: any) {
   const [services, setServices] = useState<Service[]>([]);

@@ -1,14 +1,14 @@
-import { Plus, Search } from "lucide-react";
-import { CreateServiceRequest, Service } from "../types";
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth";
-import { useServices } from "../components/Services/UseServices";
-import { ServicesTable } from "../components/Services/ServicesTable";
+import { ServicesCards } from "../components/Services/ServiceCards";
 import { ServiceModal } from "../components/Services/ServiceModal";
-import { useSearchFilter } from "../hooks/useSearchFilters";
+import { ServicesTable } from "../components/Services/ServicesTable";
+import { useServices } from "../components/Services/UseServices";
 import { CreateButton } from "../components/UI/CreateButton";
 import { ToggleDataView } from "../components/UI/ToggleDataView";
-import { ServicesCards } from "../components/Services/ServiceCards";
+import { useAuth } from "../hooks/useAuth";
+import { useSearchFilter } from "../hooks/useSearchFilters";
+import { CreateServiceRequest, Service } from "../types";
 
 const ServicesManagement: React.FC = () => {
   const { user: currentUser } = useAuth();

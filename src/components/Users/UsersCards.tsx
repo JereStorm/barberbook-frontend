@@ -1,10 +1,8 @@
 import {
-  CircleCheckBig,
-  CircleX,
   Edit,
   Trash2,
   UserCheck,
-  UserX,
+  UserX
 } from "lucide-react";
 import { User, UserRole } from "../../types";
 

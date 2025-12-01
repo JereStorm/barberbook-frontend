@@ -1,5 +1,5 @@
 import { Users } from "lucide-react";
-import { User, UserRole } from "../../types";
+import { User } from "../../types";
 import { getRoleBadgeColor, getRoleDisplayName } from "../Utils";
 
 interface UsersShowTableProps {

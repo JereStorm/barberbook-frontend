@@ -28,7 +28,7 @@ export function useSalons(currentUser: any) {
     setIsSubmitting(true);
 
     try {
-      const response = await apiService.createSalon(formData);
+      await apiService.createSalon(formData);
       toast.success("Salon creado correctamente");
       loadSalons();
       return true;
@@ -96,7 +96,7 @@ export function useSalons(currentUser: any) {
 
   const switchSalonStatus = async (salon: Salon) => {
     let verbo;
-    if (salon.activeUsersCount != 0) {
+    if (salon.activeUsersCount !== 0) {
       verbo = "desactivar";
     } else {
         verbo = "activar";
@@ -117,7 +117,7 @@ export function useSalons(currentUser: any) {
     }
 
     try {
-      if (salon.activeUsersCount == 0) {
+      if (salon.activeUsersCount === 0) {
         await apiService.enableSalon(salon.id);
       } else {
         await apiService.disableSalon(salon.id);

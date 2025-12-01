@@ -1,5 +1,7 @@
-import { UserPlus, Search, Filter, Table, CardSim, IdCard } from "lucide-react";
+import { Filter, Search, UserPlus } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { apiService } from "../apisServices/api";
 import { useAuth } from "../hooks/useAuth";
 import {
   Appointment,
@@ -7,22 +9,20 @@ import {
   Client,
   CreateAppointmentRequest,
 } from "../types";
-import toast from "react-hot-toast";
-import { apiService } from "../apisServices/api";
 
 //Los agregue para el formulario de creacion de cliente
-import { normalizeMobileVerySimple } from "../components/Utils";
 import { createClient } from "../apisServices/api-clients";
+import { AppointmentCards } from "../components/Appointments/AppointmentCards";
+import { AppointmentModal } from "../components/Appointments/AppointmentModal";
+import { AppointmentsTable } from "../components/Appointments/AppointmentsTable";
+import { useAppointments } from "../components/Appointments/UseAppointments";
 import { useClients } from "../components/Clients/UseClients";
 import { useServices } from "../components/Services/UseServices";
-import { useUsers } from "../components/Users/UseUsers";
-import { useAppointments } from "../components/Appointments/UseAppointments";
-import { AppointmentsTable } from "../components/Appointments/AppointmentsTable";
-import { AppointmentModal } from "../components/Appointments/AppointmentModal";
-import { useAppointmentSearch } from "../hooks/useSearchAppointment";
 import { CreateButton } from "../components/UI/CreateButton";
-import { AppointmentCards } from "../components/Appointments/AppointmentCards";
 import { ToggleDataView } from "../components/UI/ToggleDataView";
+import { useUsers } from "../components/Users/UseUsers";
+import { normalizeMobileVerySimple } from "../components/Utils";
+import { useAppointmentSearch } from "../hooks/useSearchAppointment";
 
 const AppointmentsManagement: React.FC = () => {
   // CUSTOM HOOKS

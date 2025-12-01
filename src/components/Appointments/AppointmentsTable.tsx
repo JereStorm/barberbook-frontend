@@ -154,7 +154,7 @@ export const AppointmentsTable: React.FC<Props> = ({
                                                     ? "text-red-600 hover:text-red-900"
                                                     : "text-green-600 hover:text-green-900"
                                                     }`}
-                                                title={apt.status == AppointmentStatus.CANCELADO ? "Activar turno" : "Cancelar turno"}
+                                                title={apt.status === AppointmentStatus.CANCELADO ? "Activar turno" : "Cancelar turno"}
                                             >
                                                 {apt.status !== AppointmentStatus.CANCELADO ? (
                                                     <CircleX className="w-4 h-4 " />

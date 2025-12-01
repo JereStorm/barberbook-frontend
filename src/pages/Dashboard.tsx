@@ -1,26 +1,17 @@
 //Dashboard.tsx
-import React, { useState, useEffect } from "react";
 import {
-  Users,
-  Building2,
-  UserCheck,
-  UserX,
-  Phone,
-  Calendar,
+  Building2
 } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
-import { apiService } from "../apisServices/api";
-import { User, Salon, UserRole, Appointment } from "../types";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import SummaryCard from "../components/UI/SummaryCard";
-import { Route } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { AppointmentsTable } from "../components/Appointments/AppointmentsTable";
+import { apiService } from "../apisServices/api";
 import { useAppointments } from "../components/Appointments/UseAppointments";
-import { TodaysAppointment } from "../components/Dashboard/TodaysAppointment";
 import ServicesShowTable from "../components/Dashboard/ServicesShowTable";
-import { useServices } from "../components/Services/UseServices";
+import { TodaysAppointment } from "../components/Dashboard/TodaysAppointment";
 import UsersShowTable from "../components/Dashboard/UsersShowTable";
+import { useServices } from "../components/Services/UseServices";
+import { useAuth } from "../hooks/useAuth";
+import { Appointment, Salon, User, UserRole } from "../types";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();

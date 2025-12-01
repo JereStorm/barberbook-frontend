@@ -1,21 +1,21 @@
-import React, { ReactNode, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  Users,
   Building2,
-  LogOut,
-  Home,
-  Menu,
-  X,
-  Contact,
-  SquareScissors,
   CalendarCog,
+  Contact,
+  Home,
+  LogOut,
+  Menu,
+  SquareScissors,
+  Users,
+  X,
 } from "lucide-react";
+import React, { ReactNode, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { UserRole } from "../../types";
+import Footer from "../UI/Footer";
 import SidebarLink from "../UI/SidebarLink";
 import { getRoleBadgeColor } from "../Utils";
-import Footer from "../UI/Footer";
 interface LayoutProps {
   children: ReactNode;
 }

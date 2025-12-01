@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { CreateClientRequest, Client } from "../types";
+import { Client, CreateClientRequest } from "../types";
 //import ClientsTable from "../components/clients/ClientsTable";
-import { Edit, Plus, Search, Trash2 } from "lucide-react";
-import { useClients } from "../components/Clients/UseClients";
+import { Search } from "lucide-react";
 import ClientModal from "../components/Clients/ClientModal";
 import { ClientsTable } from "../components/Clients/ClientsTable";
+import { useClients } from "../components/Clients/UseClients";
+import { CreateButton } from "../components/UI/CreateButton";
 import { useAuth } from "../hooks/useAuth";
 import { useSearchFilter } from "../hooks/useSearchFilters";
-import { CreateButton } from "../components/UI/CreateButton";
 
 const ClientsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();

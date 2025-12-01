@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  Appointment,
-  AppointmentStatus,
-  CreateAppointmentRequest,
-  CreateClientRequest,
-  UpdateAppointmentRequest,
-  UserRole,
-} from "../../types";
 import toast from "react-hot-toast";
+import { apiService } from "../../apisServices/api";
 import {
   cancelAppointment,
   createAppointment,
@@ -16,11 +9,15 @@ import {
   getAppointments,
   getAppointmentsToday,
 } from "../../apisServices/api-appointments";
-import { apiService } from "../../apisServices/api";
 import AlertService from "../../helpers/sweetAlert/AlertService";
+import {
+  Appointment,
+  AppointmentStatus,
+  CreateAppointmentRequest,
+  UpdateAppointmentRequest,
+  UserRole
+} from "../../types";
 import { formatDateTime, normalizeMobileVerySimple } from "../Utils";
-import { createClient } from "../../apisServices/api-clients";
-import { useClients } from "../Clients/UseClients";
 
 export function useAppointments(currentUser: any) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);

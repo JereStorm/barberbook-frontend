@@ -1,19 +1,18 @@
+import { Timer, UserPlus } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
   Appointment,
   AppointmentStatus,
   Client,
   CreateAppointmentRequest,
   Service,
-  UpdateAppointmentRequest,
-  User,
+  User
 } from "../../types";
-import { formatDateTime } from "../Utils";
-import { Timer, UserPlus } from "lucide-react";
 import CalendarInput from "../UI/CalendarInput";
 import ClientAutocomplete from "../UI/ClientAutocomplete";
 import { FormActionButton } from "../UI/FormActionButton";
-import toast from "react-hot-toast";
+import { formatDateTime } from "../Utils";
 
 type Props = {
   isOpen: boolean;

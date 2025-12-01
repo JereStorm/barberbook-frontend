@@ -1,12 +1,12 @@
+import { Building2, Search } from "lucide-react";
 import React, { useState } from "react";
-import { Plus, Building2, Search } from "lucide-react";
-import { CreateSalonRequest, Salon } from "../types";
-import { useAuth } from "../hooks/useAuth";
+import SalonModal from "../components/Salons/SalonModal";
 import { SalonsCard } from "../components/Salons/SalonsCard";
 import { useSalons } from "../components/Salons/UseSalons";
-import SalonModal from "../components/Salons/SalonModal";
-import { useSearchFilter } from "../hooks/useSearchFilters";
 import { CreateButton } from "../components/UI/CreateButton";
+import { useAuth } from "../hooks/useAuth";
+import { useSearchFilter } from "../hooks/useSearchFilters";
+import { CreateSalonRequest, Salon } from "../types";
 
 const SalonsManagement: React.FC = () => {
   const { user: currentUser } = useAuth();

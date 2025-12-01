@@ -1,6 +1,6 @@
 import { CalendarCog } from "lucide-react";
 import { Appointment } from "../../types";
-import { formatDateTime, formatHour } from "../Utils";
+import { formatHour } from "../Utils";
 
 interface TodaysAppointmentProps {
     appointments: Appointment[];

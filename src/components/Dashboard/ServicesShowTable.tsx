@@ -1,7 +1,6 @@
-import React from 'react'
+import { SquareScissors } from 'lucide-react';
 import { Service } from '../../types';
 import { formatPrice } from '../Utils';
-import { CalendarCog, SquareScissors } from 'lucide-react';
 
 interface ServicesShowTableProps {
     services: Service[];
