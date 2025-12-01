@@ -54,7 +54,9 @@ export const AppointmentCards = (props: Props) => {
               <div className="mt-1 inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-sm">
                 <span
                   className={`w-2 h-2 rounded-full ${
-                    apt.status === "activo" ? "bg-green-400" : "bg-red-400"
+                    apt.status === "activo" || apt.status === "completado"
+                      ? "bg-green-400"
+                      : "bg-red-400"
                   }`}
                 ></span>
                 {apt.status.charAt(0).toUpperCase() + apt.status.slice(1)}
@@ -63,7 +65,7 @@ export const AppointmentCards = (props: Props) => {
           </div>
 
           {/* --- Fecha + Hora --- */}
-          <div className="flex gap-3 mb-4">
+          <div className="flex justify-center gap-3 mb-4">
             <div className="bg-white/20 px-4 py-2 rounded-lg text-sm">
               {new Date(apt.startTime).toLocaleDateString("en-US", {
                 month: "short",
@@ -81,8 +83,8 @@ export const AppointmentCards = (props: Props) => {
           </div>
 
           {/* --- Servicios --- */}
-          <div className="mb-4">
-            <div className="bg-white text-blue-900 font-semibold text-center rounded-full py-2">
+          <div className="flex justify-center mb-4 mx-auto">
+            <div className="inline bg-white text-sm text-blue-900 font-semibold text-center rounded-lg py-1.5 px-3">
               {apt.services?.length > 0
                 ? apt.services.map((s) => s.name).join(" | ")
                 : "Sin servicios"}
@@ -149,7 +151,9 @@ export const AppointmentCards = (props: Props) => {
       ))}
 
       {appointments.length === 0 && (
-        <p className="text-center col-span-full text-white/80">No hay turnos</p>
+        <div className="col-span-full flex justify-center py-6">
+          <p className="text-sm text-gray-500 text-center">No hay turnos</p>
+        </div>
       )}
     </div>
   );

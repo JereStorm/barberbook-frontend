@@ -7,6 +7,8 @@ import { ServicesTable } from "../components/Services/ServicesTable";
 import { ServiceModal } from "../components/Services/ServiceModal";
 import { useSearchFilter } from "../hooks/useSearchFilters";
 import { CreateButton } from "../components/UI/CreateButton";
+import { ToggleDataView } from "../components/UI/ToggleDataView";
+import { ServicesCards } from "../components/Services/ServiceCards";
 
 const ServicesManagement: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -32,13 +34,20 @@ const ServicesManagement: React.FC = () => {
     durationMin: DURATION_MIN,
   });
 
+  const [viewMode, setViewMode] = useState<"table" | "cards">(
+    window.innerWidth < 700 ? "cards" : "table"
+  );
+
+  const toggleView = (mode: "table" | "cards") => {
+    setViewMode(mode);
+  };
+
   useEffect(() => {
     loadServices();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-
     const success = editingService
       ? await editService(editingService.id, formData)
       : await createNewService(formData);
@@ -46,7 +55,7 @@ const ServicesManagement: React.FC = () => {
     if (success) {
       setIsModalOpen(false);
     }
-  }
+  };
 
   const resetForm = () => {
     setFormData({
@@ -77,9 +86,9 @@ const ServicesManagement: React.FC = () => {
 
   //NUEVA IMPLEMENTACION CON CUSTOM HOOK + USEMEMO
   const filteredServices = useSearchFilter(services, searchTerm, [
-    s => s.name,
-    s => s.price,
-    s => s.durationMin,
+    (s) => s.name,
+    (s) => s.price,
+    (s) => s.durationMin,
   ]);
 
   if (isLoading) {
@@ -99,7 +108,7 @@ const ServicesManagement: React.FC = () => {
         <CreateButton openCreateModal={openCreateModal} />
       </div>
 
-      <div className="bg-white rounded-lg shadow p-4">
+      <div className="flex justify-between bg-white rounded-lg shadow p-4">
         <div className="relative max-w-md">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <input
@@ -110,15 +119,25 @@ const ServicesManagement: React.FC = () => {
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
+        <ToggleDataView setViewMode={setViewMode} viewMode={viewMode} />
       </div>
 
-      <ServicesTable
-        services={filteredServices}
-        onEdit={openEditModal}
-        onDelete={removeService}
-        onToggleStatus={toggleServiceStatus}
-      />
-
+      {viewMode === "cards" ? (
+        <ServicesCards
+          services={filteredServices}
+          onEdit={openEditModal}
+          onDelete={removeService}
+          onToggleStatus={toggleServiceStatus}
+        />
+      ) : (
+        <ServicesTable
+          services={filteredServices}
+          onEdit={openEditModal}
+          onDelete={removeService}
+          onToggleStatus={toggleServiceStatus}
+        />
+      )}
       {isModalOpen && (
         <ServiceModal
           durationMin={DURATION_MIN}

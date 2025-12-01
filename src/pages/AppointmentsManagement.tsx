@@ -22,6 +22,7 @@ import { AppointmentModal } from "../components/Appointments/AppointmentModal";
 import { useAppointmentSearch } from "../hooks/useSearchAppointment";
 import { CreateButton } from "../components/UI/CreateButton";
 import { AppointmentCards } from "../components/Appointments/AppointmentCards";
+import { ToggleDataView } from "../components/UI/ToggleDataView";
 
 const AppointmentsManagement: React.FC = () => {
   // CUSTOM HOOKS
@@ -50,13 +51,10 @@ const AppointmentsManagement: React.FC = () => {
   const [aptStatus, setAptStatus] = useState<AppointmentStatus | "all">("all");
 
   const [viewMode, setViewMode] = useState<"table" | "cards">(
-    window.innerWidth < 500 ? "cards" : "table"
+    window.innerWidth < 700 ? "cards" : "table"
   );
 
   const isStylist = currentUser?.role === "estilista";
-  const toggleView = (mode: "table" | "cards") => {
-    setViewMode(mode);
-  };
 
   // ESTADOS PARA CREACION RAPIDA DE CLIENTE
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
@@ -231,35 +229,9 @@ const AppointmentsManagement: React.FC = () => {
               />
             </div>
           </div>
-          <div className="flex">
-            {/* Botón vista Cards */}
-            <button
-              onClick={() => toggleView("cards")}
-              className={`px-3 py-1 rounded-md border 
-      ${
-        viewMode === "cards"
-          ? "bg-secundario text-white"
-          : "bg-white text-gray-600"
-      }
-    `}
-            >
-              <IdCard/>
-            </button>
-
-            {/* Botón vista Tabla */}
-            <button
-              onClick={() => toggleView("table")}
-              className={`px-3 py-1 rounded-md border 
-      ${
-        viewMode === "table"
-          ? "bg-secundario text-white"
-          : "bg-white text-gray-600"
-      }
-    `}
-            >
-              <Table/>
-            </button>
-          </div>
+          
+          <ToggleDataView setViewMode={setViewMode} viewMode={viewMode} />
+          
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-gray-400" />
             <select
