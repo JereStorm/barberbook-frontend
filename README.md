@@ -100,7 +100,7 @@ REACT_APP_VERSION=1.0.0
 * 📑 [Presentación en Canva](https://www.canva.com/design/DAGiN-Z6BJY/7ekvPEv_fIHH8W8yAe-MTA/edit)
 * 📁 [Google Drive](https://drive.google.com/drive/folders/1iNgk87ktPxIVHVjKhX8JX5RhkVyxDoiI?usp=sharing)
 * 🗂 [Jira – Gestión del proyecto](https://proyecto-fip-grupo-28.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog)
-* 🎨 [Figma – Maquetado UI](https://www.figma.com/design/wnLUC1FCfYv7Dk45079Jni/Maquetado?node-id=0-1)
+* 🎨 [Figma – Maquetado UI](https://www.figma.com/design/sir4f0X1vRGK2TuaSeaMiT/Maquetado-React?node-id=0-1&p=f&t=Xrec510OXefsNFCG-0+)
 
 ---
 
